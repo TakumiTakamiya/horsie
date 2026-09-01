@@ -1,7 +1,9 @@
+import json
+from pathlib import Path
 from typing import Literal
 from random import Random
-from icecream import ic
-from tqdm import tqdm
+
+RESULT_FILE = Path(__file__).with_name("simulation_results.json")
 
 LENGTH_LITERAL = Literal["S", "M", "L"]
 PATTERN_LITERAL = Literal["D2", "DD", "D2J", "DDJ", "D2JJ", "DDJJ"]
@@ -88,7 +90,8 @@ def simulate(
     else:
         result_counts = {r: 0 for r in D2_RESULTS}
 
-    for seed in tqdm(range(100000)):
+    # TODO: Use multithreading to run independent seed simulations concurrently.
+    for seed in range(100000):
         rng = Random(seed)
         track = generate_track(rng, length)
         deck = generate_deck(rng, pattern)
@@ -125,4 +128,9 @@ def simulate_all() -> dict[PATTERN_LITERAL, dict[RESULT_LITERAL, int]]:
 
 
 if __name__ == "__main__":
-    ic(simulate_all())
+    results = simulate_all()
+    RESULT_FILE.write_text(
+        json.dumps(results, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    print(f"Saved results to {RESULT_FILE}")
