@@ -3,18 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="R・パターン・Jの有無から固定データを検索するツール" />
-    <title>Horsie Data Lookup</title>
+    <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
+    <title>Horsie Odds</title>
     <link rel="stylesheet" href="style.css" />
     <script src="data.js" defer></script>
+    <script src="odds-data.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
     <main class="app-shell">
       <header class="page-header">
-        <p class="eyebrow">DATA LOOKUP</p>
+        <p class="eyebrow">BETTING CALCULATOR</p>
         <h1>Horsie</h1>
-        <p class="intro">条件を選んで、対応する固定データを確認します。</p>
+        <p class="intro">条件を選んで、Win・Exacta・Trifecta の確率とフェアオッズを確認します。</p>
       </header>
 
       <section class="control-panel" aria-label="検索条件">
@@ -73,12 +74,19 @@
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th scope="col">項目</th><th scope="col">値</th></tr>
+              <tr>
+                <th scope="col">Bet</th>
+                <th scope="col">Selection</th>
+                <th scope="col">Tickets</th>
+                <th scope="col">Probability</th>
+                <th scope="col">Fair odds</th>
+              </tr>
             </thead>
             <tbody id="result-body"></tbody>
           </table>
           <p id="empty-state" class="empty-state">このキーのデータはありません</p>
         </div>
+        <p class="result-note"><code>D</code> / <code>@</code> は同条件の馬をまとめた表記です。確率とオッズは、Tickets の中から選んだ1通りの馬券に対する値です。</p>
       </section>
 
       <section class="settings-panel" aria-labelledby="settings-title">

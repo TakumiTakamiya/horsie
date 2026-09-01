@@ -25,9 +25,13 @@
     }
   }
 
-  function formatValue(originalValue, taxRate, mode) {
-    const taxAppliedValue = originalValue * (1 - taxRate / 100);
+  function formatOdds(originalOdds, taxRate, mode) {
+    const taxAppliedValue = originalOdds * (1 - taxRate / 100);
     return normalizeNumber(applyRounding(taxAppliedValue, mode));
+  }
+
+  function formatSelection(selection) {
+    return selection.split("").join(" → ");
   }
 
   function getKey() {
@@ -42,7 +46,7 @@
 
   function render() {
     const key = getKey();
-    const rows = FIXED_DATA[key] || [];
+    const rows = ODDS_DATA[key] || [];
     const body = document.querySelector("#result-body");
 
     document.querySelector("#current-key").textContent = key;
@@ -52,13 +56,19 @@
     setPressedButton(document.querySelector("#y-control"), "value", state.y);
     setPressedButton(document.querySelector("#z-control"), "value", state.z);
 
-    body.replaceChildren(...rows.map(([label, value]) => {
+    body.replaceChildren(...rows.map((item) => {
       const row = document.createElement("tr");
-      const labelCell = document.createElement("td");
-      const valueCell = document.createElement("td");
-      labelCell.textContent = label;
-      valueCell.textContent = formatValue(value, state.taxRate, state.rounding);
-      row.append(labelCell, valueCell);
+      const wagerCell = document.createElement("td");
+      const selectionCell = document.createElement("td");
+      const ticketsCell = document.createElement("td");
+      const probabilityCell = document.createElement("td");
+      const oddsCell = document.createElement("td");
+      wagerCell.textContent = item.wagerType;
+      selectionCell.textContent = formatSelection(item.selection);
+      ticketsCell.textContent = item.equivalentTickets;
+      probabilityCell.textContent = `${item.probabilityPercent.toFixed(4)}%`;
+      oddsCell.textContent = formatOdds(item.decimalOdds, state.taxRate, state.rounding);
+      row.append(wagerCell, selectionCell, ticketsCell, probabilityCell, oddsCell);
       return row;
     }));
 
@@ -123,6 +133,6 @@
     render();
   }
 
-  window.HorsieApp = Object.freeze({ applyRounding, formatValue, normalizeNumber });
+  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, normalizeNumber });
   window.addEventListener("DOMContentLoaded", init);
 })();
