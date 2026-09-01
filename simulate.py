@@ -90,7 +90,7 @@ def simulate(
     else:
         result_counts = {r: 0 for r in D2_RESULTS}
 
-    # TODO: Use multithreading to run independent seed simulations concurrently.
+    # TODO: Use multiprocessing to run independent seed simulations concurrently.
     for seed in range(100000):
         rng = Random(seed)
         track = generate_track(rng, length)
