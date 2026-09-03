@@ -1,0 +1,7 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="40" fill="#006266" />
+    <circle cx="50" cy="50" r="31" stroke="#009432" transform="rotate(11.25 50 50)" stroke-width="20" fill="none" stroke-dasharray="12.1736 12.1736" />
+    <circle cx="50" cy="50" r="31" fill="#d1d8e0" />
+    <text x="50" y="64" font-size="40" text-anchor="middle" fill="#2f3640">10</text>
+</svg>

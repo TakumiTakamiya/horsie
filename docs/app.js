@@ -96,6 +96,13 @@
   }
 
   function init() {
+    const settingsDialog = document.querySelector("#settings-dialog");
+    const settingsButton = document.querySelector("#open-settings");
+    settingsButton.addEventListener("click", () => settingsDialog.showModal());
+    document.querySelector("#close-settings").addEventListener("click", () => settingsDialog.close());
+    // Native dialog handles Escape and keeps keyboard focus inside while open.
+    settingsDialog.addEventListener("close", () => settingsButton.focus());
+
     document.querySelector("#r-control").addEventListener("click", (event) => {
       const button = event.target.closest("button[data-r]");
       if (button) selectR(Number(button.dataset.r), false);
@@ -127,7 +134,7 @@
     window.addEventListener("keydown", (event) => {
       if (event.code !== "Space" || event.ctrlKey || event.metaKey) return;
       event.preventDefault();
-      selectR(state.r + (event.altKey ? -1 : 1), true);
+      selectR(state.r + (event.altKey ? -1 : 1), !settingsDialog.open);
     });
 
     render();

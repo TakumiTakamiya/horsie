@@ -12,16 +12,10 @@
   </head>
   <body>
     <main class="app-shell">
-      <header class="page-header">
-        <p class="eyebrow">BETTING CALCULATOR</p>
-        <h1>Horsie</h1>
-        <p class="intro">条件を選んで、Win・Exacta・Trifecta の確率とフェアオッズを確認します。</p>
-      </header>
-
-      <section class="control-panel" aria-label="検索条件">
+      <section class="control-panel" aria-label="レース選択">
         <div class="control-block">
           <div class="control-heading">
-            <h2>Race</h2>
+            <h1 class="brand">Horsie <span>Race</span></h1>
             <span class="keyboard-hint"><kbd>Space</kbd> 次へ・<kbd>Alt</kbd> + <kbd>Space</kbd> 前へ</span>
           </div>
           <div class="r-scroller">
@@ -42,7 +36,11 @@
           </div>
         </div>
 
-        <div class="condition-grid">
+      </section>
+
+      <div class="workspace-grid">
+      <section class="result-panel" aria-labelledby="result-title">
+        <div class="condition-grid" aria-label="検索条件">
           <div class="control-block">
             <h2>Pattern</h2>
             <div id="y-control" class="segmented" role="group" aria-label="Patternを選択">
@@ -60,15 +58,17 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="result-panel" aria-labelledby="result-title">
         <div class="result-heading">
           <div>
             <p class="section-label">CURRENT KEY</p>
             <h2 id="result-title"><output id="current-key">MDD</output></h2>
           </div>
-          <p class="key-detail"><span id="current-r">1R</span><span aria-hidden="true">/</span>x = <strong id="current-x">M</strong></p>
+          <div class="result-actions">
+            <p class="key-detail"><span id="current-r">1R</span><span aria-hidden="true">/</span>x = <strong id="current-x">M</strong></p>
+            <button id="open-settings" class="icon-button" type="button" aria-label="数値表示設定を開く" aria-haspopup="dialog" aria-controls="settings-dialog" title="数値表示設定">
+              <span aria-hidden="true">⚙</span>
+            </button>
+          </div>
         </div>
 
         <div class="table-wrap">
@@ -89,11 +89,27 @@
         <p class="result-note"><code>D</code> / <code>@</code> は同条件の馬をまとめた表記です。確率とオッズは、Tickets の中から選んだ1通りの馬券に対する値です。</p>
       </section>
 
-      <section class="settings-panel" aria-labelledby="settings-title">
+      <section class="calculator-panel" aria-labelledby="calculator-title">
+        <div class="calculator-heading">
+          <p class="section-label">CALCULATOR</p>
+          <h2 id="calculator-title">電卓</h2>
+        </div>
+        <div class="calculator-placeholder">
+          <p>電卓を実装予定です</p>
+          <span>仕様確定後、ここに追加します。</span>
+        </div>
+      </section>
+      </div>
+
+      <dialog id="settings-dialog" class="settings-panel" aria-labelledby="settings-title" aria-describedby="settings-help">
         <div class="settings-heading">
+          <div>
           <p class="section-label">DISPLAY</p>
           <h2 id="settings-title">数値表示設定</h2>
+          </div>
+          <button id="close-settings" class="close-button" type="button" autofocus>閉じる</button>
         </div>
+        <p id="settings-help" class="settings-help">有効な設定は表にすぐ反映されます。</p>
 
         <fieldset class="rounding-options">
           <legend>表示方法</legend>
@@ -113,7 +129,7 @@
           <p id="tax-help" class="field-help">0以上100以下で入力してください。</p>
           <p id="tax-error" class="field-error" role="alert" aria-live="polite"></p>
         </div>
-      </section>
+      </dialog>
     </main>
   </body>
 </html>
