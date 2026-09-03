@@ -106,9 +106,8 @@ table { width: 100%; min-width: 520px; border-collapse: collapse; }
 th, td { padding: 13px 18px; border-bottom: 1px solid #e8e7e0; text-align: left; }
 th { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
 td:first-child { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
-.selection-symbols { display: inline-flex; gap: 4px; }
-.selection-symbol { display: inline-flex; width: 1.8em; height: 1.8em; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 5px; }
-.selection-symbol--d { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-dark); font-weight: 800; }
+.selection-symbols { white-space: nowrap; letter-spacing: 0; }
+.selection-symbol--d { color: var(--accent-dark); font-weight: 800; }
 .selection-symbol--other { color: var(--muted); font-weight: 400; }
 th:nth-child(n+2), td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .result-note { margin: 0; padding: 15px 24px 18px; border-top: 1px solid #e8e7e0; color: var(--muted); font-size: 0.78rem; }
