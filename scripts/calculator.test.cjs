@@ -219,6 +219,55 @@ function textOf(node) {
   return node.textContent ?? node.children.map(textOf).join("");
 }
 
+test("table has no Tickets column and probability is visible by default", () => {
+  const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  assert.doesNotMatch(html, /Tickets/);
+  assert.equal((html.match(/<th\b/g) || []).length, 3);
+  const { nodes } = createApp();
+  assert.equal(nodes["#show-probability"].checked, true);
+  assert.equal(nodes["#probability-heading"].hidden, false);
+  assert.equal(nodes["#odds-table"].dataset.showProbability, "true");
+  nodes["#result-body"].children.forEach((row, index) => {
+    assert.equal(row.children.length, 3);
+    assert.equal(textOf(row.children[0]), data.MDD[index].selection);
+    assert.equal(row.children[1].textContent, `${data.MDD[index].probabilityPercent.toFixed(2)}%`);
+    assert.equal(row.children[1].hidden, false);
+    assert.equal(row.children[2].textContent, formatOdds(data.MDD[index].decimalOdds, 0, "raw"));
+  });
+});
+
+test("probability toggle updates header/body and survives condition/settings changes without changing calculator", () => {
+  const { nodes, click, input } = createApp();
+  click("#outcome-control", "D@D");
+  input("#chip-amount", "25");
+  const previousResult = nodes["#trifecta-result"].textContent;
+  nodes["#open-settings"].events.click();
+  const toggle = nodes["#show-probability"];
+  toggle.checked = false;
+  toggle.events.change({ target: toggle });
+  assert.equal(nodes["#probability-heading"].hidden, true);
+  assert.equal(nodes["#odds-table"].dataset.showProbability, "false");
+  assert.ok(nodes["#result-body"].children.every((row) => row.children[1].hidden));
+  assert.equal(nodes["#trifecta-result"].textContent, previousResult);
+  nodes["#close-settings"].events.click();
+  click("#r-control", 2);
+  click("#y-control", "D2");
+  click("#z-control", "J");
+  input("#tax-rate", "20");
+  assert.equal(toggle.checked, false);
+  assert.ok(nodes["#result-body"].children.every((row) => row.children[1].hidden));
+  click("#r-control", 1);
+  assert.match(nodes["#outcome-help"].textContent, /D@D/);
+  assert.equal(nodes["#chip-amount"].value, "25");
+  const taxedResult = nodes["#trifecta-result"].textContent;
+  nodes["#open-settings"].events.click();
+  toggle.checked = true;
+  toggle.events.change({ target: toggle });
+  assert.equal(nodes["#probability-heading"].hidden, false);
+  assert.ok(nodes["#result-body"].children.every((row) => !row.children[1].hidden));
+  assert.equal(nodes["#trifecta-result"].textContent, taxedResult);
+});
+
 test("past R buttons show exactly three lines and revisiting restores that race's conditions/result", () => {
   const { nodes, click, input } = createApp();
   const buttons = nodes["#r-control"].children;

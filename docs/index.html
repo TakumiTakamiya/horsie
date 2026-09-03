@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=26010f43f248" />
+    <link rel="stylesheet" href="style.css?v=a2e826469039" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=5d98fe2ee770" defer></script>
-    <script src="app.js?v=1138ef1e92a0" defer></script>
+    <script src="app.js?v=895eabc7fe52" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -73,12 +73,11 @@
         </div>
 
         <div class="table-wrap">
-          <table>
+          <table id="odds-table" data-show-probability="true">
             <thead>
               <tr>
                 <th scope="col">Selection</th>
-                <th scope="col">Tickets</th>
-                <th scope="col">Probability</th>
+                <th id="probability-heading" scope="col">Probability</th>
                 <th scope="col">Fair odds</th>
               </tr>
             </thead>
@@ -86,7 +85,7 @@
           </table>
           <p id="empty-state" class="empty-state">このキーのデータはありません</p>
         </div>
-        <p class="result-note"><code>D</code> / <code>@</code> は同条件の馬をまとめた表記です。確率とオッズは、Tickets の中から選んだ1通りの馬券に対する値です。</p>
+        <p class="result-note"><code>D</code> / <code>@</code> は同条件の馬をまとめた表記です。確率とオッズは、各パターンの中から選んだ1通りの馬券に対する値です。</p>
       </section>
 
       <section class="calculator-panel" aria-labelledby="calculator-title">
@@ -146,6 +145,11 @@
           <button id="close-settings" class="close-button" type="button" autofocus>閉じる</button>
         </div>
         <p id="settings-help" class="settings-help">有効な設定は表にすぐ反映されます。</p>
+
+        <label class="column-option" for="show-probability">
+          <input id="show-probability" type="checkbox" checked aria-controls="odds-table" />
+          <span>的中確率を表示</span>
+        </label>
 
         <fieldset class="rounding-options">
           <legend>表示方法</legend>

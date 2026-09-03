@@ -9,6 +9,7 @@
     taxRate: 0,
     amount: "0",
     outcome: null,
+    showProbability: true,
   };
   // Per-race records last for the lifetime of this page; calculator input/settings
   // remain shared. Never carry a confirmed result into a previously unseen race.
@@ -108,6 +109,9 @@
     const key = getKey();
     const rows = ODDS_DATA[key] || [];
     const body = document.querySelector("#result-body");
+    document.querySelector("#probability-heading").hidden = !state.showProbability;
+    document.querySelector("#odds-table").dataset.showProbability = String(state.showProbability);
+    document.querySelector("#show-probability").checked = state.showProbability;
 
     document.querySelector("#current-key").textContent = key;
     document.querySelector("#current-r").textContent = `${state.r}R`;
@@ -118,14 +122,13 @@
     body.replaceChildren(...rows.map((item) => {
       const row = document.createElement("tr");
       const selectionCell = document.createElement("td");
-      const ticketsCell = document.createElement("td");
       const probabilityCell = document.createElement("td");
       const oddsCell = document.createElement("td");
       selectionCell.append(formatSelection(item.selection));
-      ticketsCell.textContent = item.equivalentTickets;
       probabilityCell.textContent = `${item.probabilityPercent.toFixed(2)}%`;
+      probabilityCell.hidden = !state.showProbability;
       oddsCell.textContent = formatOdds(item.decimalOdds, state.taxRate, state.rounding);
-      row.append(selectionCell, ticketsCell, probabilityCell, oddsCell);
+      row.append(selectionCell, probabilityCell, oddsCell);
       return row;
     }));
 
@@ -242,6 +245,11 @@
     });
 
     document.querySelector("#tax-rate").addEventListener("input", (event) => validateTaxRate(event.target));
+
+    document.querySelector("#show-probability").addEventListener("change", (event) => {
+      state.showProbability = event.target.checked;
+      render();
+    });
 
     document.querySelector("#outcome-control").addEventListener("click", (event) => {
       const button = event.target.closest("button[data-value]");
