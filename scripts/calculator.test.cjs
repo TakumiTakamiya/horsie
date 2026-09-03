@@ -180,11 +180,13 @@ test("UI enforces invalid/overflow inputs and recovers via clear", () => {
   assert.ok(nodes["#chip-control"].children.every((button) => !button.disabled));
 });
 
-test("UI retains amounts/outcomes across R and Joker, clears invalid Pattern outcome, and applies settings", () => {
+test("UI retains amount across R, starts new outcomes blank, and applies Pattern/Joker/settings changes", () => {
   const { nodes, events, click, input } = createApp();
   input("#chip-amount", "25");
   click("#outcome-control", "D@D");
   click("#r-control", 2);
+  assert.equal(nodes["#win-multiplier"].textContent, "—");
+  click("#outcome-control", "D@D");
   click("#z-control", "J");
   assert.equal(nodes["#chip-amount"].value, "25");
   assert.ok(nodes["#outcome-help"].textContent.includes("D@D"));
@@ -211,4 +213,107 @@ test("UI retains amounts/outcomes across R and Joker, clears invalid Pattern out
   events.keydown({ code: "Space", altKey: true, preventDefault() {} });
   assert.equal(nodes["#current-r"].textContent, "12R");
   assert.equal(nodes["#chip-amount"].value, "25");
+});
+
+function textOf(node) {
+  return node.textContent ?? node.children.map(textOf).join("");
+}
+
+test("past R buttons show exactly three lines and revisiting restores that race's conditions/result", () => {
+  const { nodes, click, input } = createApp();
+  const buttons = nodes["#r-control"].children;
+  assert.ok(buttons.every((button) => button.children.length === 1));
+  click("#z-control", "JJ");
+  click("#outcome-control", "D@D");
+  input("#chip-amount", "25");
+  click("#r-control", 2);
+  assert.deepEqual(buttons[0].children.map(textOf), ["1R", "MDDJJ", "D@D"]);
+  assert.equal(buttons[0].dataset.phase, "past");
+  assert.equal(buttons[0].attrs["aria-pressed"], "false");
+  assert.match(buttons[0].attrs["aria-label"], /MDDJJ.*D@D/);
+  assert.equal(buttons[1].dataset.phase, "current");
+  assert.equal(buttons[1].children.length, 1);
+  assert.ok(buttons.slice(2).every((button) => button.dataset.phase === "future" && button.children.length === 1));
+  assert.equal(nodes["#current-key"].textContent, "LDDJJ");
+  assert.equal(nodes["#win-result"].textContent, "—");
+  click("#y-control", "D2");
+  click("#z-control", "J");
+  click("#outcome-control", "@@@");
+  click("#r-control", 1);
+  assert.equal(nodes["#current-key"].textContent, "MDDJJ");
+  assert.match(nodes["#outcome-help"].textContent, /D@D/);
+  assert.equal(nodes["#chip-amount"].value, "25");
+  assert.ok(buttons.every((button) => button.children.length === 1));
+  click("#r-control", 2);
+  assert.equal(nodes["#current-key"].textContent, "LD2J");
+  assert.match(nodes["#outcome-help"].textContent, /@@@/);
+  assert.equal(nodes["#r-control"].children[0], buttons[0]);
+});
+
+test("skipped races remain unrecorded and future records stay hidden without being lost", () => {
+  const { nodes, click } = createApp();
+  const buttons = nodes["#r-control"].children;
+  click("#r-control", 5);
+  assert.deepEqual(buttons[0].children.map(textOf), ["1R", "MDD", "—"]);
+  for (let i = 1; i < 4; i++) {
+    assert.deepEqual(buttons[i].children.map(textOf), [`${i + 1}R`, "—", "—"]);
+    assert.match(buttons[i].attrs["aria-label"], /未記録/);
+  }
+  click("#z-control", "J");
+  click("#outcome-control", "DD@");
+  click("#r-control", 3);
+  assert.equal(buttons[4].children.length, 1);
+  assert.equal(buttons[4].dataset.phase, "future");
+  click("#r-control", 6);
+  assert.deepEqual(buttons[4].children.map(textOf), ["5R", "MDDJ", "DD@"]);
+  assert.deepEqual(buttons[3].children.map(textOf), ["4R", "—", "—"]);
+});
+
+test("editing a past race updates only its own snapshot, including invalidated results", () => {
+  const { nodes, click } = createApp();
+  const buttons = nodes["#r-control"].children;
+  click("#outcome-control", "D@D");
+  click("#r-control", 2);
+  click("#outcome-control", "DD@");
+  click("#r-control", 1);
+  click("#y-control", "D2");
+  assert.equal(nodes["#win-result"].textContent, "—");
+  click("#r-control", 3);
+  assert.deepEqual(buttons[0].children.map(textOf), ["1R", "MD2", "—"]);
+  assert.deepEqual(buttons[1].children.map(textOf), ["2R", "LDD", "DD@"]);
+  click("#r-control", 1);
+  click("#outcome-control", "@@@");
+  click("#r-control", 3);
+  assert.deepEqual(buttons[0].children.map(textOf), ["1R", "MD2", "@@@"]);
+  assert.deepEqual(buttons[1].children.map(textOf), ["2R", "LDD", "DD@"]);
+});
+
+test("all 12 independent records survive Space/Alt+Space wraparound", () => {
+  const { nodes, click, events } = createApp();
+  const saved = [];
+  for (let r = 1; r <= 12; r++) {
+    click("#r-control", r);
+    click("#y-control", r % 2 ? "DD" : "D2");
+    click("#z-control", ["", "J", "JJ"][r % 3]);
+    const outcome = r % 2 ? "DD@" : "@@@";
+    click("#outcome-control", outcome);
+    saved.push({ key: nodes["#current-key"].textContent, outcome });
+  }
+  events.keydown({ code: "Space", preventDefault() {} });
+  assert.equal(nodes["#current-r"].textContent, "1R");
+  assert.equal(nodes["#current-key"].textContent, saved[0].key);
+  assert.ok(nodes["#r-control"].children.every((button) => button.children.length === 1));
+  events.keydown({ code: "Space", altKey: true, preventDefault() {} });
+  assert.equal(nodes["#current-key"].textContent, saved[11].key);
+  assert.match(nodes["#outcome-help"].textContent, /@@@/);
+  for (let i = 0; i < 11; i++) {
+    assert.deepEqual(nodes["#r-control"].children[i].children.map(textOf), [`${i + 1}R`, saved[i].key, saved[i].outcome]);
+  }
+  for (let r = 11; r >= 1; r--) {
+    events.keydown({ code: "Space", altKey: true, preventDefault() {} });
+    assert.equal(nodes["#current-key"].textContent, saved[r - 1].key);
+    assert.ok(nodes["#outcome-help"].textContent.includes(saved[r - 1].outcome));
+    assert.equal(nodes["#r-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
+    assert.equal(nodes["#r-control"].children.filter((button) => button.children.length === 3).length, r - 1);
+  }
 });

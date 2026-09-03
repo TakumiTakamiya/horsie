@@ -10,6 +10,9 @@
     amount: "0",
     outcome: null,
   };
+  // Per-race records last for the lifetime of this page; calculator input/settings
+  // remain shared. Never carry a confirmed result into a previously unseen race.
+  const raceRecords = new Map();
 
   const decimalFormatter = new Intl.NumberFormat("en-US", {
     useGrouping: false,
@@ -54,6 +57,47 @@
     return `${R_TO_X[state.r]}${state.y}${state.z}`;
   }
 
+  function saveCurrentRace() {
+    raceRecords.set(state.r, { y: state.y, z: state.z, key: getKey(), outcome: state.outcome });
+  }
+
+  function renderRaceButtons() {
+    document.querySelector("#r-control").querySelectorAll("button").forEach((button) => {
+      const r = Number(button.dataset.r);
+      const past = r < state.r;
+      const record = raceRecords.get(r);
+      const phase = past ? "past" : r === state.r ? "current" : "future";
+      const key = past ? record?.key ?? "—" : "";
+      const outcome = past ? record?.outcome ?? "—" : "";
+      button.dataset.phase = phase;
+      button.setAttribute("aria-pressed", String(r === state.r));
+      const label = past
+        ? `${r}R、キー ${record?.key ?? "未記録"}、結果 ${record ? record.outcome ?? "未選択" : "未記録"}`
+        : `${r}R`;
+      button.setAttribute("aria-label", label);
+      button.title = label;
+      const signature = `${phase}:${key}:${outcome}`;
+      if (button.dataset.summary === signature) return;
+      const raceLabel = document.createElement("span");
+      raceLabel.className = "race-label";
+      raceLabel.textContent = `${r}R`;
+      const content = [raceLabel];
+      if (past) {
+        const keyLabel = document.createElement("span");
+        keyLabel.className = "race-key";
+        keyLabel.textContent = key;
+        const outcomeLabel = document.createElement("span");
+        outcomeLabel.className = "race-outcome";
+        if (record?.outcome) outcomeLabel.append(formatSelection(outcome));
+        else outcomeLabel.textContent = "—";
+        content.push(keyLabel, outcomeLabel);
+      }
+      // Preserve the actual button so click/keyboard focus remains stable.
+      button.replaceChildren(...content);
+      button.dataset.summary = signature;
+    });
+  }
+
   function setPressedButton(container, attribute, value) {
     container.querySelectorAll("button").forEach((button) => {
       button.setAttribute("aria-pressed", String(button.dataset[attribute] === String(value)));
@@ -68,7 +112,6 @@
     document.querySelector("#current-key").textContent = key;
     document.querySelector("#current-r").textContent = `${state.r}R`;
     document.querySelector("#current-x").textContent = R_TO_X[state.r];
-    setPressedButton(document.querySelector("#r-control"), "r", state.r);
     setPressedButton(document.querySelector("#y-control"), "value", state.y);
     setPressedButton(document.querySelector("#z-control"), "value", state.z);
 
@@ -94,6 +137,8 @@
     const calculator = window.HorsieCalculator;
     const outcomes = calculator.getOutcomes(rows);
     state.outcome = calculator.retainOutcome(rows, state.outcome);
+    saveCurrentRace();
+    renderRaceButtons();
     const controls = document.querySelector("#outcome-control");
     const signature = outcomes.join(",");
     // Keep existing buttons/focus when only odds, the amount, or selection changes.
@@ -135,7 +180,15 @@
   }
 
   function selectR(nextR, scrollIntoView) {
-    state.r = ((nextR - 1 + 12) % 12) + 1;
+    const r = ((nextR - 1 + 12) % 12) + 1;
+    if (r !== state.r) {
+      saveCurrentRace();
+      const record = raceRecords.get(r);
+      state.r = r;
+      state.y = record?.y ?? state.y;
+      state.z = record?.z ?? state.z;
+      state.outcome = record?.outcome ?? null;
+    }
     render();
     if (scrollIntoView) {
       document.querySelector(`[data-r="${state.r}"]`).scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
