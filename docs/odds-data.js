@@ -5,64 +5,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.4918333333333336,
-      "decimalOdds": 40.13109491003946
+      "probabilityPercent": 2.49,
+      "decimalOdds": 40.13
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 3.1734999999999998,
-      "decimalOdds": 31.510950055144164
+      "probabilityPercent": 3.17,
+      "decimalOdds": 31.51
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.148833333333333,
-      "decimalOdds": 24.103161531354196
+      "probabilityPercent": 4.15,
+      "decimalOdds": 24.1
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 6.8525,
-      "decimalOdds": 14.59321415541773
+      "probabilityPercent": 6.85,
+      "decimalOdds": 14.59
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 4.983666666666667,
-      "decimalOdds": 20.06554745501973
+      "probabilityPercent": 4.98,
+      "decimalOdds": 20.07
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 6.3469999999999995,
-      "decimalOdds": 15.755475027572082
+      "probabilityPercent": 6.35,
+      "decimalOdds": 15.76
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 11.001333333333333,
-      "decimalOdds": 9.089807296085322
+      "probabilityPercent": 11.0,
+      "decimalOdds": 9.09
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 14.951,
-      "decimalOdds": 6.68851581833991
+      "probabilityPercent": 14.95,
+      "decimalOdds": 6.69
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 28.349666666666668,
-      "decimalOdds": 3.5273783348422674
+      "probabilityPercent": 28.35,
+      "decimalOdds": 3.53
     }
   ],
   "SDD": [
@@ -70,85 +70,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.97525,
-      "decimalOdds": 33.610620956222164
+      "probabilityPercent": 2.98,
+      "decimalOdds": 33.61
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.3935,
-      "decimalOdds": 29.46810078090467
+      "probabilityPercent": 3.39,
+      "decimalOdds": 29.47
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.86675,
-      "decimalOdds": 25.861511605353332
+      "probabilityPercent": 3.87,
+      "decimalOdds": 25.86
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.2764999999999995,
-      "decimalOdds": 23.3836080907284
+      "probabilityPercent": 4.28,
+      "decimalOdds": 23.38
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.9334999999999996,
-      "decimalOdds": 20.269585486976794
+      "probabilityPercent": 4.93,
+      "decimalOdds": 20.27
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.5545,
-      "decimalOdds": 18.003420649923488
+      "probabilityPercent": 5.55,
+      "decimalOdds": 18.0
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.9505,
-      "decimalOdds": 16.805310478111082
+      "probabilityPercent": 5.95,
+      "decimalOdds": 16.81
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.670000000000001,
-      "decimalOdds": 13.037809647979138
+      "probabilityPercent": 7.67,
+      "decimalOdds": 13.04
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.80025,
-      "decimalOdds": 11.363313542228914
+      "probabilityPercent": 8.8,
+      "decimalOdds": 11.36
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 11.109,
-      "decimalOdds": 9.001710324961744
+      "probabilityPercent": 11.11,
+      "decimalOdds": 9.0
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 21.2905,
-      "decimalOdds": 4.696930555881731
+      "probabilityPercent": 21.29,
+      "decimalOdds": 4.7
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 28.7095,
-      "decimalOdds": 3.4831675926087184
+      "probabilityPercent": 28.71,
+      "decimalOdds": 3.48
     }
   ],
   "SD2J": [
@@ -156,64 +156,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.4684999999999997,
-      "decimalOdds": 40.5104314360948
+      "probabilityPercent": 2.47,
+      "decimalOdds": 40.51
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 3.1963333333333335,
-      "decimalOdds": 31.285848367921574
+      "probabilityPercent": 3.2,
+      "decimalOdds": 31.29
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.204333333333333,
-      "decimalOdds": 23.784983746927775
+      "probabilityPercent": 4.2,
+      "decimalOdds": 23.78
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 6.797499999999999,
-      "decimalOdds": 14.71129091577786
+      "probabilityPercent": 6.8,
+      "decimalOdds": 14.71
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 4.936999999999999,
-      "decimalOdds": 20.2552157180474
+      "probabilityPercent": 4.94,
+      "decimalOdds": 20.26
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 6.392666666666667,
-      "decimalOdds": 15.642924183960787
+      "probabilityPercent": 6.39,
+      "decimalOdds": 15.64
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 11.001833333333334,
-      "decimalOdds": 9.089394191877112
+      "probabilityPercent": 11.0,
+      "decimalOdds": 9.09
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 14.811,
-      "decimalOdds": 6.751738572682466
+      "probabilityPercent": 14.81,
+      "decimalOdds": 6.75
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 28.396333333333335,
-      "decimalOdds": 3.521581424831844
+      "probabilityPercent": 28.4,
+      "decimalOdds": 3.52
     }
   ],
   "SDDJ": [
@@ -221,85 +221,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.972,
-      "decimalOdds": 33.64737550471063
+      "probabilityPercent": 2.97,
+      "decimalOdds": 33.65
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.383,
-      "decimalOdds": 29.559562518474728
+      "probabilityPercent": 3.38,
+      "decimalOdds": 29.56
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.9215,
-      "decimalOdds": 25.50044625780951
+      "probabilityPercent": 3.92,
+      "decimalOdds": 25.5
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
       "probabilityPercent": 4.25,
-      "decimalOdds": 23.52941176470588
+      "decimalOdds": 23.53
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.919,
-      "decimalOdds": 20.329335230737957
+      "probabilityPercent": 4.92,
+      "decimalOdds": 20.33
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.5545,
-      "decimalOdds": 18.003420649923488
+      "probabilityPercent": 5.55,
+      "decimalOdds": 18.0
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.944,
-      "decimalOdds": 16.823687752355315
+      "probabilityPercent": 5.94,
+      "decimalOdds": 16.82
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.632999999999999,
-      "decimalOdds": 13.101008777675881
+      "probabilityPercent": 7.63,
+      "decimalOdds": 13.1
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.8405,
-      "decimalOdds": 11.311577399468357
+      "probabilityPercent": 8.84,
+      "decimalOdds": 11.31
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 11.109,
-      "decimalOdds": 9.001710324961744
+      "probabilityPercent": 11.11,
+      "decimalOdds": 9.0
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
       "probabilityPercent": 21.21,
-      "decimalOdds": 4.714757190004715
+      "decimalOdds": 4.71
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
       "probabilityPercent": 28.79,
-      "decimalOdds": 3.473428273706148
+      "decimalOdds": 3.47
     }
   ],
   "SD2JJ": [
@@ -307,64 +307,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.4665000000000004,
-      "decimalOdds": 40.54327995134806
+      "probabilityPercent": 2.47,
+      "decimalOdds": 40.54
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 3.2348333333333334,
-      "decimalOdds": 30.91349374001752
+      "probabilityPercent": 3.23,
+      "decimalOdds": 30.91
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.1855,
-      "decimalOdds": 23.89200812328276
+      "probabilityPercent": 4.19,
+      "decimalOdds": 23.89
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 6.779833333333333,
-      "decimalOdds": 14.749625113695027
+      "probabilityPercent": 6.78,
+      "decimalOdds": 14.75
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 4.933000000000001,
-      "decimalOdds": 20.27163997567403
+      "probabilityPercent": 4.93,
+      "decimalOdds": 20.27
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 6.469666666666667,
-      "decimalOdds": 15.45674687000876
+      "probabilityPercent": 6.47,
+      "decimalOdds": 15.46
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 10.965333333333332,
-      "decimalOdds": 9.119649805447471
+      "probabilityPercent": 10.97,
+      "decimalOdds": 9.12
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 14.799000000000001,
-      "decimalOdds": 6.757213325224677
+      "probabilityPercent": 14.8,
+      "decimalOdds": 6.76
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 28.400333333333332,
-      "decimalOdds": 3.5210854332695627
+      "probabilityPercent": 28.4,
+      "decimalOdds": 3.52
     }
   ],
   "SDDJJ": [
@@ -372,85 +372,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.9705,
-      "decimalOdds": 33.664366268305
+      "probabilityPercent": 2.97,
+      "decimalOdds": 33.66
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.37625,
-      "decimalOdds": 29.618659755646057
+      "probabilityPercent": 3.38,
+      "decimalOdds": 29.62
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.89575,
-      "decimalOdds": 25.668998267342616
+      "probabilityPercent": 3.9,
+      "decimalOdds": 25.67
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.28175,
-      "decimalOdds": 23.354936649734338
+      "probabilityPercent": 4.28,
+      "decimalOdds": 23.35
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.91725,
-      "decimalOdds": 20.336570237429456
+      "probabilityPercent": 4.92,
+      "decimalOdds": 20.34
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.5585,
-      "decimalOdds": 17.990465053521632
+      "probabilityPercent": 5.56,
+      "decimalOdds": 17.99
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.941,
-      "decimalOdds": 16.8321831341525
+      "probabilityPercent": 5.94,
+      "decimalOdds": 16.83
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.6579999999999995,
-      "decimalOdds": 13.058239749281798
+      "probabilityPercent": 7.66,
+      "decimalOdds": 13.06
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.813,
-      "decimalOdds": 11.346873936230569
+      "probabilityPercent": 8.81,
+      "decimalOdds": 11.35
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 11.117,
-      "decimalOdds": 8.995232526760816
+      "probabilityPercent": 11.12,
+      "decimalOdds": 9.0
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 21.257,
-      "decimalOdds": 4.704332690407865
+      "probabilityPercent": 21.26,
+      "decimalOdds": 4.7
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 28.743000000000002,
-      "decimalOdds": 3.4791079567198966
+      "probabilityPercent": 28.74,
+      "decimalOdds": 3.48
     }
   ],
   "MD2": [
@@ -458,64 +458,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.197833333333333,
-      "decimalOdds": 45.499355425798136
+      "probabilityPercent": 2.2,
+      "decimalOdds": 45.5
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.919166666666667,
-      "decimalOdds": 34.2563516985441
+      "probabilityPercent": 2.92,
+      "decimalOdds": 34.26
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.031833333333333,
-      "decimalOdds": 24.80261254185441
+      "probabilityPercent": 4.03,
+      "decimalOdds": 24.8
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 7.517833333333333,
-      "decimalOdds": 13.301704835169708
+      "probabilityPercent": 7.52,
+      "decimalOdds": 13.3
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 4.395666666666666,
-      "decimalOdds": 22.749677712899068
+      "probabilityPercent": 4.4,
+      "decimalOdds": 22.75
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 5.838333333333334,
-      "decimalOdds": 17.12817584927205
+      "probabilityPercent": 5.84,
+      "decimalOdds": 17.13
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 11.549666666666667,
-      "decimalOdds": 8.658258535599872
+      "probabilityPercent": 11.55,
+      "decimalOdds": 8.66
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 13.187,
-      "decimalOdds": 7.58322590429969
+      "probabilityPercent": 13.19,
+      "decimalOdds": 7.58
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 28.93766666666667,
-      "decimalOdds": 3.4557036388559315
+      "probabilityPercent": 28.94,
+      "decimalOdds": 3.46
     }
   ],
   "MDD": [
@@ -523,85 +523,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.73725,
-      "decimalOdds": 36.53301671385515
+      "probabilityPercent": 2.74,
+      "decimalOdds": 36.53
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.2535000000000003,
-      "decimalOdds": 30.73613032119256
+      "probabilityPercent": 3.25,
+      "decimalOdds": 30.74
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.787,
-      "decimalOdds": 26.406126221283337
+      "probabilityPercent": 3.79,
+      "decimalOdds": 26.41
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.30175,
-      "decimalOdds": 23.246353228337306
+      "probabilityPercent": 4.3,
+      "decimalOdds": 23.25
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.9845,
-      "decimalOdds": 20.062192797672786
+      "probabilityPercent": 4.98,
+      "decimalOdds": 20.06
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.936,
-      "decimalOdds": 16.846361185983827
+      "probabilityPercent": 5.94,
+      "decimalOdds": 16.85
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.4745,
-      "decimalOdds": 18.266508356927574
+      "probabilityPercent": 5.47,
+      "decimalOdds": 18.27
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.555249999999999,
-      "decimalOdds": 13.235829390159163
+      "probabilityPercent": 7.56,
+      "decimalOdds": 13.24
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.7715,
-      "decimalOdds": 11.40055862737274
+      "probabilityPercent": 8.77,
+      "decimalOdds": 11.4
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 11.872,
-      "decimalOdds": 8.423180592991914
+      "probabilityPercent": 11.87,
+      "decimalOdds": 8.42
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 20.585,
-      "decimalOdds": 4.857906242409522
+      "probabilityPercent": 20.59,
+      "decimalOdds": 4.86
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 29.415000000000003,
-      "decimalOdds": 3.3996260411354746
+      "probabilityPercent": 29.42,
+      "decimalOdds": 3.4
     }
   ],
   "MD2J": [
@@ -609,64 +609,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.2036666666666664,
-      "decimalOdds": 45.37891393132658
+      "probabilityPercent": 2.2,
+      "decimalOdds": 45.38
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.9381666666666666,
-      "decimalOdds": 34.0348289749844
+      "probabilityPercent": 2.94,
+      "decimalOdds": 34.03
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.0895,
-      "decimalOdds": 24.45286709866732
+      "probabilityPercent": 4.09,
+      "decimalOdds": 24.45
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 7.435333333333334,
-      "decimalOdds": 13.4492961535013
+      "probabilityPercent": 7.44,
+      "decimalOdds": 13.45
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 4.407333333333333,
-      "decimalOdds": 22.68945696566329
+      "probabilityPercent": 4.41,
+      "decimalOdds": 22.69
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 5.876333333333333,
-      "decimalOdds": 17.0174144874922
+      "probabilityPercent": 5.88,
+      "decimalOdds": 17.02
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 11.524833333333333,
-      "decimalOdds": 8.676915067463014
+      "probabilityPercent": 11.52,
+      "decimalOdds": 8.68
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 13.222000000000001,
-      "decimalOdds": 7.563152321887762
+      "probabilityPercent": 13.22,
+      "decimalOdds": 7.56
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 28.926000000000002,
-      "decimalOdds": 3.4570974210053236
+      "probabilityPercent": 28.93,
+      "decimalOdds": 3.46
     }
   ],
   "MDDJ": [
@@ -674,85 +674,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.7425,
-      "decimalOdds": 36.46308113035551
+      "probabilityPercent": 2.74,
+      "decimalOdds": 36.46
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.2994999999999997,
-      "decimalOdds": 30.30762236702531
+      "probabilityPercent": 3.3,
+      "decimalOdds": 30.31
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.81925,
-      "decimalOdds": 26.18315114223997
+      "probabilityPercent": 3.82,
+      "decimalOdds": 26.18
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.252750000000001,
-      "decimalOdds": 23.51419669625536
+      "probabilityPercent": 4.25,
+      "decimalOdds": 23.51
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.016,
-      "decimalOdds": 19.93620414673046
+      "probabilityPercent": 5.02,
+      "decimalOdds": 19.94
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
       "probabilityPercent": 5.87,
-      "decimalOdds": 17.035775127768314
+      "decimalOdds": 17.04
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.485,
-      "decimalOdds": 18.231540565177756
+      "probabilityPercent": 5.49,
+      "decimalOdds": 18.23
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.552250000000001,
-      "decimalOdds": 13.241087093250355
+      "probabilityPercent": 7.55,
+      "decimalOdds": 13.24
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.83525,
-      "decimalOdds": 11.31829885968139
+      "probabilityPercent": 8.84,
+      "decimalOdds": 11.32
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
       "probabilityPercent": 11.74,
-      "decimalOdds": 8.517887563884157
+      "decimalOdds": 8.52
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 20.5895,
-      "decimalOdds": 4.856844508123072
+      "probabilityPercent": 20.59,
+      "decimalOdds": 4.86
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 29.4105,
-      "decimalOdds": 3.40014620628687
+      "probabilityPercent": 29.41,
+      "decimalOdds": 3.4
     }
   ],
   "MD2JJ": [
@@ -760,64 +760,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.205333333333333,
-      "decimalOdds": 45.34461910519952
+      "probabilityPercent": 2.21,
+      "decimalOdds": 45.34
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 3.0131666666666668,
-      "decimalOdds": 33.187676309530396
+      "probabilityPercent": 3.01,
+      "decimalOdds": 33.19
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.122999999999999,
-      "decimalOdds": 24.25418384671356
+      "probabilityPercent": 4.12,
+      "decimalOdds": 24.25
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 7.325166666666667,
-      "decimalOdds": 13.651566517257853
+      "probabilityPercent": 7.33,
+      "decimalOdds": 13.65
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 4.410666666666666,
-      "decimalOdds": 22.67230955259976
+      "probabilityPercent": 4.41,
+      "decimalOdds": 22.67
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 6.0263333333333335,
-      "decimalOdds": 16.593838154765198
+      "probabilityPercent": 6.03,
+      "decimalOdds": 16.59
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 11.448166666666665,
-      "decimalOdds": 8.73502307501929
+      "probabilityPercent": 11.45,
+      "decimalOdds": 8.74
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 13.232,
-      "decimalOdds": 7.557436517533253
+      "probabilityPercent": 13.23,
+      "decimalOdds": 7.56
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 28.922666666666668,
-      "decimalOdds": 3.4574958510049787
+      "probabilityPercent": 28.92,
+      "decimalOdds": 3.46
     }
   ],
   "MDDJJ": [
@@ -825,85 +825,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.80425,
-      "decimalOdds": 35.66015868770616
+      "probabilityPercent": 2.8,
+      "decimalOdds": 35.66
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
       "probabilityPercent": 3.25,
-      "decimalOdds": 30.769230769230766
+      "decimalOdds": 30.77
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.83975,
-      "decimalOdds": 26.043362198059768
+      "probabilityPercent": 3.84,
+      "decimalOdds": 26.04
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.249,
-      "decimalOdds": 23.53494939985879
+      "probabilityPercent": 4.25,
+      "decimalOdds": 23.53
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.99125,
-      "decimalOdds": 20.035061357375408
+      "probabilityPercent": 4.99,
+      "decimalOdds": 20.04
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.86575,
-      "decimalOdds": 17.0481183139411
+      "probabilityPercent": 5.87,
+      "decimalOdds": 17.05
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.6085,
-      "decimalOdds": 17.83007934385308
+      "probabilityPercent": 5.61,
+      "decimalOdds": 17.83
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.4990000000000006,
-      "decimalOdds": 13.335111348179757
+      "probabilityPercent": 7.5,
+      "decimalOdds": 13.34
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.831,
-      "decimalOdds": 11.323745895142114
+      "probabilityPercent": 8.83,
+      "decimalOdds": 11.32
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 11.7315,
-      "decimalOdds": 8.52405915697055
+      "probabilityPercent": 11.73,
+      "decimalOdds": 8.52
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 20.6065,
-      "decimalOdds": 4.852837696843229
+      "probabilityPercent": 20.61,
+      "decimalOdds": 4.85
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 29.3935,
-      "decimalOdds": 3.4021127119941483
+      "probabilityPercent": 29.39,
+      "decimalOdds": 3.4
     }
   ],
   "LD2": [
@@ -911,64 +911,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 1.8680029071899609,
-      "decimalOdds": 53.53310726396573
+      "probabilityPercent": 1.87,
+      "decimalOdds": 53.53
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.592800037340054,
-      "decimalOdds": 38.56834254854057
+      "probabilityPercent": 2.59,
+      "decimalOdds": 38.57
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 3.7913491095063776,
-      "decimalOdds": 26.375835385156524
+      "probabilityPercent": 3.79,
+      "decimalOdds": 26.38
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 8.414514612630274,
-      "decimalOdds": 11.884226791869725
+      "probabilityPercent": 8.41,
+      "decimalOdds": 11.88
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 3.7360058143799217,
-      "decimalOdds": 26.766553631982866
+      "probabilityPercent": 3.74,
+      "decimalOdds": 26.77
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 5.185600074680108,
-      "decimalOdds": 19.284171274270285
+      "probabilityPercent": 5.19,
+      "decimalOdds": 19.28
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 12.20586372213665,
-      "decimalOdds": 8.192783589631532
+      "probabilityPercent": 12.21,
+      "decimalOdds": 8.19
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 11.208017443139767,
-      "decimalOdds": 8.922184543994288
+      "probabilityPercent": 11.21,
+      "decimalOdds": 8.92
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 29.597327518953414,
-      "decimalOdds": 3.3786834279535007
+      "probabilityPercent": 29.6,
+      "decimalOdds": 3.38
     }
   ],
   "LDD": [
@@ -976,85 +976,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.4889988998899892,
-      "decimalOdds": 40.17679558011049
+      "probabilityPercent": 2.49,
+      "decimalOdds": 40.18
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.027802780278028,
-      "decimalOdds": 33.027250206440954
+      "probabilityPercent": 3.03,
+      "decimalOdds": 33.03
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.596359635963596,
-      "decimalOdds": 27.80589543937709
+      "probabilityPercent": 3.6,
+      "decimalOdds": 27.81
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.342184218421842,
-      "decimalOdds": 23.029884263257905
+      "probabilityPercent": 4.34,
+      "decimalOdds": 23.03
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.221522152215222,
-      "decimalOdds": 19.151503543382493
+      "probabilityPercent": 5.22,
+      "decimalOdds": 19.15
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 6.323132313231324,
-      "decimalOdds": 15.81494661921708
+      "probabilityPercent": 6.32,
+      "decimalOdds": 15.81
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 4.9779977997799785,
-      "decimalOdds": 20.088397790055247
+      "probabilityPercent": 4.98,
+      "decimalOdds": 20.09
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.36998699869987,
-      "decimalOdds": 13.56854496726261
+      "probabilityPercent": 7.37,
+      "decimalOdds": 13.57
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.817881788178818,
-      "decimalOdds": 11.3405920381082
+      "probabilityPercent": 8.82,
+      "decimalOdds": 11.34
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 12.646264626462647,
-      "decimalOdds": 7.90747330960854
+      "probabilityPercent": 12.65,
+      "decimalOdds": 7.91
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 19.717971797179718,
-      "decimalOdds": 5.071515520389531
+      "probabilityPercent": 19.72,
+      "decimalOdds": 5.07
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 30.282028202820282,
-      "decimalOdds": 3.302288714950956
+      "probabilityPercent": 30.28,
+      "decimalOdds": 3.3
     }
   ],
   "LD2J": [
@@ -1062,64 +1062,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 1.8695,
-      "decimalOdds": 53.490238031559244
+      "probabilityPercent": 1.87,
+      "decimalOdds": 53.49
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.6628333333333334,
-      "decimalOdds": 37.553983851786946
+      "probabilityPercent": 2.66,
+      "decimalOdds": 37.55
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 3.903666666666667,
-      "decimalOdds": 25.616941337204334
+      "probabilityPercent": 3.9,
+      "decimalOdds": 25.62
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 8.230666666666666,
-      "decimalOdds": 12.149684108213187
+      "probabilityPercent": 8.23,
+      "decimalOdds": 12.15
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 3.739,
-      "decimalOdds": 26.745119015779622
+      "probabilityPercent": 3.74,
+      "decimalOdds": 26.75
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 5.325666666666667,
-      "decimalOdds": 18.776991925893473
+      "probabilityPercent": 5.33,
+      "decimalOdds": 18.78
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 12.134333333333334,
-      "decimalOdds": 8.241079031947915
+      "probabilityPercent": 12.13,
+      "decimalOdds": 8.24
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 11.217,
-      "decimalOdds": 8.91503967192654
+      "probabilityPercent": 11.22,
+      "decimalOdds": 8.92
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 29.594333333333335,
-      "decimalOdds": 3.379025263845556
+      "probabilityPercent": 29.59,
+      "decimalOdds": 3.38
     }
   ],
   "LDDJ": [
@@ -1127,85 +1127,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.5149999999999997,
-      "decimalOdds": 39.761431411530815
+      "probabilityPercent": 2.51,
+      "decimalOdds": 39.76
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.0582499999999997,
-      "decimalOdds": 32.69843864955448
+      "probabilityPercent": 3.06,
+      "decimalOdds": 32.7
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.657,
-      "decimalOdds": 27.344818156959256
+      "probabilityPercent": 3.66,
+      "decimalOdds": 27.34
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.28725,
-      "decimalOdds": 23.324975217213833
+      "probabilityPercent": 4.29,
+      "decimalOdds": 23.32
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.2017500000000005,
-      "decimalOdds": 19.224299514586438
+      "probabilityPercent": 5.2,
+      "decimalOdds": 19.22
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 6.28075,
-      "decimalOdds": 15.921665406201488
+      "probabilityPercent": 6.28,
+      "decimalOdds": 15.92
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.029999999999999,
-      "decimalOdds": 19.880715705765407
+      "probabilityPercent": 5.03,
+      "decimalOdds": 19.88
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.3455,
-      "decimalOdds": 13.613777142468177
+      "probabilityPercent": 7.35,
+      "decimalOdds": 13.61
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.85875,
-      "decimalOdds": 11.288274305065613
+      "probabilityPercent": 8.86,
+      "decimalOdds": 11.29
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 12.5615,
-      "decimalOdds": 7.960832703100744
+      "probabilityPercent": 12.56,
+      "decimalOdds": 7.96
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 19.721,
-      "decimalOdds": 5.070736778053852
+      "probabilityPercent": 19.72,
+      "decimalOdds": 5.07
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 30.279,
-      "decimalOdds": 3.302618976848641
+      "probabilityPercent": 30.28,
+      "decimalOdds": 3.3
     }
   ],
   "LD2JJ": [
@@ -1213,64 +1213,64 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 1.8753333333333333,
-      "decimalOdds": 53.32385353714895
+      "probabilityPercent": 1.88,
+      "decimalOdds": 53.32
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 6,
-      "probabilityPercent": 2.7408333333333337,
-      "decimalOdds": 36.48525387655822
+      "probabilityPercent": 2.74,
+      "decimalOdds": 36.49
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 6,
-      "probabilityPercent": 4.004333333333333,
-      "decimalOdds": 24.97294597519354
+      "probabilityPercent": 4.0,
+      "decimalOdds": 24.97
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 8.046166666666666,
-      "decimalOdds": 12.428278476293059
+      "probabilityPercent": 8.05,
+      "decimalOdds": 12.43
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 3,
-      "probabilityPercent": 3.7506666666666666,
-      "decimalOdds": 26.661926768574475
+      "probabilityPercent": 3.75,
+      "decimalOdds": 26.66
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 3,
-      "probabilityPercent": 5.481666666666667,
-      "decimalOdds": 18.24262693827911
+      "probabilityPercent": 5.48,
+      "decimalOdds": 18.24
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 6,
-      "probabilityPercent": 12.0505,
-      "decimalOdds": 8.298410854321398
+      "probabilityPercent": 12.05,
+      "decimalOdds": 8.3
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 1,
-      "probabilityPercent": 11.251999999999999,
-      "decimalOdds": 8.887308922858159
+      "probabilityPercent": 11.25,
+      "decimalOdds": 8.89
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 3,
-      "probabilityPercent": 29.582666666666668,
-      "decimalOdds": 3.380357867219543
+      "probabilityPercent": 29.58,
+      "decimalOdds": 3.38
     }
   ],
   "LDDJJ": [
@@ -1278,85 +1278,85 @@ const ODDS_DATA = Object.freeze({
       "wagerType": "Trifecta",
       "selection": "DD@",
       "equivalentTickets": 4,
-      "probabilityPercent": 2.5505,
-      "decimalOdds": 39.20799843168006
+      "probabilityPercent": 2.55,
+      "decimalOdds": 39.21
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.0875,
-      "decimalOdds": 32.388663967611336
+      "probabilityPercent": 3.09,
+      "decimalOdds": 32.39
     },
     {
       "wagerType": "Trifecta",
       "selection": "@DD",
       "equivalentTickets": 4,
-      "probabilityPercent": 3.749,
-      "decimalOdds": 26.673779674579887
+      "probabilityPercent": 3.75,
+      "decimalOdds": 26.67
     },
     {
       "wagerType": "Trifecta",
       "selection": "D@@",
       "equivalentTickets": 4,
-      "probabilityPercent": 4.23225,
-      "decimalOdds": 23.6280938035324
+      "probabilityPercent": 4.23,
+      "decimalOdds": 23.63
     },
     {
       "wagerType": "Trifecta",
       "selection": "@D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 5.144,
-      "decimalOdds": 19.440124416796266
+      "probabilityPercent": 5.14,
+      "decimalOdds": 19.44
     },
     {
       "wagerType": "Trifecta",
       "selection": "@@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 6.23675,
-      "decimalOdds": 16.03399206317393
+      "probabilityPercent": 6.24,
+      "decimalOdds": 16.03
     },
     {
       "wagerType": "Exacta",
       "selection": "DD",
       "equivalentTickets": 2,
-      "probabilityPercent": 5.101,
-      "decimalOdds": 19.60399921584003
+      "probabilityPercent": 5.1,
+      "decimalOdds": 19.6
     },
     {
       "wagerType": "Exacta",
       "selection": "D@",
       "equivalentTickets": 4,
-      "probabilityPercent": 7.31975,
-      "decimalOdds": 13.661668772840603
+      "probabilityPercent": 7.32,
+      "decimalOdds": 13.66
     },
     {
       "wagerType": "Exacta",
       "selection": "@D",
       "equivalentTickets": 4,
-      "probabilityPercent": 8.892999999999999,
-      "decimalOdds": 11.244799280332847
+      "probabilityPercent": 8.89,
+      "decimalOdds": 11.24
     },
     {
       "wagerType": "Exacta",
       "selection": "@@",
       "equivalentTickets": 2,
-      "probabilityPercent": 12.4735,
-      "decimalOdds": 8.016996031586965
+      "probabilityPercent": 12.47,
+      "decimalOdds": 8.02
     },
     {
       "wagerType": "Win",
       "selection": "D",
       "equivalentTickets": 2,
-      "probabilityPercent": 19.7405,
-      "decimalOdds": 5.065727818444315
+      "probabilityPercent": 19.74,
+      "decimalOdds": 5.07
     },
     {
       "wagerType": "Win",
       "selection": "@",
       "equivalentTickets": 2,
-      "probabilityPercent": 30.2595,
-      "decimalOdds": 3.3047472694525686
+      "probabilityPercent": 30.26,
+      "decimalOdds": 3.3
     }
   ]
 });

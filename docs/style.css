@@ -102,12 +102,15 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgb(31 106 74 / 2
 .icon-button:hover { background: rgb(255 255 255 / 12%); }
 .icon-button:focus-visible { outline-color: white; }
 .table-wrap { position: relative; min-height: 166px; overflow-x: auto; }
-table { width: 100%; min-width: 700px; border-collapse: collapse; }
+table { width: 100%; min-width: 520px; border-collapse: collapse; }
 th, td { padding: 13px 18px; border-bottom: 1px solid #e8e7e0; text-align: left; }
 th { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
-td:first-child { font-weight: 700; }
-td:nth-child(2) { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
-th:nth-child(n+3), td:nth-child(n+3) { text-align: right; font-variant-numeric: tabular-nums; }
+td:first-child { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
+.selection-symbols { display: inline-flex; gap: 4px; }
+.selection-symbol { display: inline-flex; width: 1.8em; height: 1.8em; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 5px; }
+.selection-symbol--d { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-dark); font-weight: 800; }
+.selection-symbol--other { color: var(--muted); font-weight: 400; }
+th:nth-child(n+2), td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .result-note { margin: 0; padding: 15px 24px 18px; border-top: 1px solid #e8e7e0; color: var(--muted); font-size: 0.78rem; }
 .result-note code { color: var(--accent-dark); font-weight: 800; }
 .empty-state { margin: 0; padding: 38px 24px 48px; color: var(--muted); text-align: center; }

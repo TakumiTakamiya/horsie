@@ -1,6 +1,9 @@
+import json
 import unittest
+from copy import deepcopy
+from decimal import Decimal
 
-from calculate_odds import calculate_scenario, parse_scenario
+from calculate_odds import calculate_scenario, parse_scenario, render_javascript
 
 
 def rows_by_key(rows):
@@ -8,6 +11,34 @@ def rows_by_key(rows):
 
 
 class CalculateOddsTests(unittest.TestCase):
+    def test_export_rounds_half_up_without_changing_calculations(self):
+        source = {"MDD": [
+            {"wagerType": "Win", "selection": "D", "equivalentTickets": 2,
+             "probabilityPercent": 2.675, "decimalOdds": 10.825},
+            {"wagerType": "Win", "selection": "@", "equivalentTickets": 2,
+             "probabilityPercent": 7.494, "decimalOdds": 7.495},
+        ]}
+        original = deepcopy(source)
+        output = render_javascript(source)
+        exported = json.loads(output.split("Object.freeze(", 1)[1].rsplit(");", 1)[0])
+        self.assertEqual(exported["MDD"][0]["probabilityPercent"], 2.68)
+        self.assertEqual(exported["MDD"][0]["decimalOdds"], 10.83)
+        self.assertEqual(exported["MDD"][1]["probabilityPercent"], 7.49)
+        self.assertEqual(exported["MDD"][1]["decimalOdds"], 7.5)
+        self.assertIsInstance(exported["MDD"][0]["equivalentTickets"], int)
+        self.assertEqual(source, original)
+
+    def test_exported_values_have_at_most_two_decimal_places(self):
+        rows = calculate_scenario(
+            "LDD", {"DD@": 2, "D@D": 3, "D@@": 5, "@DD": 7, "@D@": 11, "@@D": 13}
+        )
+        output = render_javascript({"LDD": rows})
+        exported = json.loads(output.split("Object.freeze(", 1)[1].rsplit(");", 1)[0])
+        for row in exported["LDD"]:
+            for field in ("probabilityPercent", "decimalOdds"):
+                value = Decimal(str(row[field]))
+                self.assertEqual(value, value.quantize(Decimal("0.01")))
+
     def test_d2_prefix_aggregation_and_equivalent_tickets(self):
         rows = rows_by_key(
             calculate_scenario(

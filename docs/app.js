@@ -9,6 +9,12 @@
     taxRate: 0,
   };
 
+  const decimalFormatter = new Intl.NumberFormat("en-US", {
+    useGrouping: false,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
   function normalizeNumber(value) {
     if (Object.is(value, -0)) return "0";
     return Number(value.toPrecision(12)).toString();
@@ -27,11 +33,19 @@
 
   function formatOdds(originalOdds, taxRate, mode) {
     const taxAppliedValue = originalOdds * (1 - taxRate / 100);
-    return normalizeNumber(applyRounding(taxAppliedValue, mode));
+    return decimalFormatter.format(Number(normalizeNumber(applyRounding(taxAppliedValue, mode))));
   }
 
   function formatSelection(selection) {
-    return selection.split("").join(" → ");
+    const symbols = document.createElement("span");
+    symbols.className = "selection-symbols";
+    for (const symbol of selection) {
+      const token = document.createElement("span");
+      token.className = `selection-symbol selection-symbol--${symbol === "D" ? "d" : "other"}`;
+      token.textContent = symbol;
+      symbols.append(token);
+    }
+    return symbols;
   }
 
   function getKey() {
@@ -58,17 +72,15 @@
 
     body.replaceChildren(...rows.map((item) => {
       const row = document.createElement("tr");
-      const wagerCell = document.createElement("td");
       const selectionCell = document.createElement("td");
       const ticketsCell = document.createElement("td");
       const probabilityCell = document.createElement("td");
       const oddsCell = document.createElement("td");
-      wagerCell.textContent = item.wagerType;
-      selectionCell.textContent = formatSelection(item.selection);
+      selectionCell.append(formatSelection(item.selection));
       ticketsCell.textContent = item.equivalentTickets;
-      probabilityCell.textContent = `${item.probabilityPercent.toFixed(4)}%`;
+      probabilityCell.textContent = `${item.probabilityPercent.toFixed(2)}%`;
       oddsCell.textContent = formatOdds(item.decimalOdds, state.taxRate, state.rounding);
-      row.append(wagerCell, selectionCell, ticketsCell, probabilityCell, oddsCell);
+      row.append(selectionCell, ticketsCell, probabilityCell, oddsCell);
       return row;
     }));
 
