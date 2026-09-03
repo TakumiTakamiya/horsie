@@ -14,6 +14,16 @@
 - 実装・調査などのまとまった作業の終了時に、`DIALY.md` の状態、検証方法、未解決事項を更新する。古い状態を置き換え、秘密情報は記録しない。
 - 引き継ぎファイルも通常の変更として、作業内容とともにコミット・pushする。
 
+## キャッシュ更新フック
+
+- このリポジトリをcloneしたら、一度 `git config --local core.hooksPath .githooks` を実行する。既に別のフック設定がある場合は上書きせず、先に確認する。Gitのローカル設定はclone先へ自動継承されない。
+- コミット環境にはNode.jsが必要（テストはNode.js 22で確認）。`.githooks/pre-commit` が `scripts/update-asset-versions.cjs` を実行する。
+- フックはステージ済みCSS/JSの内容ハッシュを `docs/index.html` の相対参照に `?v=...` として付与し、HTMLを自動ステージする。日付やHEADのコミットIDは使わず、内容が同じならURLは変えない。
+- バージョン更新が必要な際に `docs/index.html` に未ステージ変更があるとコミットを停止する。HTMLをすべてステージするか、未ステージ部分を退避してから再試行する。フックを迂回して公開しない。
+- 通常の `git add` → `git commit` と `git commit -a` を使う。バージョン更新が必要な `git commit --only` / ファイル指定コミット / カスタムインデックスは不整合防止のため停止する。
+- 手動実行: `node scripts/update-asset-versions.cjs`（インデックスも更新するため、先に対象変更をステージする）。
+- 回帰テスト: `node --test scripts/update-asset-versions.test.cjs`。使い捨てリポジトリでフック動作を検証する。
+
 ## プロジェクト構成
 
 - GitHub Pages向けの静的サイトは `docs/`。HTML/CSS/JavaScriptのみで動作し、外部バックエンドやビルド工程は不要。
