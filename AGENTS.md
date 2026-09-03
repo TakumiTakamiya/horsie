@@ -30,3 +30,4 @@
 - `calculate_odds.py` が `simulation_results.json` から `docs/odds-data.js` を生成する。生成ファイルは手編集せず、Python側を修正して再生成する。
 - Pythonテスト: `py -3.9 -m unittest test_calculate_odds.py`（利用可能な互換Pythonでも可）。
 - JavaScript構文確認: `node --check docs/app.js`。
+- 電卓の計算・入力・イベント連携テスト: `node --test scripts/calculator.test.cjs`。計算処理は `docs/calculator.js`、表と共通の倍率設定・画面連携は `docs/app.js`。

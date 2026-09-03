@@ -7,6 +7,8 @@
     z: "",
     rounding: "raw",
     taxRate: 0,
+    amount: "0",
+    outcome: null,
   };
 
   const decimalFormatter = new Intl.NumberFormat("en-US", {
@@ -85,6 +87,51 @@
     }));
 
     document.querySelector("#empty-state").hidden = rows.length > 0;
+    renderCalculator(rows);
+  }
+
+  function renderCalculator(rows = ODDS_DATA[getKey()] || []) {
+    const calculator = window.HorsieCalculator;
+    const outcomes = calculator.getOutcomes(rows);
+    state.outcome = calculator.retainOutcome(rows, state.outcome);
+    const controls = document.querySelector("#outcome-control");
+    const signature = outcomes.join(",");
+    // Keep existing buttons/focus when only odds, the amount, or selection changes.
+    if (controls.dataset.outcomes !== signature) {
+      controls.replaceChildren(...outcomes.map((outcome) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.value = outcome;
+        button.setAttribute("aria-label", `結果 ${outcome}`);
+        button.append(formatSelection(outcome));
+        return button;
+      }));
+      controls.dataset.outcomes = signature;
+    }
+    setPressedButton(controls, "value", state.outcome);
+    document.querySelector("#outcome-help").textContent = outcomes.length === 0
+      ? "この条件の結果データはありません。"
+      : state.outcome ? `選択中：${state.outcome}` : "三連単の結果を選択してください。";
+
+    const amount = calculator.parseAmount(state.amount);
+    const input = document.querySelector("#chip-amount");
+    if (input.value !== state.amount) input.value = state.amount;
+    input.setAttribute("aria-invalid", String(amount.status === "invalid"));
+    document.querySelector("#amount-error").textContent = amount.status === "invalid"
+      ? "0〜9007199254740991の整数を入力してください（小数・負数・指数表記は使えません）。"
+      : "";
+    document.querySelectorAll("button[data-chip]").forEach((button) => {
+      button.disabled = calculator.addChip(state.amount, Number(button.dataset.chip)) === null;
+      button.title = button.disabled ? "入力が無効、または加算すると上限を超えます。" : "";
+    });
+
+    const results = calculator.calculateRows(rows, state.outcome, state.amount,
+      (odds) => formatOdds(odds, state.taxRate, state.rounding));
+    results.forEach(({ type, multiplier, result }) => {
+      const id = type.toLowerCase();
+      document.querySelector(`#${id}-multiplier`).textContent = multiplier ?? "—";
+      document.querySelector(`#${id}-result`).textContent = result ?? "—";
+    });
   }
 
   function selectR(nextR, scrollIntoView) {
@@ -142,6 +189,29 @@
     });
 
     document.querySelector("#tax-rate").addEventListener("input", (event) => validateTaxRate(event.target));
+
+    document.querySelector("#outcome-control").addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-value]");
+      if (!button) return;
+      state.outcome = button.dataset.value;
+      renderCalculator();
+    });
+    document.querySelector("#chip-amount").addEventListener("input", (event) => {
+      state.amount = event.target.value;
+      renderCalculator();
+    });
+    document.querySelector("#chip-control").addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-chip]");
+      if (!button || button.disabled) return;
+      const amount = window.HorsieCalculator.addChip(state.amount, Number(button.dataset.chip));
+      if (amount === null) return;
+      state.amount = amount;
+      renderCalculator();
+    });
+    document.querySelector("#clear-amount").addEventListener("click", () => {
+      state.amount = "0";
+      renderCalculator();
+    });
 
     window.addEventListener("keydown", (event) => {
       if (event.code !== "Space" || event.ctrlKey || event.metaKey) return;

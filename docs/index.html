@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=f5e949a2a06c" />
+    <link rel="stylesheet" href="style.css?v=85784e2c15ab" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
-    <script src="app.js?v=2adea16c0ab0" defer></script>
+    <script src="calculator.js?v=5d98fe2ee770" defer></script>
+    <script src="app.js?v=09c66e3357ad" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -93,9 +94,45 @@
           <p class="section-label">CALCULATOR</p>
           <h2 id="calculator-title">電卓</h2>
         </div>
-        <div class="calculator-placeholder">
-          <p>電卓を実装予定です</p>
-          <span>仕様確定後、ここに追加します。</span>
+        <div class="outcome-field">
+          <h3 id="outcome-label">実際の結果</h3>
+          <div id="outcome-control" class="outcome-buttons" role="group" aria-labelledby="outcome-label" aria-describedby="outcome-help"></div>
+          <p id="outcome-help" class="field-help" role="status">三連単の結果を選択してください。</p>
+        </div>
+
+        <div class="calculation-grid">
+          <div class="amount-field">
+            <label for="chip-amount">入力</label>
+            <input id="chip-amount" type="text" inputmode="numeric" pattern="[0-9]*" value="0" autocomplete="off" spellcheck="false" aria-describedby="amount-help amount-error" />
+          </div>
+          <span class="calculation-times" aria-hidden="true">×</span>
+          <div class="calculation-row">
+            <div class="calculation-rate"><span id="win-label">単勝</span><output id="win-multiplier" aria-label="単勝の倍率">—</output></div>
+            <span class="calculation-equals" aria-hidden="true">=</span>
+            <output id="win-result" class="calculation-result" for="chip-amount" aria-label="単勝の計算結果">—</output>
+          </div>
+          <div class="calculation-row">
+            <div class="calculation-rate"><span id="exacta-label">2連単</span><output id="exacta-multiplier" aria-label="2連単の倍率">—</output></div>
+            <span class="calculation-equals" aria-hidden="true">=</span>
+            <output id="exacta-result" class="calculation-result" for="chip-amount" aria-label="2連単の計算結果">—</output>
+          </div>
+          <div class="calculation-row">
+            <div class="calculation-rate"><span id="trifecta-label">三連単</span><output id="trifecta-multiplier" aria-label="三連単の倍率">—</output></div>
+            <span class="calculation-equals" aria-hidden="true">=</span>
+            <output id="trifecta-result" class="calculation-result" for="chip-amount" aria-label="三連単の計算結果">—</output>
+          </div>
+        </div>
+        <p id="amount-help" class="field-help">0〜9007199254740991の整数を入力できます。</p>
+        <p id="amount-error" class="field-error" role="alert"></p>
+        <p class="calculator-note">倍率は表と共通です。計算結果は小数第2位を四捨五入し、小数第1位まで表示します。</p>
+
+        <div id="chip-control" class="chip-buttons" role="group" aria-label="チップを加算">
+          <button type="button" data-chip="1" aria-label="1チップ加算"><img src="chips/chip1.svg" width="64" height="64" alt="" /><span>+1</span></button>
+          <button type="button" data-chip="5" aria-label="5チップ加算"><img src="chips/chip5.svg" width="64" height="64" alt="" /><span>+5</span></button>
+          <button type="button" data-chip="10" aria-label="10チップ加算"><img src="chips/chip10.svg" width="64" height="64" alt="" /><span>+10</span></button>
+          <button type="button" data-chip="25" aria-label="25チップ加算"><img src="chips/chip25.svg" width="64" height="64" alt="" /><span>+25</span></button>
+          <button type="button" data-chip="100" aria-label="100チップ加算"><img src="chips/chip100.svg" width="64" height="64" alt="" /><span>+100</span></button>
+          <button id="clear-amount" class="clear-amount" type="button">クリア</button>
         </div>
       </section>
       </div>

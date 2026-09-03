@@ -54,9 +54,31 @@ button, input { font: inherit; }
 .result-panel { min-width: 0; overflow: hidden; }
 .calculator-panel { min-width: 0; padding: 24px; }
 .calculator-heading h2 { margin: 0; font-size: 1.2rem; }
-.calculator-placeholder { display: flex; min-height: 320px; margin-top: 20px; padding: 24px; flex-direction: column; justify-content: center; align-items: center; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); text-align: center; }
-.calculator-placeholder p { margin: 0 0 8px; color: var(--ink); font-weight: 700; }
-.calculator-placeholder span { font-size: 0.85rem; }
+.outcome-field { margin-top: 22px; }
+.outcome-field h3 { margin: 0 0 10px; font-size: 0.85rem; }
+.outcome-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.outcome-buttons button { min-height: 44px; padding: 8px 13px; border: 1px solid var(--line); border-radius: 8px; background: white; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 1.05rem; cursor: pointer; }
+.outcome-buttons button:hover { border-color: var(--accent); }
+.outcome-buttons button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.calculation-grid { display: grid; grid-template-columns: minmax(72px, 1fr) 16px minmax(64px, 0.9fr) 16px minmax(72px, 1.3fr); gap: 0 8px; margin-top: 20px; align-items: center; }
+.amount-field { grid-column: 1; grid-row: 1 / span 3; min-width: 0; }
+.amount-field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.8rem; font-weight: 700; }
+.amount-field input { width: 100%; min-width: 0; padding: 12px 8px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.amount-field input[aria-invalid="true"] { border-color: var(--danger); }
+.calculation-times { grid-column: 2; grid-row: 1 / span 3; color: var(--muted); font-size: 1.3rem; }
+.calculation-row { display: contents; }
+.calculation-rate { grid-column: 3; min-width: 0; padding: 14px 0; }
+.calculation-rate > span { display: block; color: var(--muted); font-size: 0.72rem; }
+.calculation-rate output { font-size: 1.1rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.calculation-equals { grid-column: 4; color: var(--muted); }
+.calculation-result { grid-column: 5; min-width: 0; padding: 12px 0; color: var(--accent-dark); font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; overflow-wrap: anywhere; }
+.calculator-note { margin: 10px 0 0; color: var(--muted); font-size: 0.76rem; }
+.chip-buttons { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+.chip-buttons button { display: flex; min-width: 56px; min-height: 44px; padding: 5px; align-items: center; flex-direction: column; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--ink); font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+.chip-buttons img { width: 56px; height: 56px; }
+.chip-buttons button:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--line); }
+.chip-buttons button:disabled { opacity: 0.4; cursor: not-allowed; }
+.chip-buttons .clear-amount { justify-content: center; padding: 10px 14px; border-color: var(--line); background: white; }
 
 .control-heading, .result-heading {
   display: flex;
@@ -140,7 +162,6 @@ th:nth-child(n+2), td:nth-child(n+2) { text-align: right; font-variant-numeric: 
 @media (max-width: 900px) {
   .app-shell { width: calc(100% - 24px); padding: 12px 0 32px; }
   .workspace-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
-  .calculator-placeholder { min-height: 180px; }
 }
 
 @media (max-width: 600px) {
@@ -148,6 +169,13 @@ th:nth-child(n+2), td:nth-child(n+2) { text-align: right; font-variant-numeric: 
   .condition-grid { gap: 12px; padding: 18px; }
   .condition-grid .segmented button { min-width: 44px; padding-inline: 10px; }
   .settings-panel[open] { grid-template-columns: 1fr; }
+  .calculation-grid { grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1.3fr); }
+  .amount-field { grid-column: 1 / -1; grid-row: auto; margin-bottom: 6px; }
+  .calculation-times { display: none; }
+  .calculation-rate { grid-column: 1; }
+  .calculation-rate output::before { content: "× "; color: var(--muted); }
+  .calculation-equals { grid-column: 2; }
+  .calculation-result { grid-column: 3; }
 }
 
 @media (max-width: 430px) {
