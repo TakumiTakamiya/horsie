@@ -258,6 +258,7 @@ function textOf(node) {
 test("table has no Tickets column and probability is visible by default", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   assert.doesNotMatch(html, /Tickets/);
+  assert.doesNotMatch(html, /result-note|同条件の馬をまとめた表記/);
   assert.doesNotMatch(html, /Horsie\s*<span>Race|CURRENT KEY|current-r|current-x/);
   assert.equal((html.match(/<th\b/g) || []).length, 3);
   const { nodes } = createApp();
@@ -281,6 +282,11 @@ test("race and condition controls occupy the right column above the calculator",
   assert.ok(controlPanel.indexOf('id="y-control"') < controlPanel.indexOf('id="z-control"'));
   assert.match(css, /grid-template-areas:\s*"result controls"\s*"result calculator"/);
   assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator"/);
+  assert.match(css, /height:\s*calc\(100dvh - 32px\)/);
+  assert.match(css, /\.result-panel[^}]*display:\s*flex/);
+  assert.match(css, /\.table-wrap table\s*\{\s*height:\s*100%/);
+  assert.match(css, /\.chip-buttons[^}]*grid-template-columns:\s*repeat\(6/);
+  assert.equal(Math.max(...Object.values(data).map((rows) => rows.length)), 12);
 });
 
 test("probability toggle updates header/body and survives condition/settings changes without changing calculator", () => {
