@@ -4,7 +4,9 @@
 
 ## 現在の状態
 
-- 作業ブランチは `main`、追跡先は `origin/main`。今回の開始時点は `f748f92` で同期済み、マージ作業なし。
+- 作業ブランチは `main`、追跡先は `origin/main`。今回の開始時点は `20b04fa` で同期済み、マージ作業なし。
+- PCでは表を左列に置き、右列にR選択、その下にPattern/Joker、その下に電卓を配置。900px以下では操作部、表、電卓の順に1列表示する。R選択は右列内でも折り返さず横スクロールする。
+- 修飾キーなしのDキーでPatternを `D2 → DD → D2`、JキーでJokerを `なし → J → JJ → なし` の順に循環する。選択表示・キー・表・電卓・R履歴を即時同期し、Ctrl/Alt/Meta付きのD/Jはブラウザ側の操作を妨げない。
 - R選択上部の「Horsie Race」、表上部の「CURRENT KEY」と `nR / x=○` は削除。表タイトルだけキー先頭のS/M/Lを「短距離」「中距離」「長距離」に置換し、DD/D2/J/JJ部分はそのまま表示する。過去Rボタン内の履歴キーと内部検索キーは従来どおりS/M/L表記を保持する。
 - 表のTickets列を削除し、設定ダイアログに「的中確率を表示」を追加。初期状態は表示。非表示時は見出しと全データ行を隠し、表を2列幅に縮める。R・条件・設定変更後も表示状態は維持する（リロードで初期化）。計算データ内のequivalentTicketsは変更しない。
 - 1R〜12RそれぞれのPattern/Joker・キー・結果をページ内メモリへ記録。Rを戻すとそのRの条件と結果が復元される。初めて開くRは直前のPattern/Jokerを引き継ぎ、結果は未選択。
@@ -24,7 +26,7 @@
 ## 実行・検証
 
 - データ再生成: `py -3.9 calculate_odds.py`
-- 表・電卓・履歴テスト: `node --test scripts/calculator.test.cjs`（今回15件成功。Spaceで次、Ctrl+Spaceで前へ循環し、Alt+SpaceではRを変更しないことも検証）
+- 表・電卓・履歴テスト: `node --test scripts/calculator.test.cjs`（今回17件成功。右列の操作部レイアウト、モバイル順序、D/Jの全循環、修飾キー付きD/Jを無視することも検証）
 - フック回帰テスト: `node --test scripts/update-asset-versions.test.cjs`（今回6件成功。使い捨てGitリポジトリで実際のコミットも検証）
 - Pythonテスト: `py -3.9 -m unittest test_calculate_odds.py`（今回8件成功）
 - フック構文確認: `node --check scripts/update-asset-versions.cjs`（今回成功）

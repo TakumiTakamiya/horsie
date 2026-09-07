@@ -5,21 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=0e01af2d0d23" />
+    <link rel="stylesheet" href="style.css?v=396ba37eb236" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=5d98fe2ee770" defer></script>
-    <script src="app.js?v=cdad72145b3b" defer></script>
+    <script src="app.js?v=a3fc7a77cd37" defer></script>
   </head>
   <body>
     <main class="app-shell">
-      <section class="control-panel" aria-label="レース選択">
+      <div class="workspace-grid">
+      <section class="control-panel" aria-label="レース条件選択">
         <div class="control-block">
           <div class="control-heading">
-            <span class="keyboard-hint"><kbd>Space</kbd> 次へ・<kbd>Ctrl</kbd> + <kbd>Space</kbd> 前へ</span>
+            <span class="keyboard-hint"><kbd>Space</kbd> 次へ・<kbd>Ctrl</kbd> + <kbd>Space</kbd> 前へ・<kbd>D</kbd> Pattern・<kbd>J</kbd> Joker</span>
           </div>
           <div class="r-scroller">
-            <div id="r-control" class="segmented segmented--race" role="group" aria-label="Raceを選択">
+            <div id="r-control" class="segmented segmented--race" role="group" aria-label="Raceを選択" aria-keyshortcuts="Space Control+Space">
               <button type="button" data-r="1" aria-pressed="true">1R</button>
               <button type="button" data-r="2" aria-pressed="false">2R</button>
               <button type="button" data-r="3" aria-pressed="false">3R</button>
@@ -35,15 +36,10 @@
             </div>
           </div>
         </div>
-
-      </section>
-
-      <div class="workspace-grid">
-      <section class="result-panel" aria-labelledby="result-title">
         <div class="condition-grid" aria-label="検索条件">
           <div class="control-block">
             <h2>Pattern</h2>
-            <div id="y-control" class="segmented" role="group" aria-label="Patternを選択">
+            <div id="y-control" class="segmented" role="group" aria-label="Patternを選択" aria-keyshortcuts="D">
               <button type="button" data-value="D2" aria-pressed="false">D2</button>
               <button type="button" data-value="DD" aria-pressed="true">DD</button>
             </div>
@@ -51,13 +47,16 @@
 
           <div class="control-block">
             <h2>Joker</h2>
-            <div id="z-control" class="segmented" role="group" aria-label="Jokerを選択">
+            <div id="z-control" class="segmented" role="group" aria-label="Jokerを選択" aria-keyshortcuts="J">
               <button type="button" data-value="" aria-label="Jなし" aria-pressed="true"><s aria-hidden="true">J</s></button>
               <button type="button" data-value="J" aria-pressed="false">J</button>
               <button type="button" data-value="JJ" aria-pressed="false">JJ</button>
             </div>
           </div>
         </div>
+      </section>
+
+      <section class="result-panel" aria-labelledby="result-title">
         <div class="result-heading">
           <h2 id="result-title"><output id="current-title">中距離DD</output></h2>
           <button id="open-settings" class="icon-button" type="button" aria-label="数値表示設定を開く" aria-haspopup="dialog" aria-controls="settings-dialog" title="数値表示設定">

@@ -47,9 +47,18 @@ button, input { font: inherit; }
   box-shadow: var(--shadow);
 }
 .control-panel, .settings-panel { padding: 24px; }
-.workspace-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; margin-top: 20px; align-items: start; }
-.result-panel { min-width: 0; overflow: hidden; }
-.calculator-panel { min-width: 0; padding: 24px; }
+.workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "result controls"
+    "result calculator";
+  gap: 20px;
+  align-items: start;
+}
+.control-panel { grid-area: controls; min-width: 0; }
+.result-panel { grid-area: result; min-width: 0; overflow: hidden; }
+.calculator-panel { grid-area: calculator; min-width: 0; padding: 24px; }
 .calculator-heading h2 { margin: 0; font-size: 1.2rem; }
 .outcome-field { margin-top: 22px; }
 .outcome-field h3 { margin: 0 0 10px; font-size: 0.85rem; }
@@ -88,7 +97,7 @@ button, input { font: inherit; }
 .keyboard-hint { color: var(--muted); font-size: 0.76rem; }
 kbd { padding: 2px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: white; font-size: 0.7rem; }
 
-.condition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px 24px; }
+.condition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; padding-top: 18px; border-top: 1px solid var(--line); }
 .r-scroller { overflow-x: auto; padding: 2px 0 7px; scrollbar-width: thin; }
 .segmented { display: inline-flex; white-space: nowrap; }
 .segmented--race { width: 100%; min-width: max-content; display: flex; }
@@ -165,12 +174,16 @@ th:nth-child(n+2), td:nth-child(n+2) { text-align: right; font-variant-numeric: 
 
 @media (max-width: 900px) {
   .app-shell { width: calc(100% - 24px); padding: 12px 0 32px; }
-  .workspace-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+  .workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "controls" "result" "calculator";
+    gap: 16px;
+  }
 }
 
 @media (max-width: 600px) {
   .keyboard-hint { display: none; }
-  .condition-grid { gap: 12px; padding: 18px; }
+  .condition-grid { gap: 12px; }
   .condition-grid .segmented button { min-width: 44px; padding-inline: 10px; }
   .settings-panel[open] { grid-template-columns: 1fr; }
   .calculation-grid { grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1.3fr); }

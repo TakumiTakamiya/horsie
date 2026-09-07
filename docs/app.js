@@ -15,6 +15,8 @@
   // remain shared. Never carry a confirmed result into a previously unseen race.
   const raceRecords = new Map();
   const DISTANCE_LABELS = Object.freeze({ S: "短距離", M: "中距離", L: "長距離" });
+  const PATTERNS = Object.freeze(["D2", "DD"]);
+  const JOKERS = Object.freeze(["", "J", "JJ"]);
 
   const decimalFormatter = new Intl.NumberFormat("en-US", {
     useGrouping: false,
@@ -61,6 +63,10 @@
 
   function formatTableTitle(key) {
     return `${DISTANCE_LABELS[key.charAt(0)] ?? key.charAt(0)}${key.slice(1)}`;
+  }
+
+  function nextValue(values, current) {
+    return values[(values.indexOf(current) + 1) % values.length];
   }
 
   function saveCurrentRace() {
@@ -278,9 +284,17 @@
     });
 
     window.addEventListener("keydown", (event) => {
-      if (event.code !== "Space" || event.altKey || event.metaKey) return;
+      if (event.code === "Space" && !event.altKey && !event.metaKey) {
+        event.preventDefault();
+        selectR(state.r + (event.ctrlKey ? -1 : 1), !settingsDialog.open);
+        return;
+      }
+      if (event.ctrlKey || event.altKey || event.metaKey) return;
+      if (event.code === "KeyD") state.y = nextValue(PATTERNS, state.y);
+      else if (event.code === "KeyJ") state.z = nextValue(JOKERS, state.z);
+      else return;
       event.preventDefault();
-      selectR(state.r + (event.ctrlKey ? -1 : 1), !settingsDialog.open);
+      render();
     });
 
     render();

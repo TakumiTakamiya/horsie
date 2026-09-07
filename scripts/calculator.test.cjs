@@ -226,6 +226,31 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   assert.equal(nodes["#chip-amount"].value, "25");
 });
 
+test("D and J keys cycle Pattern and Joker without modifier shortcuts", () => {
+  const { nodes, events } = createApp();
+  let prevented = 0;
+  const press = (code, modifiers = {}) => events.keydown({
+    code,
+    ...modifiers,
+    preventDefault() { prevented += 1; },
+  });
+
+  press("KeyD");
+  assert.equal(nodes["#current-title"].textContent, "中距離D2");
+  press("KeyD");
+  assert.equal(nodes["#current-title"].textContent, "中距離DD");
+  for (const expected of ["中距離DDJ", "中距離DDJJ", "中距離DD"]) {
+    press("KeyJ");
+    assert.equal(nodes["#current-title"].textContent, expected);
+  }
+  press("KeyD", { ctrlKey: true });
+  press("KeyJ", { altKey: true });
+  assert.equal(nodes["#current-title"].textContent, "中距離DD");
+  assert.equal(prevented, 5);
+  assert.equal(nodes["#y-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
+  assert.equal(nodes["#z-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
+});
+
 function textOf(node) {
   return node.textContent ?? node.children.map(textOf).join("");
 }
@@ -246,6 +271,16 @@ test("table has no Tickets column and probability is visible by default", () => 
     assert.equal(row.children[1].hidden, false);
     assert.equal(row.children[2].textContent, formatOdds(data.MDD[index].decimalOdds, 0, "raw"));
   });
+});
+
+test("race and condition controls occupy the right column above the calculator", () => {
+  const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  const controlPanel = html.match(/<section class="control-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.ok(controlPanel.indexOf('id="r-control"') < controlPanel.indexOf('id="y-control"'));
+  assert.ok(controlPanel.indexOf('id="y-control"') < controlPanel.indexOf('id="z-control"'));
+  assert.match(css, /grid-template-areas:\s*"result controls"\s*"result calculator"/);
+  assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator"/);
 });
 
 test("probability toggle updates header/body and survives condition/settings changes without changing calculator", () => {
