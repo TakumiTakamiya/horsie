@@ -1,11 +1,12 @@
 # Horsie 引き継ぎ
 
-更新日: 2026-09-03
+更新日: 2026-09-07
 
 ## 現在の状態
 
-- 作業ブランチは `main`、追跡先は `origin/main`。今回の開始時点は `8853ccd` で同期済み、マージ作業なし。
-- 今回は表のTickets列を削除し、設定ダイアログに「的中確率を表示」を追加。初期状態は表示。非表示時は見出しと全データ行を隠し、表を2列幅に縮める。R・条件・設定変更後も表示状態は維持する（リロードで初期化）。計算データ内のequivalentTicketsは変更しない。
+- 作業ブランチは `main`、追跡先は `origin/main`。今回の開始時点は `13b5d44` で同期済み、マージ作業なし。
+- R選択上部の「Horsie Race」、表上部の「CURRENT KEY」と `nR / x=○` は削除。表タイトルだけキー先頭のS/M/Lを「短距離」「中距離」「長距離」に置換し、DD/D2/J/JJ部分はそのまま表示する。過去Rボタン内の履歴キーと内部検索キーは従来どおりS/M/L表記を保持する。
+- 表のTickets列を削除し、設定ダイアログに「的中確率を表示」を追加。初期状態は表示。非表示時は見出しと全データ行を隠し、表を2列幅に縮める。R・条件・設定変更後も表示状態は維持する（リロードで初期化）。計算データ内のequivalentTicketsは変更しない。
 - 1R〜12RそれぞれのPattern/Joker・キー・結果をページ内メモリへ記録。Rを戻すとそのRの条件と結果が復元される。初めて開くRは直前のPattern/Jokerを引き継ぎ、結果は未選択。
 - 現在Rより小さい番号のボタンだけを「R／キー／結果」の3行に変更。R番号・キーは小さく、結果は大きめ。現在以降はR番号のみを大きく中央表示し、ボタンの高さは揃える。未訪問・未選択は「—」。
 - 過去Rの修正はそのRの記録だけに反映。Space/Alt+Spaceで1R・12Rを循環しても記録は残る。記録はリロードでリセットされる（永続保存は未実装）。
@@ -23,13 +24,13 @@
 ## 実行・検証
 
 - データ再生成: `py -3.9 calculate_odds.py`
-- 表・電卓・履歴テスト: `node --test scripts/calculator.test.cjs`（今回14件成功。Tickets削除、確率列の初期表示・切り替え・状態維持と電卓への影響がないことを追加検証）
+- 表・電卓・履歴テスト: `node --test scripts/calculator.test.cjs`（今回15件成功。表示タイトルの距離表記変換、履歴キーのS/M/L保持、不要見出しの削除も検証）
 - フック回帰テスト: `node --test scripts/update-asset-versions.test.cjs`（今回6件成功。使い捨てGitリポジトリで実際のコミットも検証）
 - Pythonテスト: `py -3.9 -m unittest test_calculate_odds.py`（今回8件成功）
 - フック構文確認: `node --check scripts/update-asset-versions.cjs`（今回成功）
 - アプリ構文確認: `node --check docs/app.js`、`node --check docs/calculator.js`、`node --check docs/odds-data.js`
 - 差分確認: `git diff --check`（今回成功）
-- ローカル表示: `py -3.9 -m http.server 8000 --bind 127.0.0.1 --directory docs`
+- ローカル配信確認: Pythonの一時HTTPサーバーから `/` を取得し、HTTP 200・`text/html` を確認。手動表示は `py -3.9 -m http.server 8000 --bind 127.0.0.1 --directory docs`。
 - フック検証内容: 初回付与、冪等性、無関係なコミットでは更新なし、ステージ内容のみ採用、HTMLの部分ステージ保護、欠損アセット時の停止、通常コミットと `-a`、`--only` の安全な拒否。
 - 電卓と履歴のイベント連携はNodeのモックDOMで確認。ローカルHTTP配信も確認。実ブラウザによる画面サイズ別の目視・操作検証は未実施。
 

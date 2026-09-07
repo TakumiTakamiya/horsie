@@ -14,6 +14,7 @@
   // Per-race records last for the lifetime of this page; calculator input/settings
   // remain shared. Never carry a confirmed result into a previously unseen race.
   const raceRecords = new Map();
+  const DISTANCE_LABELS = Object.freeze({ S: "短距離", M: "中距離", L: "長距離" });
 
   const decimalFormatter = new Intl.NumberFormat("en-US", {
     useGrouping: false,
@@ -56,6 +57,10 @@
 
   function getKey() {
     return `${R_TO_X[state.r]}${state.y}${state.z}`;
+  }
+
+  function formatTableTitle(key) {
+    return `${DISTANCE_LABELS[key.charAt(0)] ?? key.charAt(0)}${key.slice(1)}`;
   }
 
   function saveCurrentRace() {
@@ -113,9 +118,7 @@
     document.querySelector("#odds-table").dataset.showProbability = String(state.showProbability);
     document.querySelector("#show-probability").checked = state.showProbability;
 
-    document.querySelector("#current-key").textContent = key;
-    document.querySelector("#current-r").textContent = `${state.r}R`;
-    document.querySelector("#current-x").textContent = R_TO_X[state.r];
+    document.querySelector("#current-title").textContent = formatTableTitle(key);
     setPressedButton(document.querySelector("#y-control"), "value", state.y);
     setPressedButton(document.querySelector("#z-control"), "value", state.z);
 
@@ -283,6 +286,6 @@
     render();
   }
 
-  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, normalizeNumber });
+  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, formatTableTitle, normalizeNumber });
   window.addEventListener("DOMContentLoaded", init);
 })();

@@ -13,7 +13,14 @@ vm.runInContext(fs.readFileSync(path.join(docs, "odds-data.js"), "utf8"), dataCo
 const data = vm.runInContext("ODDS_DATA", dataContext);
 const appContext = { window: { addEventListener() {} } };
 vm.runInNewContext(fs.readFileSync(path.join(docs, "app.js"), "utf8"), appContext);
-const { formatOdds } = appContext.window.HorsieApp;
+const { formatOdds, formatTableTitle } = appContext.window.HorsieApp;
+
+test("table titles localize only the distance prefix", () => {
+  assert.equal(formatTableTitle("SD2J"), "短距離D2J");
+  assert.equal(formatTableTitle("MDDJJ"), "中距離DDJJ");
+  assert.equal(formatTableTitle("LD2"), "長距離D2");
+  assert.equal(formatTableTitle("XDD"), "XDD");
+});
 
 test("accepts only nonnegative safe integers and treats empty input separately", () => {
   for (const [raw, value] of [["0", 0n], ["00025", 25n], ["9007199254740991", 9007199254740991n]]) {
@@ -209,9 +216,9 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   let prevented = false;
   events.keydown({ code: "Space", preventDefault() { prevented = true; } });
   assert.ok(prevented);
-  assert.equal(nodes["#current-r"].textContent, "1R");
+  assert.equal(nodes["#current-title"].textContent, "中距離DD");
   events.keydown({ code: "Space", altKey: true, preventDefault() {} });
-  assert.equal(nodes["#current-r"].textContent, "12R");
+  assert.equal(nodes["#current-title"].textContent, "短距離DDJ");
   assert.equal(nodes["#chip-amount"].value, "25");
 });
 
@@ -222,6 +229,7 @@ function textOf(node) {
 test("table has no Tickets column and probability is visible by default", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   assert.doesNotMatch(html, /Tickets/);
+  assert.doesNotMatch(html, /Horsie\s*<span>Race|CURRENT KEY|current-r|current-x/);
   assert.equal((html.match(/<th\b/g) || []).length, 3);
   const { nodes } = createApp();
   assert.equal(nodes["#show-probability"].checked, true);
@@ -283,18 +291,18 @@ test("past R buttons show exactly three lines and revisiting restores that race'
   assert.equal(buttons[1].dataset.phase, "current");
   assert.equal(buttons[1].children.length, 1);
   assert.ok(buttons.slice(2).every((button) => button.dataset.phase === "future" && button.children.length === 1));
-  assert.equal(nodes["#current-key"].textContent, "LDDJJ");
+  assert.equal(nodes["#current-title"].textContent, "長距離DDJJ");
   assert.equal(nodes["#win-result"].textContent, "—");
   click("#y-control", "D2");
   click("#z-control", "J");
   click("#outcome-control", "@@@");
   click("#r-control", 1);
-  assert.equal(nodes["#current-key"].textContent, "MDDJJ");
+  assert.equal(nodes["#current-title"].textContent, "中距離DDJJ");
   assert.match(nodes["#outcome-help"].textContent, /D@D/);
   assert.equal(nodes["#chip-amount"].value, "25");
   assert.ok(buttons.every((button) => button.children.length === 1));
   click("#r-control", 2);
-  assert.equal(nodes["#current-key"].textContent, "LD2J");
+  assert.equal(nodes["#current-title"].textContent, "長距離D2J");
   assert.match(nodes["#outcome-help"].textContent, /@@@/);
   assert.equal(nodes["#r-control"].children[0], buttons[0]);
 });
@@ -342,25 +350,29 @@ test("all 12 independent records survive Space/Alt+Space wraparound", () => {
   const saved = [];
   for (let r = 1; r <= 12; r++) {
     click("#r-control", r);
-    click("#y-control", r % 2 ? "DD" : "D2");
-    click("#z-control", ["", "J", "JJ"][r % 3]);
+    const x = r % 2 ? "M" : r % 4 === 0 ? "S" : "L";
+    const y = r % 2 ? "DD" : "D2";
+    const z = ["", "J", "JJ"][r % 3];
+    click("#y-control", y);
+    click("#z-control", z);
     const outcome = r % 2 ? "DD@" : "@@@";
     click("#outcome-control", outcome);
-    saved.push({ key: nodes["#current-key"].textContent, outcome });
+    const key = `${x}${y}${z}`;
+    saved.push({ key, title: formatTableTitle(key), outcome });
+    assert.equal(nodes["#current-title"].textContent, formatTableTitle(key));
   }
   events.keydown({ code: "Space", preventDefault() {} });
-  assert.equal(nodes["#current-r"].textContent, "1R");
-  assert.equal(nodes["#current-key"].textContent, saved[0].key);
+  assert.equal(nodes["#current-title"].textContent, saved[0].title);
   assert.ok(nodes["#r-control"].children.every((button) => button.children.length === 1));
   events.keydown({ code: "Space", altKey: true, preventDefault() {} });
-  assert.equal(nodes["#current-key"].textContent, saved[11].key);
+  assert.equal(nodes["#current-title"].textContent, saved[11].title);
   assert.match(nodes["#outcome-help"].textContent, /@@@/);
   for (let i = 0; i < 11; i++) {
     assert.deepEqual(nodes["#r-control"].children[i].children.map(textOf), [`${i + 1}R`, saved[i].key, saved[i].outcome]);
   }
   for (let r = 11; r >= 1; r--) {
     events.keydown({ code: "Space", altKey: true, preventDefault() {} });
-    assert.equal(nodes["#current-key"].textContent, saved[r - 1].key);
+    assert.equal(nodes["#current-title"].textContent, saved[r - 1].title);
     assert.ok(nodes["#outcome-help"].textContent.includes(saved[r - 1].outcome));
     assert.equal(nodes["#r-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
     assert.equal(nodes["#r-control"].children.filter((button) => button.children.length === 3).length, r - 1);
