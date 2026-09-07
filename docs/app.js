@@ -138,7 +138,7 @@
       selectionCell.append(formatSelection(item.selection));
       probabilityCell.textContent = `${item.probabilityPercent.toFixed(2)}%`;
       probabilityCell.hidden = !state.showProbability;
-      oddsCell.textContent = formatOdds(item.decimalOdds, state.taxRate, state.rounding);
+      oddsCell.textContent = `${formatOdds(item.decimalOdds, state.taxRate, state.rounding)}倍`;
       row.append(selectionCell, oddsCell, probabilityCell);
       return row;
     }));
@@ -168,9 +168,6 @@
       controls.dataset.outcomes = signature;
     }
     setPressedButton(controls, "value", state.outcome);
-    document.querySelector("#outcome-help").textContent = outcomes.length === 0
-      ? "この条件の結果データはありません。"
-      : state.outcome ? `選択中：${state.outcome}` : "三連単の結果を選択してください。";
 
     const amount = calculator.parseAmount(state.amount);
     const input = document.querySelector("#chip-amount");
@@ -188,7 +185,7 @@
       (odds) => formatOdds(odds, state.taxRate, state.rounding));
     results.forEach(({ type, multiplier, result }) => {
       const id = type.toLowerCase();
-      document.querySelector(`#${id}-multiplier`).textContent = multiplier ?? "—";
+      document.querySelector(`#${id}-multiplier`).textContent = multiplier === null ? "—" : `${multiplier}倍`;
       document.querySelector(`#${id}-result`).textContent = result ?? "—";
     });
   }

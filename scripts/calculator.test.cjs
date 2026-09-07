@@ -158,7 +158,7 @@ test("UI starts unselected, adds chips, preserves button focus targets, and clea
   nodes["#clear-amount"].events.click();
   assert.equal(nodes["#chip-amount"].value, "0");
   assert.equal(nodes["#win-result"].textContent, "0.0");
-  assert.ok(nodes["#outcome-help"].textContent.includes("D@D"));
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
   input("#chip-amount", "");
   assert.equal(nodes["#win-result"].textContent, "—");
   click("#chip-control", 25);
@@ -196,13 +196,13 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   click("#outcome-control", "D@D");
   click("#z-control", "J");
   assert.equal(nodes["#chip-amount"].value, "25");
-  assert.ok(nodes["#outcome-help"].textContent.includes("D@D"));
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
   input("#tax-rate", "20");
   const odds = data.LDDJ.find((row) => row.wagerType === "Win" && row.selection === "D").decimalOdds;
-  assert.equal(nodes["#win-multiplier"].textContent, formatOdds(odds, 20, "raw"));
+  assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(odds, 20, "raw")}倍`);
   for (const mode of ["raw", "floor-half", "floor-integer", "round-half", "round-integer"]) {
     nodes[".rounding-options"].events.change({ target: { matches() { return true; }, value: mode } });
-    assert.equal(nodes["#win-multiplier"].textContent, formatOdds(odds, 20, mode));
+    assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(odds, 20, mode)}倍`);
   }
   input("#tax-rate", "100");
   assert.equal(nodes["#win-result"].textContent, "0.0");
@@ -211,7 +211,7 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   assert.equal(nodes["#chip-amount"].value, "25");
   click("#outcome-control", "D@@");
   click("#y-control", "DD");
-  assert.ok(nodes["#outcome-help"].textContent.includes("D@@"));
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@@");
   click("#r-control", 12);
   let altPrevented = false;
   events.keydown({ code: "Space", altKey: true, preventDefault() { altPrevented = true; } });
@@ -255,6 +255,10 @@ function textOf(node) {
   return node.textContent ?? node.children.map(textOf).join("");
 }
 
+function pressedValue(node) {
+  return node.children.find((button) => button.attrs["aria-pressed"] === "true")?.dataset.value ?? null;
+}
+
 test("table has no heading row and orders Selection, Odds, Probability", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   assert.doesNotMatch(html, /Tickets/);
@@ -268,7 +272,7 @@ test("table has no heading row and orders Selection, Odds, Probability", () => {
     assert.equal(row.children.length, 3);
     assert.equal(textOf(row.children[0]), data.MDD[index].selection);
     assert.equal(row.children[0].attrs["aria-label"], "Selection");
-    assert.equal(row.children[1].textContent, formatOdds(data.MDD[index].decimalOdds, 0, "raw"));
+    assert.equal(row.children[1].textContent, `${formatOdds(data.MDD[index].decimalOdds, 0, "raw")}倍`);
     assert.equal(row.children[1].attrs["aria-label"], "Odds");
     assert.equal(row.children[2].textContent, `${data.MDD[index].probabilityPercent.toFixed(2)}%`);
     assert.equal(row.children[2].attrs["aria-label"], "Probability");
@@ -294,12 +298,13 @@ test("race and condition controls occupy the right column above the calculator",
 test("table title and calculator use the space freed by removed guidance", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
-  assert.doesNotMatch(html, /id="amount-help"|calculator-note/);
+  assert.doesNotMatch(html, /id="amount-help"|calculator-note|outcome-help|三連単の結果を選択してください/);
   assert.match(html, /id="chip-amount"[^>]*aria-describedby="amount-error"/);
   assert.match(css, /\.result-heading\s*\{[^}]*min-height:\s*104px/);
   assert.match(css, /\.result-heading h2\s*\{[^}]*font-size:\s*2\.3rem/);
   assert.match(css, /\.amount-field input\s*\{[^}]*font-size:\s*1\.75rem/);
   assert.match(css, /\.calculation-result\s*\{[^}]*font-size:\s*2rem/);
+  assert.match(css, /\.outcome-buttons button\s*\{[^}]*min-height:\s*64px[^}]*font-size:\s*1\.35rem/);
 });
 
 test("probability toggle updates header/body and survives condition/settings changes without changing calculator", () => {
@@ -322,7 +327,7 @@ test("probability toggle updates header/body and survives condition/settings cha
   assert.equal(toggle.checked, false);
   assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
   click("#r-control", 1);
-  assert.match(nodes["#outcome-help"].textContent, /D@D/);
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
   assert.equal(nodes["#chip-amount"].value, "25");
   const taxedResult = nodes["#trifecta-result"].textContent;
   nodes["#open-settings"].events.click();
@@ -354,12 +359,12 @@ test("past R buttons show exactly three lines and revisiting restores that race'
   click("#outcome-control", "@@@");
   click("#r-control", 1);
   assert.equal(nodes["#current-title"].textContent, "中距離DDJJ");
-  assert.match(nodes["#outcome-help"].textContent, /D@D/);
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
   assert.equal(nodes["#chip-amount"].value, "25");
   assert.ok(buttons.every((button) => button.children.length === 1));
   click("#r-control", 2);
   assert.equal(nodes["#current-title"].textContent, "長距離D2J");
-  assert.match(nodes["#outcome-help"].textContent, /@@@/);
+  assert.equal(pressedValue(nodes["#outcome-control"]), "@@@");
   assert.equal(nodes["#r-control"].children[0], buttons[0]);
 });
 
@@ -422,14 +427,14 @@ test("all 12 independent records survive Space/Ctrl+Space wraparound", () => {
   assert.ok(nodes["#r-control"].children.every((button) => button.children.length === 1));
   events.keydown({ code: "Space", ctrlKey: true, preventDefault() {} });
   assert.equal(nodes["#current-title"].textContent, saved[11].title);
-  assert.match(nodes["#outcome-help"].textContent, /@@@/);
+  assert.equal(pressedValue(nodes["#outcome-control"]), "@@@");
   for (let i = 0; i < 11; i++) {
     assert.deepEqual(nodes["#r-control"].children[i].children.map(textOf), [`${i + 1}R`, saved[i].key, saved[i].outcome]);
   }
   for (let r = 11; r >= 1; r--) {
     events.keydown({ code: "Space", ctrlKey: true, preventDefault() {} });
     assert.equal(nodes["#current-title"].textContent, saved[r - 1].title);
-    assert.ok(nodes["#outcome-help"].textContent.includes(saved[r - 1].outcome));
+    assert.equal(pressedValue(nodes["#outcome-control"]), saved[r - 1].outcome);
     assert.equal(nodes["#r-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
     assert.equal(nodes["#r-control"].children.filter((button) => button.children.length === 3).length, r - 1);
   }
