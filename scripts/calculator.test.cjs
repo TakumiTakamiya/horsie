@@ -286,6 +286,7 @@ test("race and condition controls occupy the right column above the calculator",
   const controlPanel = html.match(/<section class="control-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.ok(controlPanel.indexOf('id="r-control"') < controlPanel.indexOf('id="y-control"'));
   assert.ok(controlPanel.indexOf('id="y-control"') < controlPanel.indexOf('id="z-control"'));
+  assert.match(css, /grid-template-columns:\s*minmax\(0, 1fr\) minmax\(0, 2fr\)/);
   assert.match(css, /grid-template-areas:\s*"result controls"\s*"result calculator"/);
   assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator"/);
   assert.match(css, /height:\s*calc\(100dvh - 32px\)/);
