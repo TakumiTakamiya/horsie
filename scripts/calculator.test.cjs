@@ -213,11 +213,15 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   click("#y-control", "DD");
   assert.ok(nodes["#outcome-help"].textContent.includes("D@@"));
   click("#r-control", 12);
+  let altPrevented = false;
+  events.keydown({ code: "Space", altKey: true, preventDefault() { altPrevented = true; } });
+  assert.equal(altPrevented, false);
+  assert.equal(nodes["#current-title"].textContent, "短距離DDJ");
   let prevented = false;
   events.keydown({ code: "Space", preventDefault() { prevented = true; } });
   assert.ok(prevented);
   assert.equal(nodes["#current-title"].textContent, "中距離DD");
-  events.keydown({ code: "Space", altKey: true, preventDefault() {} });
+  events.keydown({ code: "Space", ctrlKey: true, preventDefault() {} });
   assert.equal(nodes["#current-title"].textContent, "短距離DDJ");
   assert.equal(nodes["#chip-amount"].value, "25");
 });
@@ -345,7 +349,7 @@ test("editing a past race updates only its own snapshot, including invalidated r
   assert.deepEqual(buttons[1].children.map(textOf), ["2R", "LDD", "DD@"]);
 });
 
-test("all 12 independent records survive Space/Alt+Space wraparound", () => {
+test("all 12 independent records survive Space/Ctrl+Space wraparound", () => {
   const { nodes, click, events } = createApp();
   const saved = [];
   for (let r = 1; r <= 12; r++) {
@@ -364,14 +368,14 @@ test("all 12 independent records survive Space/Alt+Space wraparound", () => {
   events.keydown({ code: "Space", preventDefault() {} });
   assert.equal(nodes["#current-title"].textContent, saved[0].title);
   assert.ok(nodes["#r-control"].children.every((button) => button.children.length === 1));
-  events.keydown({ code: "Space", altKey: true, preventDefault() {} });
+  events.keydown({ code: "Space", ctrlKey: true, preventDefault() {} });
   assert.equal(nodes["#current-title"].textContent, saved[11].title);
   assert.match(nodes["#outcome-help"].textContent, /@@@/);
   for (let i = 0; i < 11; i++) {
     assert.deepEqual(nodes["#r-control"].children[i].children.map(textOf), [`${i + 1}R`, saved[i].key, saved[i].outcome]);
   }
   for (let r = 11; r >= 1; r--) {
-    events.keydown({ code: "Space", altKey: true, preventDefault() {} });
+    events.keydown({ code: "Space", ctrlKey: true, preventDefault() {} });
     assert.equal(nodes["#current-title"].textContent, saved[r - 1].title);
     assert.ok(nodes["#outcome-help"].textContent.includes(saved[r - 1].outcome));
     assert.equal(nodes["#r-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);

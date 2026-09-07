@@ -278,9 +278,9 @@
     });
 
     window.addEventListener("keydown", (event) => {
-      if (event.code !== "Space" || event.ctrlKey || event.metaKey) return;
+      if (event.code !== "Space" || event.altKey || event.metaKey) return;
       event.preventDefault();
-      selectR(state.r + (event.altKey ? -1 : 1), !settingsDialog.open);
+      selectR(state.r + (event.ctrlKey ? -1 : 1), !settingsDialog.open);
     });
 
     render();
