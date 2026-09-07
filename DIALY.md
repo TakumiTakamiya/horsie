@@ -4,7 +4,7 @@
 
 ## 現在の状態
 
-- 作業ブランチは `main`、追跡先は `origin/main`。今回の開始時点は `631a5f9` で同期済み、マージ作業なし。
+- 作業ブランチは `main`、追跡先は `origin/main`。今回の開始時点は `9a752cc` で同期済み、マージ作業なし。
 - PCでは表を左列に置き、右列にR選択、その下にPattern/Joker、その下に電卓を配置。作業領域をビューポート下端まで固定し、表パネルも同じ高さにする。表下の注意書きは削除し、最大12行のDDが画面内に収まる可変行余白のまま表文字を拡大。電卓は残りの高さを埋め、計算欄・結果・チップを拡大し、短い画面だけ電卓内で縦スクロールする。
 - 900px以下では操作部、表、電卓の順に1列表示する。R選択は右列内でも折り返さず横スクロールする。
 - 修飾キーなしのDキーでPatternを `D2 → DD → D2`、JキーでJokerを `なし → J → JJ → なし` の順に循環する。選択表示・キー・表・電卓・R履歴を即時同期し、Ctrl/Alt/Meta付きのD/Jはブラウザ側の操作を妨げない。
@@ -21,14 +21,14 @@
 - コミット時のCSS/JSバージョン自動付与は既存フックを使用。新しい `calculator.js` も対象。
 - このチェックアウトでは `core.hooksPath=.githooks` を有効化済み。新しいclone先では `git config --local core.hooksPath .githooks` を一度実行する必要がある。Node.jsが必要。
 - `AGENTS.md` の継続方針どおり、検証後に変更とこの記録をコミット・pushする。
-- Selectionは余白なしの連続文字列。Dは濃い緑の太字、@はグレーの通常文字。より明確な配色としてD `#064e3b`、@ `#6b7280` を提案中だが、ユーザー選択前のため未適用。
+- Selectionは余白なしの連続文字列。Dは深緑 `#052e24`・太さ900、@はスレートグレー `#6b7280`・太さ400・サイズ0.9emとして、表・結果選択・R履歴へ共通適用する。
 - 既存機能: 右上にR・Pattern・Joker選択、左にSelection・Odds・Probability（非表示可）の見出しなし表、右下に電卓。表示設定は歯車ボタンから開くダイアログ。Spaceで次のR、Ctrl+Spaceで前のRへ循環。
 - 確率とオッズはPythonの出力時に小数2桁へROUND_HALF_UPで四捨五入。元の計算精度は維持。表示時も小数2桁に揃える。
 
 ## 実行・検証
 
 - データ再生成: `py -3.9 calculate_odds.py`
-- 表・電卓・履歴テスト: `node --test scripts/calculator.test.cjs`（今回18件成功。結果案内文削除、選択ボタン拡大、表と電卓の「倍」表示、計算への影響がないことも検証）
+- 表・電卓・履歴テスト: `node --test scripts/calculator.test.cjs`（今回19件成功。D/@の配色・太さ・@の縮小指定も検証）
 - フック回帰テスト: `node --test scripts/update-asset-versions.test.cjs`（今回6件成功。使い捨てGitリポジトリで実際のコミットも検証）
 - Pythonテスト: `py -3.9 -m unittest test_calculate_odds.py`（今回8件成功）
 - フック構文確認: `node --check scripts/update-asset-versions.cjs`（今回成功）
