@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=4e88be582982" />
+    <link rel="stylesheet" href="style.css?v=0e74116b68fc" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=5d98fe2ee770" defer></script>
-    <script src="app.js?v=a3fc7a77cd37" defer></script>
+    <script src="app.js?v=1bce4ba9f996" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -65,14 +65,7 @@
         </div>
 
         <div class="table-wrap">
-          <table id="odds-table" data-show-probability="true">
-            <thead>
-              <tr>
-                <th scope="col">Selection</th>
-                <th id="probability-heading" scope="col">Probability</th>
-                <th scope="col">Fair odds</th>
-              </tr>
-            </thead>
+          <table id="odds-table" data-show-probability="true" aria-label="オッズ一覧">
             <tbody id="result-body"></tbody>
           </table>
           <p id="empty-state" class="empty-state">このキーのデータはありません</p>
@@ -93,7 +86,7 @@
         <div class="calculation-grid">
           <div class="amount-field">
             <label for="chip-amount">入力</label>
-            <input id="chip-amount" type="text" inputmode="numeric" pattern="[0-9]*" value="0" autocomplete="off" spellcheck="false" aria-describedby="amount-help amount-error" />
+            <input id="chip-amount" type="text" inputmode="numeric" pattern="[0-9]*" value="0" autocomplete="off" spellcheck="false" aria-describedby="amount-error" />
           </div>
           <span class="calculation-times" aria-hidden="true">×</span>
           <div class="calculation-row">
@@ -112,9 +105,7 @@
             <output id="trifecta-result" class="calculation-result" for="chip-amount" aria-label="三連単の計算結果">—</output>
           </div>
         </div>
-        <p id="amount-help" class="field-help">0〜9007199254740991の整数を入力できます。</p>
         <p id="amount-error" class="field-error" role="alert"></p>
-        <p class="calculator-note">倍率は表と共通です。計算結果は小数第2位を四捨五入し、小数第1位まで表示します。</p>
 
         <div id="chip-control" class="chip-buttons" role="group" aria-label="チップを加算">
           <button type="button" data-chip="1" aria-label="1チップ加算"><img src="chips/chip1.svg" width="64" height="64" alt="" /><span>+1</span></button>

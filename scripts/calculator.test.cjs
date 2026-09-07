@@ -255,22 +255,24 @@ function textOf(node) {
   return node.textContent ?? node.children.map(textOf).join("");
 }
 
-test("table has no Tickets column and probability is visible by default", () => {
+test("table has no heading row and orders Selection, Odds, Probability", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   assert.doesNotMatch(html, /Tickets/);
   assert.doesNotMatch(html, /result-note|同条件の馬をまとめた表記/);
   assert.doesNotMatch(html, /Horsie\s*<span>Race|CURRENT KEY|current-r|current-x/);
-  assert.equal((html.match(/<th\b/g) || []).length, 3);
+  assert.doesNotMatch(html, /<thead\b|<th\b|probability-heading/);
   const { nodes } = createApp();
   assert.equal(nodes["#show-probability"].checked, true);
-  assert.equal(nodes["#probability-heading"].hidden, false);
   assert.equal(nodes["#odds-table"].dataset.showProbability, "true");
   nodes["#result-body"].children.forEach((row, index) => {
     assert.equal(row.children.length, 3);
     assert.equal(textOf(row.children[0]), data.MDD[index].selection);
-    assert.equal(row.children[1].textContent, `${data.MDD[index].probabilityPercent.toFixed(2)}%`);
-    assert.equal(row.children[1].hidden, false);
-    assert.equal(row.children[2].textContent, formatOdds(data.MDD[index].decimalOdds, 0, "raw"));
+    assert.equal(row.children[0].attrs["aria-label"], "Selection");
+    assert.equal(row.children[1].textContent, formatOdds(data.MDD[index].decimalOdds, 0, "raw"));
+    assert.equal(row.children[1].attrs["aria-label"], "Odds");
+    assert.equal(row.children[2].textContent, `${data.MDD[index].probabilityPercent.toFixed(2)}%`);
+    assert.equal(row.children[2].attrs["aria-label"], "Probability");
+    assert.equal(row.children[2].hidden, false);
   });
 });
 
@@ -289,6 +291,17 @@ test("race and condition controls occupy the right column above the calculator",
   assert.equal(Math.max(...Object.values(data).map((rows) => rows.length)), 12);
 });
 
+test("table title and calculator use the space freed by removed guidance", () => {
+  const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  assert.doesNotMatch(html, /id="amount-help"|calculator-note/);
+  assert.match(html, /id="chip-amount"[^>]*aria-describedby="amount-error"/);
+  assert.match(css, /\.result-heading\s*\{[^}]*min-height:\s*104px/);
+  assert.match(css, /\.result-heading h2\s*\{[^}]*font-size:\s*2\.3rem/);
+  assert.match(css, /\.amount-field input\s*\{[^}]*font-size:\s*1\.75rem/);
+  assert.match(css, /\.calculation-result\s*\{[^}]*font-size:\s*2rem/);
+});
+
 test("probability toggle updates header/body and survives condition/settings changes without changing calculator", () => {
   const { nodes, click, input } = createApp();
   click("#outcome-control", "D@D");
@@ -298,9 +311,8 @@ test("probability toggle updates header/body and survives condition/settings cha
   const toggle = nodes["#show-probability"];
   toggle.checked = false;
   toggle.events.change({ target: toggle });
-  assert.equal(nodes["#probability-heading"].hidden, true);
   assert.equal(nodes["#odds-table"].dataset.showProbability, "false");
-  assert.ok(nodes["#result-body"].children.every((row) => row.children[1].hidden));
+  assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
   assert.equal(nodes["#trifecta-result"].textContent, previousResult);
   nodes["#close-settings"].events.click();
   click("#r-control", 2);
@@ -308,7 +320,7 @@ test("probability toggle updates header/body and survives condition/settings cha
   click("#z-control", "J");
   input("#tax-rate", "20");
   assert.equal(toggle.checked, false);
-  assert.ok(nodes["#result-body"].children.every((row) => row.children[1].hidden));
+  assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
   click("#r-control", 1);
   assert.match(nodes["#outcome-help"].textContent, /D@D/);
   assert.equal(nodes["#chip-amount"].value, "25");
@@ -316,8 +328,7 @@ test("probability toggle updates header/body and survives condition/settings cha
   nodes["#open-settings"].events.click();
   toggle.checked = true;
   toggle.events.change({ target: toggle });
-  assert.equal(nodes["#probability-heading"].hidden, false);
-  assert.ok(nodes["#result-body"].children.every((row) => !row.children[1].hidden));
+  assert.ok(nodes["#result-body"].children.every((row) => !row.children[2].hidden));
   assert.equal(nodes["#trifecta-result"].textContent, taxedResult);
 });
 

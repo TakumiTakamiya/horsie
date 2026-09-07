@@ -120,7 +120,6 @@
     const key = getKey();
     const rows = ODDS_DATA[key] || [];
     const body = document.querySelector("#result-body");
-    document.querySelector("#probability-heading").hidden = !state.showProbability;
     document.querySelector("#odds-table").dataset.showProbability = String(state.showProbability);
     document.querySelector("#show-probability").checked = state.showProbability;
 
@@ -133,11 +132,14 @@
       const selectionCell = document.createElement("td");
       const probabilityCell = document.createElement("td");
       const oddsCell = document.createElement("td");
+      selectionCell.setAttribute("aria-label", "Selection");
+      oddsCell.setAttribute("aria-label", "Odds");
+      probabilityCell.setAttribute("aria-label", "Probability");
       selectionCell.append(formatSelection(item.selection));
       probabilityCell.textContent = `${item.probabilityPercent.toFixed(2)}%`;
       probabilityCell.hidden = !state.showProbability;
       oddsCell.textContent = formatOdds(item.decimalOdds, state.taxRate, state.rounding);
-      row.append(selectionCell, probabilityCell, oddsCell);
+      row.append(selectionCell, oddsCell, probabilityCell);
       return row;
     }));
 
