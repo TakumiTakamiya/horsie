@@ -309,8 +309,9 @@ test("table title and calculator use the space freed by removed guidance", () =>
 
 test("D and @ use the approved high-contrast hierarchy", () => {
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
-  assert.match(css, /\.selection-symbol--d\s*\{[^}]*color:\s*#052e24[^}]*font-weight:\s*900/);
-  assert.match(css, /\.selection-symbol--other\s*\{[^}]*color:\s*#6b7280[^}]*font-size:\s*0\.9em[^}]*font-weight:\s*400/);
+  assert.match(css, /\.selection-symbols\s*\{[^}]*display:\s*inline-flex[^}]*align-items:\s*flex-end/);
+  assert.match(css, /\.selection-symbol--d\s*\{[^}]*color:\s*#052e24[^}]*font-size:\s*1\.08em[^}]*font-weight:\s*900/);
+  assert.match(css, /\.selection-symbol--other\s*\{[^}]*color:\s*#6b7280[^}]*font-size:\s*0\.9em[^}]*font-weight:\s*400[^}]*translateY\(-0\.04em\)/);
 });
 
 test("probability toggle updates header/body and survives condition/settings changes without changing calculator", () => {

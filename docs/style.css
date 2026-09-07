@@ -138,9 +138,9 @@ td[hidden] { display: none; }
 td { padding: clamp(8px, 1.2dvh, 13px) 20px; border-bottom: 1px solid #e8e7e0; text-align: left; }
 td { font-size: 1.18rem; }
 td:first-child { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
-.selection-symbols { white-space: nowrap; letter-spacing: 0; }
-.selection-symbol--d { color: #052e24; font-weight: 900; }
-.selection-symbol--other { color: #6b7280; font-size: 0.9em; font-weight: 400; }
+.selection-symbols { display: inline-flex; align-items: flex-end; white-space: nowrap; line-height: 1; letter-spacing: 0; }
+.selection-symbol--d { color: #052e24; font-size: 1.08em; font-weight: 900; }
+.selection-symbol--other { color: #6b7280; font-size: 0.9em; font-weight: 400; transform: translateY(-0.04em); }
 td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .empty-state { margin: 0; padding: 38px 24px 48px; color: var(--muted); text-align: center; }
 
