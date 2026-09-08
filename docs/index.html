@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=9d305a3bab79" />
+    <link rel="stylesheet" href="style.css?v=561ad6ed6cdc" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=4ee369167b14" defer></script>
@@ -112,15 +112,13 @@
         <p id="amount-error" class="field-error" role="alert"></p>
       </section>
 
-      <aside id="settings-panel" class="settings-panel" aria-labelledby="settings-title" aria-describedby="settings-help">
+      <aside id="settings-panel" class="settings-panel" aria-labelledby="settings-title">
         <div class="settings-heading">
           <div>
           <p class="section-label">DISPLAY</p>
           <h2 id="settings-title">数値表示設定</h2>
           </div>
         </div>
-        <p id="settings-help" class="settings-help">有効な設定は表にすぐ反映されます。</p>
-
         <label class="column-option" for="show-probability">
           <input id="show-probability" type="checkbox" checked aria-controls="odds-table" />
           <span>的中確率を表示</span>
@@ -149,7 +147,7 @@
 
         <fieldset class="tax-settings">
           <legend>Tax Rate</legend>
-          <p id="tax-help" class="field-help">券種ごとに0以上100以下で入力してください。</p>
+          <p id="tax-help" class="field-help">各券種 0〜100%</p>
           <div class="tax-fields">
             <div class="tax-field">
               <label for="tax-rate-win">単勝</label>

@@ -141,38 +141,38 @@ td:first-child { font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
 td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .empty-state { margin: 0; padding: 38px 24px 48px; color: var(--muted); text-align: center; }
 
-.settings-panel { grid-area: settings; display: flex; min-width: 0; color: var(--ink); overflow-y: auto; flex-direction: column; gap: 18px; }
+.settings-panel { grid-area: settings; display: flex; min-width: 0; padding: 18px; color: var(--ink); overflow: hidden; flex-direction: column; gap: 12px; }
 .settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.settings-help { margin: 0; color: var(--muted); font-size: 0.84rem; }
 .column-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; }
 .column-option input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
 .settings-heading h2 { margin: 0; font-size: 1.18rem; }
 .rounding-options, .tax-settings, .rounding-details fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
-.rounding-options { display: grid; gap: 14px; }
+.rounding-options { display: grid; gap: 8px; }
 .rounding-options > legend, .tax-settings > legend, .tax-field > label { margin-bottom: 8px; font-size: 0.82rem; font-weight: 800; }
 .rounding-options label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #38443e; font-size: 0.88rem; }
 .rounding-options input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
 .rounding-kind { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.rounding-kind label { min-height: 42px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+.rounding-kind label { min-height: 36px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
 .rounding-kind label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
-.rounding-details { display: grid; gap: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: rgb(245 243 236 / 55%); }
+.rounding-details { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: rgb(245 243 236 / 55%); }
 .rounding-details[hidden] { display: none; }
-.rounding-details fieldset { display: flex; flex-wrap: wrap; gap: 8px 14px; }
-.rounding-details legend { width: 100%; margin-bottom: 7px; color: var(--muted); font-size: 0.75rem; font-weight: 800; }
-.tax-settings { display: grid; gap: 8px; }
+.rounding-details fieldset { display: flex; flex-wrap: wrap; gap: 5px 10px; }
+.rounding-details legend { width: 100%; margin-bottom: 4px; color: var(--muted); font-size: 0.75rem; font-weight: 800; }
+.tax-settings { display: grid; gap: 6px; }
 .tax-settings > .field-help { margin-top: -4px; }
-.tax-fields { display: grid; gap: 8px; }
+.tax-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
 .tax-field { min-width: 0; }
 .tax-field > label { display: block; }
 .number-input-wrap { display: flex; align-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
 .number-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(31 106 74 / 12%); }
-.number-input-wrap input { width: 100%; min-width: 0; padding: 9px 4px 9px 11px; border: 0; outline: 0; background: transparent; font-variant-numeric: tabular-nums; }
-.number-input-wrap span { padding: 0 11px 0 6px; color: var(--muted); }
+.number-input-wrap input { width: 100%; min-width: 0; padding: 7px 2px 7px 7px; border: 0; outline: 0; background: transparent; font-variant-numeric: tabular-nums; }
+.number-input-wrap span { padding: 0 6px 0 2px; color: var(--muted); }
 .number-input-wrap:has(input[aria-invalid="true"]) { border-color: var(--danger); }
 .field-help, .field-error { margin: 5px 0 0; font-size: 0.72rem; }
 .field-help { color: var(--muted); }
 .field-error { min-height: 1.1em; color: var(--danger); }
 #amount-error:empty { display: none; }
+.tax-field .field-error:empty { display: none; }
 
 @media (max-width: 900px) {
   .app-shell { width: calc(100% - 24px); padding: 12px 0 32px; }

@@ -385,6 +385,7 @@ test("table has no heading row and orders Selection, Odds, Probability", () => {
 
 test("settings use hierarchical rounding controls and separate tax rates", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
   assert.match(html, /name="rounding-kind"[^>]*value="raw"/);
   assert.match(html, /name="rounding-kind"[^>]*value="rounded"/);
   assert.match(html, /name="rounding-unit"[^>]*value="tenth"/);
@@ -395,6 +396,9 @@ test("settings use hierarchical rounding controls and separate tax rates", () =>
   for (const [id, wager] of [["win", "Win"], ["exacta", "Exacta"], ["trifecta", "Trifecta"]]) {
     assert.match(html, new RegExp(`id="tax-rate-${id}"[^>]*data-wager="${wager}"`));
   }
+  assert.doesNotMatch(html, /id="settings-help"/);
+  assert.match(css, /\.settings-panel\s*\{[^}]*padding:\s*18px[^}]*overflow:\s*hidden[^}]*gap:\s*12px/);
+  assert.match(css, /\.tax-fields\s*\{[^}]*grid-template-columns:\s*repeat\(3/);
 });
 
 test("race controls span the calculator and settings columns", () => {
