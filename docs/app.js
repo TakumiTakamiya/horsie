@@ -102,6 +102,11 @@
     renderCalculator();
   }
 
+  function removeAmountDigit() {
+    state.amount = state.amount.length > 1 ? state.amount.slice(0, -1) : "0";
+    renderCalculator();
+  }
+
   function saveCurrentRace() {
     raceRecords.set(state.r, { y: state.y, z: state.z, key: getKey(), outcome: state.outcome });
   }
@@ -333,6 +338,11 @@
       if (/^[0-9]$/.test(event.key) && !usesNativeNumberInput(event.target)) {
         event.preventDefault();
         appendAmountDigit(event.key);
+        return;
+      }
+      if (event.code === "Backspace" && !usesNativeNumberInput(event.target)) {
+        event.preventDefault();
+        removeAmountDigit();
         return;
       }
       if (event.code === "KeyC") {

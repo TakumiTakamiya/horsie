@@ -308,7 +308,7 @@ test("D and J keys cycle Pattern and Joker without modifier shortcuts", () => {
   assert.equal(nodes["#z-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
 });
 
-test("number keys type globally, C clears, and the display never takes input focus", () => {
+test("number keys type globally, Backspace deletes, C clears, and the display never takes input focus", () => {
   const { nodes, events } = createApp();
   let prevented = 0;
   const press = (key, options = {}) => events.keydown({
@@ -341,9 +341,19 @@ test("number keys type globally, C clears, and the display never takes input foc
   assert.equal(nodes["#chip-amount"].value, "507");
   assert.equal(prevented, 3);
 
+  press("Backspace", { code: "Backspace" });
+  assert.equal(nodes["#chip-amount"].value, "50");
+  assert.equal(prevented, 4);
+  press("Backspace", { code: "Backspace", target: nativeInput });
+  assert.equal(nodes["#chip-amount"].value, "50");
+  assert.equal(prevented, 4);
+
   press("c", { code: "KeyC" });
   assert.equal(nodes["#chip-amount"].value, "0");
-  assert.equal(prevented, 4);
+  assert.equal(prevented, 5);
+  press("Backspace", { code: "Backspace" });
+  assert.equal(nodes["#chip-amount"].value, "0");
+  assert.equal(prevented, 6);
 });
 
 test("calculator amount is read-only and hides focus and caret interaction", () => {
