@@ -88,6 +88,16 @@
     return values[(values.indexOf(current) + 1) % values.length];
   }
 
+  function usesNativeNumberInput(target) {
+    return typeof target?.matches === "function" && target.matches('#chip-amount, input[type="number"]');
+  }
+
+  function appendAmountDigit(digit) {
+    state.amount = state.amount === "0" ? digit : `${state.amount}${digit}`;
+    renderCalculator();
+    document.querySelector("#chip-amount").focus();
+  }
+
   function saveCurrentRace() {
     raceRecords.set(state.r, { y: state.y, z: state.z, key: getKey(), outcome: state.outcome });
   }
@@ -324,6 +334,11 @@
         return;
       }
       if (event.ctrlKey || event.altKey || event.metaKey) return;
+      if (/^[0-9]$/.test(event.key) && !usesNativeNumberInput(event.target)) {
+        event.preventDefault();
+        appendAmountDigit(event.key);
+        return;
+      }
       if (event.code === "KeyD") state.y = nextValue(PATTERNS, state.y);
       else if (event.code === "KeyJ") state.z = nextValue(JOKERS, state.z);
       else return;
@@ -334,6 +349,6 @@
     render();
   }
 
-  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, formatTableTitle, getOddsFractionDigits, normalizeNumber });
+  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, formatTableTitle, getOddsFractionDigits, normalizeNumber, usesNativeNumberInput });
   window.addEventListener("DOMContentLoaded", init);
 })();

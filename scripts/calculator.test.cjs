@@ -308,6 +308,41 @@ test("D and J keys cycle Pattern and Joker without modifier shortcuts", () => {
   assert.equal(nodes["#z-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
 });
 
+test("number keys type into the calculator globally without hijacking numeric inputs", () => {
+  const { nodes, events } = createApp();
+  let prevented = 0;
+  const press = (key, options = {}) => events.keydown({
+    key,
+    code: options.code ?? `Digit${key}`,
+    target: options.target,
+    ctrlKey: options.ctrlKey,
+    altKey: options.altKey,
+    metaKey: options.metaKey,
+    preventDefault() { prevented += 1; },
+  });
+
+  press("5");
+  press("0");
+  press("7", { code: "Numpad7" });
+  assert.equal(nodes["#chip-amount"].value, "507");
+  assert.equal(nodes["#chip-amount"].focused, true);
+  assert.equal(prevented, 3);
+
+  press("9", { ctrlKey: true });
+  assert.equal(nodes["#chip-amount"].value, "507");
+  assert.equal(prevented, 3);
+
+  const nativeInput = { matches(selector) { return selector.includes('input[type="number"]'); } };
+  press("8", { target: nativeInput });
+  assert.equal(nodes["#chip-amount"].value, "507");
+  assert.equal(prevented, 3);
+
+  const calculatorInput = { matches(selector) { return selector.includes("#chip-amount"); } };
+  press("6", { target: calculatorInput });
+  assert.equal(nodes["#chip-amount"].value, "507");
+  assert.equal(prevented, 3);
+});
+
 function textOf(node) {
   return node.textContent ?? node.children.map(textOf).join("");
 }
