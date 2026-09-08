@@ -89,13 +89,17 @@
   }
 
   function usesNativeNumberInput(target) {
-    return typeof target?.matches === "function" && target.matches('#chip-amount, input[type="number"]');
+    return typeof target?.matches === "function" && target.matches('input[type="number"]');
   }
 
   function appendAmountDigit(digit) {
     state.amount = state.amount === "0" ? digit : `${state.amount}${digit}`;
     renderCalculator();
-    document.querySelector("#chip-amount").focus();
+  }
+
+  function clearAmount() {
+    state.amount = "0";
+    renderCalculator();
   }
 
   function saveCurrentRace() {
@@ -323,8 +327,7 @@
       renderCalculator();
     });
     document.querySelector("#clear-amount").addEventListener("click", () => {
-      state.amount = "0";
-      renderCalculator();
+      clearAmount();
     });
 
     window.addEventListener("keydown", (event) => {
@@ -337,6 +340,11 @@
       if (/^[0-9]$/.test(event.key) && !usesNativeNumberInput(event.target)) {
         event.preventDefault();
         appendAmountDigit(event.key);
+        return;
+      }
+      if (event.code === "KeyC") {
+        event.preventDefault();
+        clearAmount();
         return;
       }
       if (event.code === "KeyD") state.y = nextValue(PATTERNS, state.y);

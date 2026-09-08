@@ -308,7 +308,7 @@ test("D and J keys cycle Pattern and Joker without modifier shortcuts", () => {
   assert.equal(nodes["#z-control"].children.filter((button) => button.attrs["aria-pressed"] === "true").length, 1);
 });
 
-test("number keys type into the calculator globally without hijacking numeric inputs", () => {
+test("number keys type globally, C clears, and the display never takes input focus", () => {
   const { nodes, events } = createApp();
   let prevented = 0;
   const press = (key, options = {}) => events.keydown({
@@ -325,7 +325,11 @@ test("number keys type into the calculator globally without hijacking numeric in
   press("0");
   press("7", { code: "Numpad7" });
   assert.equal(nodes["#chip-amount"].value, "507");
-  assert.equal(nodes["#chip-amount"].focused, true);
+  assert.equal(nodes["#chip-amount"].focused, undefined);
+  assert.equal(prevented, 3);
+
+  press("x", { code: "KeyX" });
+  assert.equal(nodes["#chip-amount"].value, "507");
   assert.equal(prevented, 3);
 
   press("9", { ctrlKey: true });
@@ -337,10 +341,17 @@ test("number keys type into the calculator globally without hijacking numeric in
   assert.equal(nodes["#chip-amount"].value, "507");
   assert.equal(prevented, 3);
 
-  const calculatorInput = { matches(selector) { return selector.includes("#chip-amount"); } };
-  press("6", { target: calculatorInput });
-  assert.equal(nodes["#chip-amount"].value, "507");
-  assert.equal(prevented, 3);
+  press("c", { code: "KeyC" });
+  assert.equal(nodes["#chip-amount"].value, "0");
+  assert.equal(prevented, 4);
+});
+
+test("calculator amount is read-only and hides focus and caret interaction", () => {
+  const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  assert.match(html, /id="chip-amount"[^>]*readonly[^>]*tabindex="-1"/);
+  assert.doesNotMatch(html, /id="chip-amount"[^>]*(?:inputmode|pattern)=/);
+  assert.match(css, /\.amount-field input\s*\{[^}]*caret-color:\s*transparent[^}]*pointer-events:\s*none[^}]*user-select:\s*none/);
 });
 
 function textOf(node) {
