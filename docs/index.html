@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=3cb325e9145d" />
+    <link rel="stylesheet" href="style.css?v=9d305a3bab79" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=4ee369167b14" defer></script>
-    <script src="app.js?v=b92a7640d604" defer></script>
+    <script src="app.js?v=825e31e28ebe" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -59,9 +59,6 @@
       <section class="result-panel" aria-labelledby="result-title">
         <div class="result-heading">
           <h2 id="result-title"><output id="current-title">中距離DD</output></h2>
-          <button id="open-settings" class="icon-button" type="button" aria-label="数値表示設定を開く" aria-haspopup="dialog" aria-controls="settings-dialog" title="数値表示設定">
-            <span aria-hidden="true">⚙</span>
-          </button>
         </div>
 
         <div class="table-wrap">
@@ -114,15 +111,13 @@
         </div>
         <p id="amount-error" class="field-error" role="alert"></p>
       </section>
-      </div>
 
-      <dialog id="settings-dialog" class="settings-panel" aria-labelledby="settings-title" aria-describedby="settings-help">
+      <aside id="settings-panel" class="settings-panel" aria-labelledby="settings-title" aria-describedby="settings-help">
         <div class="settings-heading">
           <div>
           <p class="section-label">DISPLAY</p>
           <h2 id="settings-title">数値表示設定</h2>
           </div>
-          <button id="close-settings" class="close-button" type="button" autofocus>閉じる</button>
         </div>
         <p id="settings-help" class="settings-help">有効な設定は表にすぐ反映されます。</p>
 
@@ -182,7 +177,8 @@
             </div>
           </div>
         </fieldset>
-      </dialog>
+      </aside>
+      </div>
     </main>
   </body>
 </html>

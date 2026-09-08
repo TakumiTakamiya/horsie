@@ -49,10 +49,10 @@ button, input { font: inherit; }
 .control-panel, .settings-panel { padding: 24px; }
 .workspace-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(260px, 2fr);
   grid-template-areas:
-    "result controls"
-    "result calculator";
+    "result controls controls"
+    "result calculator settings";
   gap: 20px;
   align-items: stretch;
 }
@@ -128,9 +128,6 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgb(31 106 74 / 2
 
 .result-heading { min-height: 104px; padding: 26px 28px; background: var(--accent-dark); color: white; }
 .result-heading h2 { margin: 0; font-size: 2.3rem; line-height: 1.15; }
-.icon-button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #749c87; border-radius: 10px; background: transparent; color: white; cursor: pointer; font-size: 1.6rem; }
-.icon-button:hover { background: rgb(255 255 255 / 12%); }
-.icon-button:focus-visible { outline-color: white; }
 .table-wrap { position: relative; min-height: 166px; overflow-x: auto; flex: 1; }
 table { width: 100%; min-width: 360px; border-collapse: collapse; }
 table[data-show-probability="false"] { min-width: 240px; }
@@ -144,16 +141,11 @@ td:first-child { font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
 td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .empty-state { margin: 0; padding: 38px 24px 48px; color: var(--muted); text-align: center; }
 
-.settings-panel { width: min(680px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; color: var(--ink); overflow-y: auto; }
-.settings-panel:not([open]) { display: none; }
-.settings-panel[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 20px 28px; align-items: start; }
-.settings-panel::backdrop { background: rgb(16 30 23 / 50%); }
-.settings-heading { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 16px; }
-.settings-help { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.84rem; }
-.column-option { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; }
+.settings-panel { grid-area: settings; display: flex; min-width: 0; color: var(--ink); overflow-y: auto; flex-direction: column; gap: 18px; }
+.settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.settings-help { margin: 0; color: var(--muted); font-size: 0.84rem; }
+.column-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; }
 .column-option input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
-.close-button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); cursor: pointer; }
-.close-button:hover { background: var(--accent-soft); }
 .settings-heading h2 { margin: 0; font-size: 1.18rem; }
 .rounding-options, .tax-settings, .rounding-details fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
 .rounding-options { display: grid; gap: 14px; }
@@ -186,7 +178,7 @@ td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
   .app-shell { width: calc(100% - 24px); padding: 12px 0 32px; }
   .workspace-grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "controls" "result" "calculator";
+    grid-template-areas: "controls" "result" "calculator" "settings";
     gap: 16px;
   }
 }
@@ -196,6 +188,7 @@ td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
   .workspace-grid { height: calc(100dvh - 32px); grid-template-rows: auto minmax(0, 1fr); }
   .control-panel { padding-block: clamp(14px, 2dvh, 22px); }
   .calculator-panel { min-height: 0; overflow-y: auto; }
+  .settings-panel { min-height: 0; }
   .segmented.segmented--race button { min-height: clamp(66px, 8dvh, 86px); }
   .condition-grid { margin-top: clamp(10px, 1.5dvh, 16px); padding-top: clamp(10px, 1.7dvh, 18px); }
   .table-wrap table { height: 100%; }
@@ -206,7 +199,6 @@ td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
   .keyboard-hint { display: none; }
   .condition-grid { gap: 12px; }
   .condition-grid .segmented button { min-width: 44px; padding-inline: 10px; }
-  .settings-panel[open] { grid-template-columns: 1fr; }
   .calculation-grid { grid-template-columns: minmax(108px, 1.05fr) minmax(50px, 0.65fr) 12px minmax(58px, 0.8fr); grid-template-rows: repeat(3, minmax(84px, auto)); gap-inline: 6px; }
   .amount-field { grid-column: 1; grid-row: 1; margin: 0; }
   .amount-field input { padding: 20px 8px; font-size: 1.55rem; }

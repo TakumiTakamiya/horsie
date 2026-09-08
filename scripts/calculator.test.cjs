@@ -397,15 +397,17 @@ test("settings use hierarchical rounding controls and separate tax rates", () =>
   }
 });
 
-test("race controls and the calculator keep their desktop layout", () => {
+test("race controls span the calculator and settings columns", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
   const controlPanel = html.match(/<section class="control-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.ok(controlPanel.indexOf('id="r-control"') < controlPanel.indexOf('id="y-control"'));
   assert.ok(controlPanel.indexOf('id="y-control"') < controlPanel.indexOf('id="z-control"'));
-  assert.match(css, /grid-template-columns:\s*minmax\(0, 1fr\) minmax\(0, 2fr\)/);
-  assert.match(css, /grid-template-areas:\s*"result controls"\s*"result calculator"/);
-  assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator"/);
+  assert.match(css, /grid-template-columns:\s*minmax\(0, 3fr\) minmax\(0, 4fr\) minmax\(260px, 2fr\)/);
+  assert.match(css, /grid-template-areas:\s*"result controls controls"\s*"result calculator settings"/);
+  assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator" "settings"/);
+  assert.match(css, /\.settings-panel\s*\{[^}]*grid-area:\s*settings[^}]*display:\s*flex/);
+  assert.doesNotMatch(html, /<dialog\b|id="open-settings"|id="close-settings"/);
   assert.match(css, /height:\s*calc\(100dvh - 32px\)/);
   assert.match(css, /\.result-panel[^}]*display:\s*flex/);
   assert.match(css, /\.table-wrap table\s*\{\s*height:\s*100%/);
@@ -444,14 +446,12 @@ test("probability toggle updates header/body and survives condition/settings cha
   click("#outcome-control", "D@D");
   input("#chip-amount", "25");
   const previousResult = nodes["#trifecta-result"].textContent;
-  nodes["#open-settings"].events.click();
   const toggle = nodes["#show-probability"];
   toggle.checked = false;
   toggle.events.change({ target: toggle });
   assert.equal(nodes["#odds-table"].dataset.showProbability, "false");
   assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
   assert.equal(nodes["#trifecta-result"].textContent, previousResult);
-  nodes["#close-settings"].events.click();
   click("#r-control", 2);
   click("#y-control", "D2");
   click("#z-control", "J");
@@ -462,7 +462,6 @@ test("probability toggle updates header/body and survives condition/settings cha
   assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
   assert.equal(nodes["#chip-amount"].value, "25");
   const taxedResult = nodes["#trifecta-result"].textContent;
-  nodes["#open-settings"].events.click();
   toggle.checked = true;
   toggle.events.change({ target: toggle });
   assert.ok(nodes["#result-body"].children.every((row) => !row.children[2].hidden));
