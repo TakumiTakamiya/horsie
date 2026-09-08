@@ -397,7 +397,7 @@ test("settings use hierarchical rounding controls and separate tax rates", () =>
   }
 });
 
-test("race and condition controls occupy the right column above the calculator", () => {
+test("race controls and the calculator keep their desktop layout", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
   const controlPanel = html.match(/<section class="control-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
@@ -409,7 +409,12 @@ test("race and condition controls occupy the right column above the calculator",
   assert.match(css, /height:\s*calc\(100dvh - 32px\)/);
   assert.match(css, /\.result-panel[^}]*display:\s*flex/);
   assert.match(css, /\.table-wrap table\s*\{\s*height:\s*100%/);
-  assert.match(css, /\.chip-buttons[^}]*grid-template-columns:\s*repeat\(6/);
+  assert.match(css, /\.chip-buttons[^}]*grid-column:\s*1[^}]*grid-row:\s*2 \/ span 2[^}]*grid-template-columns:\s*repeat\(2[^}]*grid-template-rows:\s*repeat\(3/);
+  const calculationGrid = html.match(/<div class="calculation-grid">[\s\S]*?<p id="amount-error"/)?.[0] ?? "";
+  assert.ok(calculationGrid.indexOf('id="chip-amount"') < calculationGrid.indexOf('id="chip-control"'));
+  assert.ok(calculationGrid.indexOf('id="chip-control"') < calculationGrid.indexOf('id="win-multiplier"'));
+  assert.equal((calculationGrid.match(/data-chip=/g) ?? []).length, 5);
+  assert.match(calculationGrid, /id="clear-amount"/);
   assert.equal(Math.max(...Object.values(data).map((rows) => rows.length)), 12);
 });
 

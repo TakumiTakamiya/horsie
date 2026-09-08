@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=af04085af1ec" />
+    <link rel="stylesheet" href="style.css?v=e99e47f0cae3" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=4ee369167b14" defer></script>
@@ -87,6 +87,14 @@
             <label for="chip-amount">入力</label>
             <input id="chip-amount" type="text" value="0" readonly tabindex="-1" aria-describedby="amount-error" />
           </div>
+          <div id="chip-control" class="chip-buttons" role="group" aria-label="チップを加算">
+            <button type="button" data-chip="1" aria-label="1チップ加算"><img src="chips/chip1.svg" width="64" height="64" alt="" /><span>+1</span></button>
+            <button type="button" data-chip="5" aria-label="5チップ加算"><img src="chips/chip5.svg" width="64" height="64" alt="" /><span>+5</span></button>
+            <button type="button" data-chip="10" aria-label="10チップ加算"><img src="chips/chip10.svg" width="64" height="64" alt="" /><span>+10</span></button>
+            <button type="button" data-chip="25" aria-label="25チップ加算"><img src="chips/chip25.svg" width="64" height="64" alt="" /><span>+25</span></button>
+            <button type="button" data-chip="100" aria-label="100チップ加算"><img src="chips/chip100.svg" width="64" height="64" alt="" /><span>+100</span></button>
+            <button id="clear-amount" class="clear-amount" type="button">クリア</button>
+          </div>
           <span class="calculation-times" aria-hidden="true">×</span>
           <div class="calculation-row">
             <div class="calculation-rate"><span id="win-label">単勝</span><output id="win-multiplier" aria-label="単勝の倍率">—</output></div>
@@ -105,15 +113,6 @@
           </div>
         </div>
         <p id="amount-error" class="field-error" role="alert"></p>
-
-        <div id="chip-control" class="chip-buttons" role="group" aria-label="チップを加算">
-          <button type="button" data-chip="1" aria-label="1チップ加算"><img src="chips/chip1.svg" width="64" height="64" alt="" /><span>+1</span></button>
-          <button type="button" data-chip="5" aria-label="5チップ加算"><img src="chips/chip5.svg" width="64" height="64" alt="" /><span>+5</span></button>
-          <button type="button" data-chip="10" aria-label="10チップ加算"><img src="chips/chip10.svg" width="64" height="64" alt="" /><span>+10</span></button>
-          <button type="button" data-chip="25" aria-label="25チップ加算"><img src="chips/chip25.svg" width="64" height="64" alt="" /><span>+25</span></button>
-          <button type="button" data-chip="100" aria-label="100チップ加算"><img src="chips/chip100.svg" width="64" height="64" alt="" /><span>+100</span></button>
-          <button id="clear-amount" class="clear-amount" type="button">クリア</button>
-        </div>
       </section>
       </div>
 
