@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=cdcb35876127" />
+    <link rel="stylesheet" href="style.css?v=520bfc920e91" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
-    <script src="calculator.js?v=5d98fe2ee770" defer></script>
-    <script src="app.js?v=95051dbd1429" defer></script>
+    <script src="calculator.js?v=4ee369167b14" defer></script>
+    <script src="app.js?v=0b4b6f32f509" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -134,22 +134,55 @@
 
         <fieldset class="rounding-options">
           <legend>表示方法</legend>
-          <label><input type="radio" name="rounding" value="raw" checked /><span>実値</span></label>
-          <label><input type="radio" name="rounding" value="floor-half" /><span>0.5単位切り捨て</span></label>
-          <label><input type="radio" name="rounding" value="floor-integer" /><span>整数切り捨て</span></label>
-          <label><input type="radio" name="rounding" value="round-half" /><span>0.5単位四捨五入</span></label>
-          <label><input type="radio" name="rounding" value="round-integer" /><span>整数単位四捨五入</span></label>
+          <div class="rounding-kind" role="group" aria-label="実値または丸めを選択">
+            <label><input type="radio" name="rounding-kind" value="raw" checked /><span>実値</span></label>
+            <label><input type="radio" name="rounding-kind" value="rounded" /><span>丸め</span></label>
+          </div>
+          <div id="rounding-details" class="rounding-details" hidden>
+            <fieldset id="rounding-unit-options" disabled>
+              <legend>単位</legend>
+              <label><input type="radio" name="rounding-unit" value="tenth" checked /><span>0.1</span></label>
+              <label><input type="radio" name="rounding-unit" value="half" /><span>0.5</span></label>
+              <label><input type="radio" name="rounding-unit" value="integer" /><span>整数</span></label>
+            </fieldset>
+            <fieldset id="rounding-direction-options" disabled>
+              <legend>方法</legend>
+              <label><input type="radio" name="rounding-direction" value="floor" checked /><span>切り捨て</span></label>
+              <label><input type="radio" name="rounding-direction" value="round" /><span>四捨五入</span></label>
+            </fieldset>
+          </div>
         </fieldset>
 
-        <div class="tax-field">
-          <label for="tax-rate">Tax Rate</label>
-          <div class="number-input-wrap">
-            <input id="tax-rate" type="number" value="0" min="0" max="100" step="any" inputmode="decimal" aria-describedby="tax-help tax-error" />
-            <span aria-hidden="true">%</span>
+        <fieldset class="tax-settings">
+          <legend>Tax Rate</legend>
+          <p id="tax-help" class="field-help">券種ごとに0以上100以下で入力してください。</p>
+          <div class="tax-fields">
+            <div class="tax-field">
+              <label for="tax-rate-win">単勝</label>
+              <div class="number-input-wrap">
+                <input id="tax-rate-win" class="tax-rate-input" data-wager="Win" type="number" value="0" min="0" max="100" step="any" inputmode="decimal" aria-describedby="tax-help tax-error-win" />
+                <span aria-hidden="true">%</span>
+              </div>
+              <p id="tax-error-win" class="field-error" role="alert" aria-live="polite"></p>
+            </div>
+            <div class="tax-field">
+              <label for="tax-rate-exacta">2連単</label>
+              <div class="number-input-wrap">
+                <input id="tax-rate-exacta" class="tax-rate-input" data-wager="Exacta" type="number" value="0" min="0" max="100" step="any" inputmode="decimal" aria-describedby="tax-help tax-error-exacta" />
+                <span aria-hidden="true">%</span>
+              </div>
+              <p id="tax-error-exacta" class="field-error" role="alert" aria-live="polite"></p>
+            </div>
+            <div class="tax-field">
+              <label for="tax-rate-trifecta">三連単</label>
+              <div class="number-input-wrap">
+                <input id="tax-rate-trifecta" class="tax-rate-input" data-wager="Trifecta" type="number" value="0" min="0" max="100" step="any" inputmode="decimal" aria-describedby="tax-help tax-error-trifecta" />
+                <span aria-hidden="true">%</span>
+              </div>
+              <p id="tax-error-trifecta" class="field-error" role="alert" aria-live="polite"></p>
+            </div>
           </div>
-          <p id="tax-help" class="field-help">0以上100以下で入力してください。</p>
-          <p id="tax-error" class="field-error" role="alert" aria-live="polite"></p>
-        </div>
+        </fieldset>
       </dialog>
     </main>
   </body>

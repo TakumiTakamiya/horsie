@@ -5,8 +5,10 @@
     r: 1,
     y: "DD",
     z: "",
-    rounding: "raw",
-    taxRate: 0,
+    roundingKind: "raw",
+    roundingUnit: "tenth",
+    roundingDirection: "floor",
+    taxRates: { Win: 0, Exacta: 0, Trifecta: 0 },
     amount: "0",
     outcome: null,
     showProbability: true,
@@ -17,12 +19,10 @@
   const DISTANCE_LABELS = Object.freeze({ S: "短距離", M: "中距離", L: "長距離" });
   const PATTERNS = Object.freeze(["D2", "DD"]);
   const JOKERS = Object.freeze(["", "J", "JJ"]);
+  const WAGER_TYPES = Object.freeze(["Win", "Exacta", "Trifecta"]);
+  const TAX_INPUT_IDS = Object.freeze({ Win: "win", Exacta: "exacta", Trifecta: "trifecta" });
 
-  const decimalFormatter = new Intl.NumberFormat("en-US", {
-    useGrouping: false,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  const oddsFormatters = new Map();
 
   function normalizeNumber(value) {
     if (Object.is(value, -0)) return "0";
@@ -31,8 +31,10 @@
 
   function applyRounding(value, mode) {
     switch (mode) {
+      case "floor-tenth": return Math.floor(value * 10) / 10;
       case "floor-half": return Math.floor(value * 2) / 2;
       case "floor-integer": return Math.floor(value);
+      case "round-tenth": return Math.round((value + Number.EPSILON) * 10) / 10;
       case "round-half": return Math.round((value + Number.EPSILON) * 2) / 2;
       case "round-integer": return Math.round(value + Number.EPSILON);
       case "raw": return value;
@@ -40,9 +42,26 @@
     }
   }
 
+  function getRoundingMode() {
+    return state.roundingKind === "raw" ? "raw" : `${state.roundingDirection}-${state.roundingUnit}`;
+  }
+
+  function getOddsFractionDigits(mode) {
+    if (mode === "raw") return 2;
+    return mode.endsWith("integer") ? 0 : 1;
+  }
+
   function formatOdds(originalOdds, taxRate, mode) {
     const taxAppliedValue = originalOdds * (1 - taxRate / 100);
-    return decimalFormatter.format(Number(normalizeNumber(applyRounding(taxAppliedValue, mode))));
+    const fractionDigits = getOddsFractionDigits(mode);
+    if (!oddsFormatters.has(fractionDigits)) {
+      oddsFormatters.set(fractionDigits, new Intl.NumberFormat("en-US", {
+        useGrouping: false,
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      }));
+    }
+    return oddsFormatters.get(fractionDigits).format(Number(normalizeNumber(applyRounding(taxAppliedValue, mode))));
   }
 
   function formatSelection(selection) {
@@ -119,6 +138,7 @@
   function render() {
     const key = getKey();
     const rows = ODDS_DATA[key] || [];
+    const roundingMode = getRoundingMode();
     const body = document.querySelector("#result-body");
     document.querySelector("#odds-table").dataset.showProbability = String(state.showProbability);
     document.querySelector("#show-probability").checked = state.showProbability;
@@ -138,7 +158,7 @@
       selectionCell.append(formatSelection(item.selection));
       probabilityCell.textContent = `${item.probabilityPercent.toFixed(2)}%`;
       probabilityCell.hidden = !state.showProbability;
-      oddsCell.textContent = `${formatOdds(item.decimalOdds, state.taxRate, state.rounding)}倍`;
+      oddsCell.textContent = `${formatOdds(item.decimalOdds, state.taxRates[item.wagerType], roundingMode)}倍`;
       row.append(selectionCell, oddsCell, probabilityCell);
       return row;
     }));
@@ -181,8 +201,9 @@
       button.title = button.disabled ? "入力が無効、または加算すると上限を超えます。" : "";
     });
 
+    const roundingMode = getRoundingMode();
     const results = calculator.calculateRows(rows, state.outcome, state.amount,
-      (odds) => formatOdds(odds, state.taxRate, state.rounding));
+      (odds, type) => formatOdds(odds, state.taxRates[type], roundingMode));
     results.forEach(({ type, multiplier, result }) => {
       const id = type.toLowerCase();
       document.querySelector(`#${id}-multiplier`).textContent = multiplier === null ? "—" : `${multiplier}倍`;
@@ -210,12 +231,21 @@
     const raw = input.value.trim();
     const value = Number(raw);
     const valid = raw !== "" && Number.isFinite(value) && value >= 0 && value <= 100;
+    const wagerType = input.dataset.wager;
+    const suffix = TAX_INPUT_IDS[wagerType];
     input.setAttribute("aria-invalid", String(!valid));
-    document.querySelector("#tax-error").textContent = valid ? "" : "0以上100以下の数値を入力してください。";
+    document.querySelector(`#tax-error-${suffix}`).textContent = valid ? "" : "0以上100以下の数値を入力してください。";
     if (valid) {
-      state.taxRate = value;
+      state.taxRates[wagerType] = value;
       render();
     }
+  }
+
+  function updateRoundingDetails() {
+    const rounded = state.roundingKind === "rounded";
+    document.querySelector("#rounding-details").hidden = !rounded;
+    document.querySelector("#rounding-unit-options").disabled = !rounded;
+    document.querySelector("#rounding-direction-options").disabled = !rounded;
   }
 
   function init() {
@@ -246,13 +276,18 @@
     });
 
     document.querySelector(".rounding-options").addEventListener("change", (event) => {
-      if (event.target.matches('input[name="rounding"]')) {
-        state.rounding = event.target.value;
-        render();
-      }
+      const { name, value } = event.target;
+      if (name === "rounding-kind") state.roundingKind = value;
+      else if (name === "rounding-unit") state.roundingUnit = value;
+      else if (name === "rounding-direction") state.roundingDirection = value;
+      else return;
+      updateRoundingDetails();
+      render();
     });
 
-    document.querySelector("#tax-rate").addEventListener("input", (event) => validateTaxRate(event.target));
+    WAGER_TYPES.forEach((type) => {
+      document.querySelector(`#tax-rate-${TAX_INPUT_IDS[type]}`).addEventListener("input", (event) => validateTaxRate(event.target));
+    });
 
     document.querySelector("#show-probability").addEventListener("change", (event) => {
       state.showProbability = event.target.checked;
@@ -299,6 +334,6 @@
     render();
   }
 
-  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, formatTableTitle, normalizeNumber });
+  window.HorsieApp = Object.freeze({ applyRounding, formatOdds, formatSelection, formatTableTitle, getOddsFractionDigits, normalizeNumber });
   window.addEventListener("DOMContentLoaded", init);
 })();

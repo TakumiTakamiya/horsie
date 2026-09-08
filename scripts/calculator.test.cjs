@@ -13,7 +13,7 @@ vm.runInContext(fs.readFileSync(path.join(docs, "odds-data.js"), "utf8"), dataCo
 const data = vm.runInContext("ODDS_DATA", dataContext);
 const appContext = { window: { addEventListener() {} } };
 vm.runInNewContext(fs.readFileSync(path.join(docs, "app.js"), "utf8"), appContext);
-const { formatOdds, formatTableTitle } = appContext.window.HorsieApp;
+const { applyRounding, formatOdds, formatTableTitle, getOddsFractionDigits } = appContext.window.HorsieApp;
 
 test("table titles localize only the distance prefix", () => {
   assert.equal(formatTableTitle("SD2J"), "短距離D2J");
@@ -46,12 +46,30 @@ test("adds all chips, starts empty input at zero, and refuses invalid input/over
 test("rounds exact products half-up to one decimal, including very large amounts", () => {
   const cases = [
     ["25", "3.53", "88.3"], ["1", "0.05", "0.1"], ["1", "0.04", "0.0"],
-    ["1", "0.15", "0.2"], ["10", "3.50", "35.0"], ["0", "99.99", "0.0"],
+    ["1", "0.15", "0.2"], ["10", "3.5", "35.0"], ["10", "4", "40.0"], ["0", "99.99", "0.0"],
     ["9007199254740991", "99.99", "900629853481551690.1"],
   ];
   for (const [amount, odds, expected] of cases) assert.equal(calculator.multiplyToTenths(amount, odds), expected);
   for (const amount of ["", "-1", "1.2"]) assert.equal(calculator.multiplyToTenths(amount, "3.53"), null);
-  for (const odds of [null, "NaN", "1.5", "-1.00"]) assert.equal(calculator.multiplyToTenths("25", odds), null);
+  for (const odds of [null, "NaN", "1.234", "-1.00", ".5", "1."]) assert.equal(calculator.multiplyToTenths("25", odds), null);
+});
+
+test("supports 0.1, 0.5, and integer rounding with matching display precision", () => {
+  const cases = [
+    ["raw", 3.58, "3.58", 2],
+    ["floor-tenth", 3.58, "3.5", 1],
+    ["round-tenth", 3.55, "3.6", 1],
+    ["floor-half", 3.76, "3.5", 1],
+    ["round-half", 3.76, "4.0", 1],
+    ["floor-integer", 3.99, "3", 0],
+    ["round-integer", 3.5, "4", 0],
+  ];
+  for (const [mode, value, displayed, digits] of cases) {
+    assert.equal(formatOdds(value, 0, mode), displayed, mode);
+    assert.equal(getOddsFractionDigits(mode), digits, mode);
+  }
+  assert.equal(applyRounding(3.58, "floor-tenth"), 3.5);
+  assert.equal(applyRounding(3.55, "round-tenth"), 3.6);
 });
 
 test("all 18 keys provide a fixed outcome order and the correct three prefix multipliers", () => {
@@ -63,7 +81,7 @@ test("all 18 keys provide a fixed outcome order and the correct three prefix mul
     assert.deepEqual(calculator.getOutcomes(rows), expected);
     for (const outcome of expected) {
       for (const tax of [0, 20, 100]) {
-        for (const mode of ["raw", "floor-half", "floor-integer", "round-half", "round-integer"]) {
+        for (const mode of ["raw", "floor-tenth", "floor-half", "floor-integer", "round-tenth", "round-half", "round-integer"]) {
           const calculated = calculator.calculateRows(rows, outcome, "25", (odds) => formatOdds(odds, tax, mode));
           calculated.forEach((result, index) => {
             const type = ["Win", "Exacta", "Trifecta"][index];
@@ -116,6 +134,9 @@ function createApp() {
   nodes["#y-control"].children = ["D2", "DD"].map((value) => new Element({ value }));
   nodes["#z-control"].children = ["", "J", "JJ"].map((value) => new Element({ value }));
   nodes["#chip-control"].children = [1, 5, 10, 25, 100].map((chip) => new Element({ chip: String(chip) }));
+  nodes["#tax-rate-win"].dataset.wager = "Win";
+  nodes["#tax-rate-exacta"].dataset.wager = "Exacta";
+  nodes["#tax-rate-trifecta"].dataset.wager = "Trifecta";
   const events = {};
   const sandbox = {
     addEventListener(name, callback) { events[name] = callback; },
@@ -142,7 +163,10 @@ function createApp() {
     group.events.click({ target: { closest() { return button; } } });
   };
   const input = (id, value) => { nodes[id].value = value; nodes[id].events.input({ target: nodes[id] }); };
-  return { nodes, events, click, input };
+  const changeRounding = (name, value) => {
+    nodes[".rounding-options"].events.change({ target: { name, value } });
+  };
+  return { nodes, events, click, input, changeRounding };
 }
 
 test("UI starts unselected, adds chips, preserves button focus targets, and clears amount only", () => {
@@ -188,7 +212,7 @@ test("UI enforces invalid/overflow inputs and recovers via clear", () => {
 });
 
 test("UI retains amount across R, starts new outcomes blank, and applies Pattern/Joker/settings changes", () => {
-  const { nodes, events, click, input } = createApp();
+  const { nodes, events, click, input, changeRounding } = createApp();
   input("#chip-amount", "25");
   click("#outcome-control", "D@D");
   click("#r-control", 2);
@@ -197,15 +221,48 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   click("#z-control", "J");
   assert.equal(nodes["#chip-amount"].value, "25");
   assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
-  input("#tax-rate", "20");
-  const odds = data.LDDJ.find((row) => row.wagerType === "Win" && row.selection === "D").decimalOdds;
-  assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(odds, 20, "raw")}倍`);
-  for (const mode of ["raw", "floor-half", "floor-integer", "round-half", "round-integer"]) {
-    nodes[".rounding-options"].events.change({ target: { matches() { return true; }, value: mode } });
-    assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(odds, 20, mode)}倍`);
+  input("#tax-rate-win", "20");
+  input("#tax-rate-exacta", "10");
+  input("#tax-rate-trifecta", "40");
+  const rows = data.LDDJ;
+  const winOdds = rows.find((row) => row.wagerType === "Win" && row.selection === "D").decimalOdds;
+  const exactaOdds = rows.find((row) => row.wagerType === "Exacta" && row.selection === "D@").decimalOdds;
+  const trifectaOdds = rows.find((row) => row.wagerType === "Trifecta" && row.selection === "D@D").decimalOdds;
+  assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(winOdds, 20, "raw")}倍`);
+  assert.equal(nodes["#exacta-multiplier"].textContent, `${formatOdds(exactaOdds, 10, "raw")}倍`);
+  assert.equal(nodes["#trifecta-multiplier"].textContent, `${formatOdds(trifectaOdds, 40, "raw")}倍`);
+  const rowIndex = (type, selection) => rows.findIndex((row) => row.wagerType === type && row.selection === selection);
+  assert.equal(nodes["#result-body"].children[rowIndex("Win", "D")].children[1].textContent, `${formatOdds(winOdds, 20, "raw")}倍`);
+  assert.equal(nodes["#result-body"].children[rowIndex("Exacta", "D@")].children[1].textContent, `${formatOdds(exactaOdds, 10, "raw")}倍`);
+  assert.equal(nodes["#result-body"].children[rowIndex("Trifecta", "D@D")].children[1].textContent, `${formatOdds(trifectaOdds, 40, "raw")}倍`);
+  const validWinMultiplier = nodes["#win-multiplier"].textContent;
+  input("#tax-rate-win", "101");
+  assert.equal(nodes["#tax-rate-win"].attrs["aria-invalid"], "true");
+  assert.match(nodes["#tax-error-win"].textContent, /0以上100以下/);
+  assert.equal(nodes["#win-multiplier"].textContent, validWinMultiplier);
+  assert.equal(nodes["#exacta-multiplier"].textContent, `${formatOdds(exactaOdds, 10, "raw")}倍`);
+  input("#tax-rate-win", "20");
+  assert.equal(nodes["#tax-error-win"].textContent, "");
+  changeRounding("rounding-kind", "rounded");
+  assert.equal(nodes["#rounding-details"].hidden, false);
+  assert.equal(nodes["#rounding-unit-options"].disabled, false);
+  const modes = [
+    ["rounding-direction", "floor", "floor-tenth"],
+    ["rounding-unit", "half", "floor-half"],
+    ["rounding-direction", "round", "round-half"],
+    ["rounding-unit", "integer", "round-integer"],
+    ["rounding-unit", "tenth", "round-tenth"],
+  ];
+  for (const [name, value, mode] of modes) {
+    changeRounding(name, value);
+    assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(winOdds, 20, mode)}倍`);
   }
-  input("#tax-rate", "100");
+  changeRounding("rounding-kind", "raw");
+  assert.equal(nodes["#rounding-details"].hidden, true);
+  assert.equal(nodes["#rounding-direction-options"].disabled, true);
+  input("#tax-rate-win", "100");
   assert.equal(nodes["#win-result"].textContent, "0.0");
+  assert.notEqual(nodes["#exacta-result"].textContent, "0.0");
   click("#y-control", "D2");
   assert.equal(nodes["#win-multiplier"].textContent, "—");
   assert.equal(nodes["#chip-amount"].value, "25");
@@ -280,6 +337,20 @@ test("table has no heading row and orders Selection, Odds, Probability", () => {
   });
 });
 
+test("settings use hierarchical rounding controls and separate tax rates", () => {
+  const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  assert.match(html, /name="rounding-kind"[^>]*value="raw"/);
+  assert.match(html, /name="rounding-kind"[^>]*value="rounded"/);
+  assert.match(html, /name="rounding-unit"[^>]*value="tenth"/);
+  assert.match(html, /name="rounding-unit"[^>]*value="half"/);
+  assert.match(html, /name="rounding-unit"[^>]*value="integer"/);
+  assert.match(html, /name="rounding-direction"[^>]*value="floor"/);
+  assert.match(html, /name="rounding-direction"[^>]*value="round"/);
+  for (const [id, wager] of [["win", "Win"], ["exacta", "Exacta"], ["trifecta", "Trifecta"]]) {
+    assert.match(html, new RegExp(`id="tax-rate-${id}"[^>]*data-wager="${wager}"`));
+  }
+});
+
 test("race and condition controls occupy the right column above the calculator", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
@@ -331,7 +402,7 @@ test("probability toggle updates header/body and survives condition/settings cha
   click("#r-control", 2);
   click("#y-control", "D2");
   click("#z-control", "J");
-  input("#tax-rate", "20");
+  input("#tax-rate-trifecta", "20");
   assert.equal(toggle.checked, false);
   assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
   click("#r-control", 1);

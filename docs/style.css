@@ -144,9 +144,9 @@ td:first-child { font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
 td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .empty-state { margin: 0; padding: 38px 24px 48px; color: var(--muted); text-align: center; }
 
-.settings-panel { width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; color: var(--ink); overflow-y: auto; }
+.settings-panel { width: min(680px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; color: var(--ink); overflow-y: auto; }
 .settings-panel:not([open]) { display: none; }
-.settings-panel[open] { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px 24px; align-items: start; }
+.settings-panel[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 20px 28px; align-items: start; }
 .settings-panel::backdrop { background: rgb(16 30 23 / 50%); }
 .settings-heading { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 16px; }
 .settings-help { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.84rem; }
@@ -155,11 +155,23 @@ td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
 .close-button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); cursor: pointer; }
 .close-button:hover { background: var(--accent-soft); }
 .settings-heading h2 { margin: 0; font-size: 1.18rem; }
-.rounding-options { display: grid; gap: 7px; margin: 0; padding: 0; border: 0; }
-.rounding-options legend, .tax-field > label { margin-bottom: 8px; font-size: 0.82rem; font-weight: 800; }
+.rounding-options, .tax-settings, .rounding-details fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.rounding-options { display: grid; gap: 14px; }
+.rounding-options > legend, .tax-settings > legend, .tax-field > label { margin-bottom: 8px; font-size: 0.82rem; font-weight: 800; }
 .rounding-options label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #38443e; font-size: 0.88rem; }
 .rounding-options input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+.rounding-kind { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.rounding-kind label { min-height: 42px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+.rounding-kind label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.rounding-details { display: grid; gap: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: rgb(245 243 236 / 55%); }
+.rounding-details[hidden] { display: none; }
+.rounding-details fieldset { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.rounding-details legend { width: 100%; margin-bottom: 7px; color: var(--muted); font-size: 0.75rem; font-weight: 800; }
+.tax-settings { display: grid; gap: 8px; }
+.tax-settings > .field-help { margin-top: -4px; }
+.tax-fields { display: grid; gap: 8px; }
 .tax-field { min-width: 0; }
+.tax-field > label { display: block; }
 .number-input-wrap { display: flex; align-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
 .number-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(31 106 74 / 12%); }
 .number-input-wrap input { width: 100%; min-width: 0; padding: 9px 4px 9px 11px; border: 0; outline: 0; background: transparent; font-variant-numeric: tabular-nums; }
@@ -211,7 +223,6 @@ td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
   .result-heading { min-height: 88px; padding: 20px; }
   .result-heading h2 { font-size: 1.95rem; }
   td { padding: 12px 18px; }
-  .rounding-options { grid-template-columns: 1fr; }
   .segmented button { min-width: 58px; padding-inline: 13px; }
 }
 

@@ -38,10 +38,11 @@
 
   function multiplyToTenths(rawAmount, displayedOdds) {
     const amount = parseAmount(rawAmount);
-    if (amount.status !== "valid" || typeof displayedOdds !== "string" || !/^\d+\.\d{2}$/.test(displayedOdds)) return null;
-    // Multipliers have exactly two decimals. Keep the full product in hundredths,
+    if (amount.status !== "valid" || typeof displayedOdds !== "string" || !/^\d+(?:\.\d{1,2})?$/.test(displayedOdds)) return null;
+    // Normalize multipliers to hundredths. Keep the full product in hundredths,
     // then round half-up to tenths without floating-point arithmetic.
-    const hundredths = BigInt(displayedOdds.replace(".", ""));
+    const [integer, fraction = ""] = displayedOdds.split(".");
+    const hundredths = BigInt(`${integer}${fraction.padEnd(2, "0")}`);
     const tenths = (amount.value * hundredths + 5n) / 10n;
     return `${tenths / 10n}.${tenths % 10n}`;
   }
@@ -52,7 +53,7 @@
       const selection = selected ? selected.slice(0, length) : null;
       const row = selected && rows.find((item) => item.wagerType === type && item.selection === selection);
       const multiplier = row && Number.isFinite(row.decimalOdds) && row.decimalOdds >= 0
-        ? formatOdds(row.decimalOdds)
+        ? formatOdds(row.decimalOdds, type)
         : null;
       return { type, selection, multiplier, result: multiplyToTenths(rawAmount, multiplier) };
     });
