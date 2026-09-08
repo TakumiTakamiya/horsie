@@ -410,6 +410,8 @@ test("race controls and the calculator keep their desktop layout", () => {
   assert.match(css, /\.result-panel[^}]*display:\s*flex/);
   assert.match(css, /\.table-wrap table\s*\{\s*height:\s*100%/);
   assert.match(css, /\.chip-buttons[^}]*grid-column:\s*1[^}]*grid-row:\s*2 \/ span 2[^}]*grid-template-columns:\s*repeat\(2[^}]*grid-template-rows:\s*repeat\(3/);
+  assert.match(css, /\.calculation-grid\s*\{[^}]*grid-template-columns:\s*minmax\(208px, 1\.45fr\)[^}]*minmax\(72px, 0\.88fr\)[^}]*flex:\s*1/);
+  assert.match(css, /\.calculation-equals\s*\{[^}]*display:\s*grid[^}]*place-items:\s*center/);
   const calculationGrid = html.match(/<div class="calculation-grid">[\s\S]*?<p id="amount-error"/)?.[0] ?? "";
   assert.ok(calculationGrid.indexOf('id="chip-amount"') < calculationGrid.indexOf('id="chip-control"'));
   assert.ok(calculationGrid.indexOf('id="chip-control"') < calculationGrid.indexOf('id="win-multiplier"'));
@@ -425,7 +427,7 @@ test("table title and calculator use the space freed by removed guidance", () =>
   assert.match(html, /id="chip-amount"[^>]*aria-describedby="amount-error"/);
   assert.match(css, /\.result-heading\s*\{[^}]*min-height:\s*104px/);
   assert.match(css, /\.result-heading h2\s*\{[^}]*font-size:\s*2\.3rem/);
-  assert.match(css, /\.amount-field input\s*\{[^}]*font-size:\s*1\.75rem/);
+  assert.match(css, /\.amount-field input\s*\{[^}]*font-size:\s*2\.1rem/);
   assert.match(css, /\.calculation-result\s*\{[^}]*font-size:\s*2rem/);
   assert.match(css, /\.outcome-buttons button\s*\{[^}]*min-height:\s*64px[^}]*font-size:\s*1\.35rem/);
 });

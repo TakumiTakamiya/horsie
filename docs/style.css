@@ -66,21 +66,21 @@ button, input { font: inherit; }
 .outcome-buttons button { min-width: 76px; min-height: 64px; padding: 13px 20px; border: 1px solid var(--line); border-radius: 10px; background: white; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 1.35rem; cursor: pointer; }
 .outcome-buttons button:hover { border-color: var(--accent); }
 .outcome-buttons button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
-.calculation-grid { display: grid; grid-template-columns: minmax(176px, 1.05fr) 18px minmax(64px, 0.9fr) 18px minmax(72px, 1.3fr); grid-template-rows: repeat(3, auto); gap: 0 10px; margin-top: 26px; align-items: stretch; }
-.amount-field { grid-column: 1; grid-row: 1; min-width: 0; align-self: center; }
+.calculation-grid { display: grid; grid-template-columns: minmax(208px, 1.45fr) 18px minmax(64px, 0.72fr) 18px minmax(72px, 0.88fr); grid-template-rows: repeat(3, minmax(92px, 1fr)); gap: 0 10px; min-height: 0; margin-top: 26px; align-items: stretch; flex: 1; }
+.amount-field { grid-column: 1; grid-row: 1; display: flex; min-width: 0; align-self: stretch; justify-content: center; flex-direction: column; }
 .amount-field label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
-.amount-field input { width: 100%; min-width: 0; padding: 20px 12px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); caret-color: transparent; cursor: default; font-size: 1.75rem; font-variant-numeric: tabular-nums; pointer-events: none; user-select: none; }
+.amount-field input { width: 100%; min-width: 0; padding: 26px 14px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); caret-color: transparent; cursor: default; font-size: 2.1rem; font-variant-numeric: tabular-nums; pointer-events: none; user-select: none; }
 .amount-field input[aria-invalid="true"] { border-color: var(--danger); }
-.calculation-times { grid-column: 2; grid-row: 1; align-self: center; color: var(--muted); font-size: 1.6rem; }
+.calculation-times { grid-column: 2; grid-row: 1; display: grid; place-items: center; color: var(--muted); font-size: 1.6rem; }
 .calculation-row { display: contents; }
-.calculation-rate { grid-column: 3; min-width: 0; padding: 20px 0; }
+.calculation-rate { grid-column: 3; display: flex; min-width: 0; justify-content: center; flex-direction: column; }
 .calculation-rate > span { display: block; color: var(--muted); font-size: 0.82rem; }
 .calculation-rate output { font-size: 1.5rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.calculation-equals { grid-column: 4; color: var(--muted); }
-.calculation-result { grid-column: 5; min-width: 0; padding: 20px 0; color: var(--accent-dark); font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; overflow-wrap: anywhere; }
-.chip-buttons { grid-column: 1; grid-row: 2 / span 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(48px, 1fr)); align-items: stretch; gap: 7px; padding-top: 8px; }
-.chip-buttons button { display: flex; width: 100%; min-width: 0; min-height: 48px; padding: 5px 8px; align-items: center; justify-content: center; gap: 5px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--ink); font-size: 0.84rem; font-weight: 700; cursor: pointer; }
-.chip-buttons img { width: clamp(30px, 3vw, 40px); height: clamp(30px, 3vw, 40px); }
+.calculation-equals { grid-column: 4; display: grid; place-items: center; color: var(--muted); font-size: 1.15rem; }
+.calculation-result { grid-column: 5; display: flex; min-width: 0; align-items: center; justify-content: flex-end; color: var(--accent-dark); font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; overflow-wrap: anywhere; }
+.chip-buttons { grid-column: 1; grid-row: 2 / span 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(64px, 1fr)); align-items: stretch; gap: 9px; padding-top: 10px; }
+.chip-buttons button { display: flex; width: 100%; min-width: 0; min-height: 64px; padding: 7px 10px; align-items: center; justify-content: center; gap: 7px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--ink); font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+.chip-buttons img { width: clamp(38px, 4vw, 52px); height: clamp(38px, 4vw, 52px); }
 .chip-buttons button:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--line); }
 .chip-buttons button:disabled { opacity: 0.4; cursor: not-allowed; }
 .chip-buttons .clear-amount { justify-content: center; padding: 10px 14px; border-color: var(--line); background: white; }
@@ -207,17 +207,17 @@ td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
   .condition-grid { gap: 12px; }
   .condition-grid .segmented button { min-width: 44px; padding-inline: 10px; }
   .settings-panel[open] { grid-template-columns: 1fr; }
-  .calculation-grid { grid-template-columns: minmax(92px, 0.9fr) minmax(54px, 0.75fr) 12px minmax(64px, 1.1fr); gap-inline: 6px; }
+  .calculation-grid { grid-template-columns: minmax(108px, 1.05fr) minmax(50px, 0.65fr) 12px minmax(58px, 0.8fr); grid-template-rows: repeat(3, minmax(84px, auto)); gap-inline: 6px; }
   .amount-field { grid-column: 1; grid-row: 1; margin: 0; }
-  .amount-field input { padding-inline: 8px; font-size: 1.4rem; }
+  .amount-field input { padding: 20px 8px; font-size: 1.55rem; }
   .calculation-times { display: none; }
   .calculation-rate { grid-column: 2; }
   .calculation-rate output::before { content: "× "; color: var(--muted); }
   .calculation-equals { grid-column: 3; }
-  .calculation-result { grid-column: 4; font-size: 1.55rem; }
+  .calculation-result { grid-column: 4; font-size: 1.5rem; }
   .chip-buttons { grid-column: 1; grid-row: 2 / span 2; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
-  .chip-buttons button { padding-inline: 4px; }
-  .chip-buttons img { width: 28px; height: 28px; }
+  .chip-buttons button { min-height: 54px; padding-inline: 4px; font-size: 0.82rem; }
+  .chip-buttons img { width: 32px; height: 32px; }
 }
 
 @media (max-width: 430px) {
