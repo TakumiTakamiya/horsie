@@ -232,9 +232,10 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   assert.equal(nodes["#exacta-multiplier"].textContent, `${formatOdds(exactaOdds, 10, "raw")}倍`);
   assert.equal(nodes["#trifecta-multiplier"].textContent, `${formatOdds(trifectaOdds, 40, "raw")}倍`);
   const rowIndex = (type, selection) => rows.findIndex((row) => row.wagerType === type && row.selection === selection);
-  assert.equal(nodes["#result-body"].children[rowIndex("Win", "D")].children[1].textContent, `${formatOdds(winOdds, 20, "raw")}倍`);
-  assert.equal(nodes["#result-body"].children[rowIndex("Exacta", "D@")].children[1].textContent, `${formatOdds(exactaOdds, 10, "raw")}倍`);
-  assert.equal(nodes["#result-body"].children[rowIndex("Trifecta", "D@D")].children[1].textContent, `${formatOdds(trifectaOdds, 40, "raw")}倍`);
+  const oddsCell = (row) => row.children.find((cell) => cell.className === "odds-cell");
+  assert.equal(oddsCell(nodes["#result-body"].children[rowIndex("Win", "D")]).textContent, `${formatOdds(winOdds, 20, "raw")}倍`);
+  assert.equal(oddsCell(nodes["#result-body"].children[rowIndex("Exacta", "D@")]).textContent, `${formatOdds(exactaOdds, 10, "raw")}倍`);
+  assert.equal(oddsCell(nodes["#result-body"].children[rowIndex("Trifecta", "D@D")]).textContent, `${formatOdds(trifectaOdds, 40, "raw")}倍`);
   const validWinMultiplier = nodes["#win-multiplier"].textContent;
   input("#tax-rate-win", "101");
   assert.equal(nodes["#tax-rate-win"].attrs["aria-invalid"], "true");
@@ -372,7 +373,7 @@ function pressedValue(node) {
   return node.children.find((button) => button.attrs["aria-pressed"] === "true")?.dataset.value ?? null;
 }
 
-test("table has no heading row and orders Selection, Odds, Probability", () => {
+test("table keeps aligned data columns and labels each wager group vertically", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   assert.doesNotMatch(html, /Tickets/);
   assert.doesNotMatch(html, /result-note|同条件の馬をまとめた表記/);
@@ -382,15 +383,23 @@ test("table has no heading row and orders Selection, Odds, Probability", () => {
   assert.equal(nodes["#show-probability"].checked, true);
   assert.equal(nodes["#odds-table"].dataset.showProbability, "true");
   nodes["#result-body"].children.forEach((row, index) => {
-    assert.equal(row.children.length, 3);
-    assert.equal(textOf(row.children[0]), data.MDD[index].selection);
-    assert.equal(row.children[0].attrs["aria-label"], "Selection");
-    assert.equal(row.children[1].textContent, `${formatOdds(data.MDD[index].decimalOdds, 0, "raw")}倍`);
-    assert.equal(row.children[1].attrs["aria-label"], "Odds");
-    assert.equal(row.children[2].textContent, `${data.MDD[index].probabilityPercent.toFixed(2)}%`);
-    assert.equal(row.children[2].attrs["aria-label"], "Probability");
-    assert.equal(row.children[2].hidden, false);
+    const selection = row.children.find((cell) => cell.className === "selection-cell");
+    const odds = row.children.find((cell) => cell.className === "odds-cell");
+    const probability = row.children.find((cell) => cell.className === "probability-cell");
+    assert.equal(textOf(selection), data.MDD[index].selection);
+    assert.equal(selection.attrs["aria-label"], "Selection");
+    assert.equal(odds.textContent, `${formatOdds(data.MDD[index].decimalOdds, 0, "raw")}倍`);
+    assert.equal(odds.attrs["aria-label"], "Odds");
+    assert.equal(probability.textContent, `${data.MDD[index].probabilityPercent.toFixed(2)}%`);
+    assert.equal(probability.attrs["aria-label"], "Probability");
+    assert.equal(probability.hidden, false);
   });
+  const groupRows = nodes["#result-body"].children.filter((row) => row.dataset.wagerGroupStart === "true");
+  assert.deepEqual(groupRows.map((row) => textOf(row.children[0])), ["TRIFECTA", "EXACTA", "WIN"]);
+  assert.deepEqual(groupRows.map((row) => row.children[0].rowSpan), [6, 4, 2]);
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  assert.match(css, /\.wager-label-text\s*\{[^}]*color:\s*rgb\(31 106 74 \/ 38%\)[^}]*transform:\s*rotate\(-90deg\)/);
+  assert.match(css, /tr\[data-wager-group-start="true"\]\s*>\s*td\s*\{[^}]*border-top:\s*2px/);
 });
 
 test("settings use hierarchical rounding controls and separate tax rates", () => {
@@ -464,21 +473,21 @@ test("probability toggle updates header/body and survives condition/settings cha
   toggle.checked = false;
   toggle.events.change({ target: toggle });
   assert.equal(nodes["#odds-table"].dataset.showProbability, "false");
-  assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
+  assert.ok(nodes["#result-body"].children.every((row) => row.children.find((cell) => cell.className === "probability-cell").hidden));
   assert.equal(nodes["#trifecta-result"].textContent, previousResult);
   click("#r-control", 2);
   click("#y-control", "D2");
   click("#z-control", "J");
   input("#tax-rate-trifecta", "20");
   assert.equal(toggle.checked, false);
-  assert.ok(nodes["#result-body"].children.every((row) => row.children[2].hidden));
+  assert.ok(nodes["#result-body"].children.every((row) => row.children.find((cell) => cell.className === "probability-cell").hidden));
   click("#r-control", 1);
   assert.equal(pressedValue(nodes["#outcome-control"]), "D@D");
   assert.equal(nodes["#chip-amount"].value, "25");
   const taxedResult = nodes["#trifecta-result"].textContent;
   toggle.checked = true;
   toggle.events.change({ target: toggle });
-  assert.ok(nodes["#result-body"].children.every((row) => !row.children[2].hidden));
+  assert.ok(nodes["#result-body"].children.every((row) => !row.children.find((cell) => cell.className === "probability-cell").hidden));
   assert.equal(nodes["#trifecta-result"].textContent, taxedResult);
 });
 
