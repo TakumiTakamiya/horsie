@@ -139,8 +139,8 @@ td { font-size: 1.18rem; }
 .selection-symbol--d { color: #052e24; font-size: 1.08em; font-weight: 900; }
 .selection-symbol--other { color: #6b7280; font-size: 0.9em; font-weight: 400; transform: translateY(-0.04em); }
 .odds-cell, .probability-cell { text-align: right; font-variant-numeric: tabular-nums; }
-.wager-label-cell { width: 38px; padding: 0; border-right: 1px solid rgb(31 106 74 / 9%); background: rgb(31 106 74 / 2.5%); text-align: center; vertical-align: middle; }
-.wager-label-text { display: inline-block; color: rgb(31 106 74 / 38%); font-family: Inter, "Hiragino Sans", sans-serif; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; line-height: 1; white-space: nowrap; transform: rotate(-90deg); }
+.wager-label-cell { width: 38px; padding: 0; background: transparent; text-align: center; vertical-align: middle; }
+.wager-label-text { display: inline-block; color: rgb(31 106 74 / 38%); font-family: Inter, "Hiragino Sans", sans-serif; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.18em; line-height: 1; white-space: nowrap; transform: rotate(-90deg); }
 tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 16%); }
 .empty-state { margin: 0; padding: 38px 24px 48px; color: var(--muted); text-align: center; }
 
@@ -222,7 +222,7 @@ tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 1
   .result-heading h2 { font-size: 1.95rem; }
   td { padding: 12px 18px; }
   .wager-label-cell { width: 30px; padding: 0; }
-  .wager-label-text { font-size: 0.56rem; letter-spacing: 0.14em; }
+  .wager-label-text { font-size: 1rem; letter-spacing: 0.14em; }
   .segmented button { min-width: 58px; padding-inline: 13px; }
 }
 

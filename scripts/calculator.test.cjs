@@ -398,7 +398,9 @@ test("table keeps aligned data columns and labels each wager group vertically", 
   assert.deepEqual(groupRows.map((row) => textOf(row.children[0])), ["TRIFECTA", "EXACTA", "WIN"]);
   assert.deepEqual(groupRows.map((row) => row.children[0].rowSpan), [6, 4, 2]);
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
-  assert.match(css, /\.wager-label-text\s*\{[^}]*color:\s*rgb\(31 106 74 \/ 38%\)[^}]*transform:\s*rotate\(-90deg\)/);
+  assert.match(css, /\.wager-label-cell\s*\{[^}]*background:\s*transparent/);
+  assert.doesNotMatch(css, /\.wager-label-cell\s*\{[^}]*border-right/);
+  assert.match(css, /\.wager-label-text\s*\{[^}]*color:\s*rgb\(31 106 74 \/ 38%\)[^}]*font-size:\s*1\.15rem[^}]*transform:\s*rotate\(-90deg\)/);
   assert.match(css, /tr\[data-wager-group-start="true"\]\s*>\s*td\s*\{[^}]*border-top:\s*2px/);
 });
 
