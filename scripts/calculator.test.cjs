@@ -398,11 +398,11 @@ test("table keeps aligned data columns and labels each wager group vertically", 
   assert.deepEqual(groupRows.map((row) => textOf(row.children[0])), ["TRIFECTA", "EXACTA", "WIN"]);
   assert.deepEqual(groupRows.map((row) => row.children[0].rowSpan), [6, 4, 2]);
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
-  assert.match(css, /\.wager-label-cell\s*\{[^}]*position:\s*relative[^}]*width:\s*25px[^}]*min-width:\s*25px[^}]*max-width:\s*25px[^}]*background:\s*transparent/);
+  assert.match(css, /\.wager-label-cell\s*\{[^}]*position:\s*relative[^}]*width:\s*40px[^}]*min-width:\s*40px[^}]*max-width:\s*40px[^}]*background:\s*transparent/);
   assert.doesNotMatch(css, /\.wager-label-cell\s*\{[^}]*border-right/);
-  assert.match(css, /\.wager-label-text\s*\{[^}]*position:\s*absolute[^}]*color:\s*rgb\(31 106 74 \/ 38%\)[^}]*font-size:\s*1\.15rem[^}]*transform:\s*translate\(-50%, -50%\) rotate\(-90deg\)/);
+  assert.match(css, /\.wager-label-text\s*\{[^}]*position:\s*absolute[^}]*color:\s*rgb\(31 106 74 \/ 25%\)[^}]*font-size:\s*1\.725rem[^}]*transform:\s*translate\(-50%, -50%\) rotate\(-90deg\)/);
   assert.match(css, /tr\[data-wager-group-start="true"\]\s*>\s*td\s*\{[^}]*border-top:\s*2px/);
-  assert.match(css, /@media \(max-width:\s*430px\)[\s\S]*?\.wager-label-cell\s*\{[^}]*width:\s*20px[^}]*min-width:\s*20px[^}]*max-width:\s*20px/);
+  assert.match(css, /@media \(max-width:\s*430px\)[\s\S]*?\.wager-label-cell\s*\{[^}]*width:\s*40px[^}]*min-width:\s*40px[^}]*max-width:\s*40px[\s\S]*?\.wager-label-text\s*\{[^}]*font-size:\s*1\.5rem/);
 });
 
 test("settings use hierarchical rounding controls and separate tax rates", () => {
