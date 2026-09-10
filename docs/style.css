@@ -14,6 +14,8 @@
 
 * { box-sizing: border-box; }
 
+.visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+
 body {
   margin: 0;
   min-width: 320px;
@@ -198,19 +200,27 @@ tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 1
 }
 
 @media (max-width: 600px) {
-  .desktop-selection, .result-panel { display: none; }
-  .mobile-selection { display: grid; gap: 18px; }
-  .mobile-selection .control-block h2 { margin-bottom: 10px; }
-  .mobile-option-grid { display: grid; gap: 8px; }
-  .mobile-option-grid--distance, .mobile-option-grid--pattern { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .mobile-option-grid button { min-width: 0; min-height: 48px; padding: 9px 6px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink); font-weight: 700; cursor: pointer; }
+  .control-panel, .result-panel { display: none; }
+  .calculator-panel { padding: 16px 18px 18px; }
+  .calculator-heading { margin-bottom: 10px; }
+  .mobile-selection { display: grid; }
+  .mobile-selection .control-block, .outcome-field { padding: 10px 0; border-top: 1px solid var(--line); }
+  .mobile-option-grid { display: grid; gap: 5px; }
+  .mobile-option-grid--distance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mobile-option-grid--pattern { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .mobile-option-grid button { min-width: 0; min-height: 42px; padding: 7px 2px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font-size: 0.82rem; font-weight: 700; cursor: pointer; }
   .mobile-option-grid button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
   .mobile-option-grid button:active { transform: translateY(1px); }
+  .outcome-field { margin-top: 0; }
+  .outcome-field h3 { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+  .outcome-buttons { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
+  .outcome-buttons[data-count="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .outcome-buttons button { min-width: 0; min-height: 48px; padding: 8px 2px; border-radius: 8px; font-size: 1.05rem; }
   .condition-grid { gap: 12px; }
   .condition-grid .segmented button { min-width: 44px; padding-inline: 10px; }
-  .calculation-grid { grid-template-columns: minmax(108px, 1.05fr) minmax(50px, 0.65fr) 12px minmax(58px, 0.8fr); grid-template-rows: repeat(3, minmax(84px, auto)); gap-inline: 6px; }
+  .calculation-grid { grid-template-columns: minmax(108px, 1.05fr) minmax(50px, 0.65fr) 12px minmax(58px, 0.8fr); grid-template-rows: repeat(3, minmax(72px, auto)); gap-inline: 6px; margin-top: 8px; }
   .amount-field { grid-column: 1; grid-row: 1; margin: 0; }
-  .amount-field input { padding: 20px 8px; font-size: 1.55rem; }
+  .amount-field input { padding: 16px 8px; font-size: 1.55rem; }
   .calculation-times { display: none; }
   .calculation-rate { grid-column: 2; }
   .calculation-rate output { font-size: clamp(0.78rem, 3.8vw, 1rem); white-space: nowrap; overflow-wrap: normal; }

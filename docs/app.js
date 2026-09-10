@@ -247,6 +247,7 @@
       }));
       controls.dataset.outcomes = signature;
     }
+    controls.dataset.count = String(outcomes.length);
     setPressedButton(controls, "value", outcome);
 
     const amount = calculator.parseAmount(state.amount);

@@ -380,6 +380,7 @@ test("mobile uses direct distance and combined Pattern/Joker controls independen
   input("#chip-amount", "25");
   click("#distance-control", "S");
   click("#mobile-pattern-control", "D2JJ");
+  assert.equal(nodes["#outcome-control"].dataset.count, "4");
   click("#outcome-control", "D@@");
   const mobileRows = data.SD2JJ;
   const mobileWin = mobileRows.find((row) => row.wagerType === "Win" && row.selection === "D").decimalOdds;
@@ -409,16 +410,23 @@ test("mobile uses direct distance and combined Pattern/Joker controls independen
   assert.equal(pressedValue(nodes["#mobile-pattern-control"]), "D2JJ");
 });
 
-test("mobile markup hides desktop selectors and odds table only at 600px or less", () => {
+test("mobile markup integrates one-line selectors into the calculator at 600px or less", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  const calculator = html.match(/<section class="calculator-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(html, /id="distance-control"[\s\S]*data-value="S"[\s\S]*data-value="M"[\s\S]*data-value="L"/);
   assert.match(html, /id="mobile-pattern-control"[\s\S]*data-value="DD"[\s\S]*data-value="DDJ"[\s\S]*data-value="DDJJ"[\s\S]*data-value="D2"[\s\S]*data-value="D2J"[\s\S]*data-value="D2JJ"/);
+  assert.ok(calculator.indexOf('id="distance-control"') < calculator.indexOf('id="mobile-pattern-control"'));
+  assert.ok(calculator.indexOf('id="mobile-pattern-control"') < calculator.indexOf('id="outcome-control"'));
   assert.match(css, /\.mobile-selection\s*\{\s*display:\s*none/);
   const mobileCss = css.match(/@media \(max-width:\s*600px\)\s*\{[\s\S]*?(?=\n@media \(max-width:\s*430px\))/)?.[0] ?? "";
-  assert.match(mobileCss, /\.desktop-selection, \.result-panel\s*\{\s*display:\s*none/);
+  assert.match(mobileCss, /\.control-panel, \.result-panel\s*\{\s*display:\s*none/);
   assert.match(mobileCss, /\.mobile-selection\s*\{\s*display:\s*grid/);
-  assert.match(mobileCss, /grid-template-columns:\s*repeat\(3/);
+  assert.match(mobileCss, /\.mobile-selection \.control-block, \.outcome-field\s*\{[^}]*border-top:\s*1px/);
+  assert.match(mobileCss, /\.mobile-option-grid--pattern\s*\{[^}]*grid-template-columns:\s*repeat\(6/);
+  assert.match(mobileCss, /\.outcome-buttons\s*\{[^}]*grid-template-columns:\s*repeat\(6/);
+  assert.match(mobileCss, /\.outcome-buttons\[data-count="4"\]\s*\{[^}]*grid-template-columns:\s*repeat\(4/);
+  assert.match(mobileCss, /\.outcome-field h3\s*\{[^}]*position:\s*absolute/);
 });
 
 test("calculator amount is read-only and hides focus and caret interaction", () => {
