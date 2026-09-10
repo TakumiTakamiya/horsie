@@ -114,7 +114,7 @@ test("retains only valid outcomes and leaves missing multipliers blank", () => {
 });
 
 // Test event wiring without a browser dependency; real visual QA is separate.
-function createApp() {
+function createApp({ mobile = false } = {}) {
   class Element {
     constructor(dataset = {}) { this.dataset = dataset; this.children = []; this.events = {}; this.attrs = {}; this.value = ""; }
     addEventListener(name, callback) { this.events[name] = callback; }
@@ -133,13 +133,22 @@ function createApp() {
   nodes["#r-control"].children = Array.from({ length: 12 }, (_, i) => new Element({ r: String(i + 1) }));
   nodes["#y-control"].children = ["D2", "DD"].map((value) => new Element({ value }));
   nodes["#z-control"].children = ["", "J", "JJ"].map((value) => new Element({ value }));
+  nodes["#distance-control"].children = ["S", "M", "L"].map((value) => new Element({ value }));
+  nodes["#mobile-pattern-control"].children = ["DD", "DDJ", "DDJJ", "D2", "D2J", "D2JJ"].map((value) => new Element({ value }));
   nodes["#chip-control"].children = [1, 5, 10, 25, 100].map((chip) => new Element({ chip: String(chip) }));
   nodes["#tax-rate-win"].dataset.wager = "Win";
   nodes["#tax-rate-exacta"].dataset.wager = "Exacta";
   nodes["#tax-rate-trifecta"].dataset.wager = "Trifecta";
   const events = {};
+  let mobileMatches = mobile;
+  let mediaChange;
+  const mobileMedia = {
+    get matches() { return mobileMatches; },
+    addEventListener(name, callback) { assert.equal(name, "change"); mediaChange = callback; },
+  };
   const sandbox = {
     addEventListener(name, callback) { events[name] = callback; },
+    matchMedia(query) { assert.equal(query, "(max-width: 600px)"); return mobileMedia; },
     document: {
       querySelector(selector) {
         if (selector.startsWith("[data-r=")) return nodes["#r-control"].children.find((button) => button.dataset.r === selector.match(/"(\d+)"/)[1]);
@@ -166,7 +175,11 @@ function createApp() {
   const changeRounding = (name, value) => {
     nodes[".rounding-options"].events.change({ target: { name, value } });
   };
-  return { nodes, events, click, input, changeRounding };
+  const setMobile = (value) => {
+    mobileMatches = value;
+    mediaChange({ matches: value });
+  };
+  return { nodes, events, click, input, changeRounding, setMobile };
 }
 
 test("UI starts unselected, adds chips, preserves button focus targets, and clears amount only", () => {
@@ -355,6 +368,57 @@ test("number keys type globally, Backspace deletes, C clears, and the display ne
   press("Backspace", { code: "Backspace" });
   assert.equal(nodes["#chip-amount"].value, "0");
   assert.equal(prevented, 6);
+});
+
+test("mobile uses direct distance and combined Pattern/Joker controls independently from desktop", () => {
+  const { nodes, events, click, input, setMobile } = createApp({ mobile: true });
+  assert.equal(pressedValue(nodes["#distance-control"]), "M");
+  assert.equal(pressedValue(nodes["#mobile-pattern-control"]), "DD");
+  assert.deepEqual(nodes["#mobile-pattern-control"].children.map((button) => button.dataset.value),
+    ["DD", "DDJ", "DDJJ", "D2", "D2J", "D2JJ"]);
+
+  input("#chip-amount", "25");
+  click("#distance-control", "S");
+  click("#mobile-pattern-control", "D2JJ");
+  click("#outcome-control", "D@@");
+  const mobileRows = data.SD2JJ;
+  const mobileWin = mobileRows.find((row) => row.wagerType === "Win" && row.selection === "D").decimalOdds;
+  assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(mobileWin, 0, "raw")}倍`);
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@@");
+
+  setMobile(false);
+  assert.equal(nodes["#current-title"].textContent, "中距離DD");
+  assert.equal(pressedValue(nodes["#y-control"]), "DD");
+  assert.equal(pressedValue(nodes["#z-control"]), "");
+  assert.equal(pressedValue(nodes["#outcome-control"]), null);
+  click("#outcome-control", "D@D");
+
+  setMobile(true);
+  assert.equal(pressedValue(nodes["#distance-control"]), "S");
+  assert.equal(pressedValue(nodes["#mobile-pattern-control"]), "D2JJ");
+  assert.equal(pressedValue(nodes["#outcome-control"]), "D@@");
+  assert.equal(nodes["#chip-amount"].value, "25");
+
+  let prevented = false;
+  events.keydown({ key: "9", code: "Digit9", preventDefault() { prevented = true; } });
+  events.keydown({ code: "Space", preventDefault() { prevented = true; } });
+  events.keydown({ code: "KeyD", preventDefault() { prevented = true; } });
+  assert.equal(prevented, false);
+  assert.equal(nodes["#chip-amount"].value, "25");
+  assert.equal(pressedValue(nodes["#distance-control"]), "S");
+  assert.equal(pressedValue(nodes["#mobile-pattern-control"]), "D2JJ");
+});
+
+test("mobile markup hides desktop selectors and odds table only at 600px or less", () => {
+  const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  assert.match(html, /id="distance-control"[\s\S]*data-value="S"[\s\S]*data-value="M"[\s\S]*data-value="L"/);
+  assert.match(html, /id="mobile-pattern-control"[\s\S]*data-value="DD"[\s\S]*data-value="DDJ"[\s\S]*data-value="DDJJ"[\s\S]*data-value="D2"[\s\S]*data-value="D2J"[\s\S]*data-value="D2JJ"/);
+  assert.match(css, /\.mobile-selection\s*\{\s*display:\s*none/);
+  const mobileCss = css.match(/@media \(max-width:\s*600px\)\s*\{[\s\S]*?(?=\n@media \(max-width:\s*430px\))/)?.[0] ?? "";
+  assert.match(mobileCss, /\.desktop-selection, \.result-panel\s*\{\s*display:\s*none/);
+  assert.match(mobileCss, /\.mobile-selection\s*\{\s*display:\s*grid/);
+  assert.match(mobileCss, /grid-template-columns:\s*repeat\(3/);
 });
 
 test("calculator amount is read-only and hides focus and caret interaction", () => {

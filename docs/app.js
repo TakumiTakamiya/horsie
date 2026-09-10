@@ -13,6 +13,11 @@
     outcome: null,
     showProbability: true,
   };
+  const mobileState = {
+    distance: "M",
+    pattern: "DD",
+    outcome: null,
+  };
   // Per-race records last for the lifetime of this page; calculator input/settings
   // remain shared. Never carry a confirmed result into a previously unseen race.
   const raceRecords = new Map();
@@ -21,6 +26,9 @@
   const JOKERS = Object.freeze(["", "J", "JJ"]);
   const WAGER_TYPES = Object.freeze(["Win", "Exacta", "Trifecta"]);
   const TAX_INPUT_IDS = Object.freeze({ Win: "win", Exacta: "exacta", Trifecta: "trifecta" });
+  const mobileMedia = typeof window.matchMedia === "function"
+    ? window.matchMedia("(max-width: 600px)")
+    : { matches: false, addEventListener() {} };
 
   const oddsFormatters = new Map();
 
@@ -78,6 +86,28 @@
 
   function getKey() {
     return `${R_TO_X[state.r]}${state.y}${state.z}`;
+  }
+
+  function getMobileKey() {
+    return `${mobileState.distance}${mobileState.pattern}`;
+  }
+
+  function isMobileLayout() {
+    return mobileMedia.matches;
+  }
+
+  function getActiveOutcome() {
+    return isMobileLayout() ? mobileState.outcome : state.outcome;
+  }
+
+  function setActiveOutcome(outcome) {
+    if (isMobileLayout()) mobileState.outcome = outcome;
+    else state.outcome = outcome;
+  }
+
+  function getActiveRows() {
+    const key = isMobileLayout() ? getMobileKey() : getKey();
+    return ODDS_DATA[key] || [];
   }
 
   function formatTableTitle(key) {
@@ -165,6 +195,8 @@
     document.querySelector("#current-title").textContent = formatTableTitle(key);
     setPressedButton(document.querySelector("#y-control"), "value", state.y);
     setPressedButton(document.querySelector("#z-control"), "value", state.z);
+    setPressedButton(document.querySelector("#distance-control"), "value", mobileState.distance);
+    setPressedButton(document.querySelector("#mobile-pattern-control"), "value", mobileState.pattern);
 
     body.replaceChildren(...rows.map((item, index) => {
       const row = document.createElement("tr");
@@ -189,15 +221,18 @@
     }));
 
     document.querySelector("#empty-state").hidden = rows.length > 0;
-    renderCalculator(rows);
+    renderCalculator(isMobileLayout() ? getActiveRows() : rows);
   }
 
-  function renderCalculator(rows = ODDS_DATA[getKey()] || []) {
+  function renderCalculator(rows = getActiveRows()) {
     const calculator = window.HorsieCalculator;
     const outcomes = calculator.getOutcomes(rows);
-    state.outcome = calculator.retainOutcome(rows, state.outcome);
-    saveCurrentRace();
-    renderRaceButtons();
+    const outcome = calculator.retainOutcome(rows, getActiveOutcome());
+    setActiveOutcome(outcome);
+    if (!isMobileLayout()) {
+      saveCurrentRace();
+      renderRaceButtons();
+    }
     const controls = document.querySelector("#outcome-control");
     const signature = outcomes.join(",");
     // Keep existing buttons/focus when only odds, the amount, or selection changes.
@@ -212,7 +247,7 @@
       }));
       controls.dataset.outcomes = signature;
     }
-    setPressedButton(controls, "value", state.outcome);
+    setPressedButton(controls, "value", outcome);
 
     const amount = calculator.parseAmount(state.amount);
     const input = document.querySelector("#chip-amount");
@@ -227,7 +262,7 @@
     });
 
     const roundingMode = getRoundingMode();
-    const results = calculator.calculateRows(rows, state.outcome, state.amount,
+    const results = calculator.calculateRows(rows, outcome, state.amount,
       (odds, type) => formatOdds(odds, state.taxRates[type], roundingMode));
     results.forEach(({ type, multiplier, result }) => {
       const id = type.toLowerCase();
@@ -293,6 +328,20 @@
       render();
     });
 
+    document.querySelector("#distance-control").addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-value]");
+      if (!button) return;
+      mobileState.distance = button.dataset.value;
+      render();
+    });
+
+    document.querySelector("#mobile-pattern-control").addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-value]");
+      if (!button) return;
+      mobileState.pattern = button.dataset.value;
+      render();
+    });
+
     document.querySelector(".rounding-options").addEventListener("change", (event) => {
       const { name, value } = event.target;
       if (name === "rounding-kind") state.roundingKind = value;
@@ -315,7 +364,7 @@
     document.querySelector("#outcome-control").addEventListener("click", (event) => {
       const button = event.target.closest("button[data-value]");
       if (!button) return;
-      state.outcome = button.dataset.value;
+      setActiveOutcome(button.dataset.value);
       renderCalculator();
     });
     document.querySelector("#chip-amount").addEventListener("input", (event) => {
@@ -335,6 +384,7 @@
     });
 
     window.addEventListener("keydown", (event) => {
+      if (isMobileLayout()) return;
       if (event.code === "Space" && !event.altKey && !event.metaKey) {
         event.preventDefault();
         selectR(state.r + (event.ctrlKey ? -1 : 1), true);
@@ -362,6 +412,8 @@
       event.preventDefault();
       render();
     });
+
+    mobileMedia.addEventListener("change", render);
 
     render();
   }
