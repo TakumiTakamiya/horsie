@@ -20,7 +20,6 @@
   const PATTERNS = Object.freeze(["D2", "DD"]);
   const JOKERS = Object.freeze(["", "J", "JJ"]);
   const WAGER_TYPES = Object.freeze(["Win", "Exacta", "Trifecta"]);
-  const WAGER_LABELS = Object.freeze({ Win: "WIN", Exacta: "EXACTA", Trifecta: "TRIFECTA" });
   const TAX_INPUT_IDS = Object.freeze({ Win: "win", Exacta: "exacta", Trifecta: "trifecta" });
 
   const oddsFormatters = new Map();
@@ -167,11 +166,6 @@
     setPressedButton(document.querySelector("#y-control"), "value", state.y);
     setPressedButton(document.querySelector("#z-control"), "value", state.z);
 
-    const wagerCounts = rows.reduce((counts, item) => {
-      counts[item.wagerType] = (counts[item.wagerType] ?? 0) + 1;
-      return counts;
-    }, {});
-
     body.replaceChildren(...rows.map((item, index) => {
       const row = document.createElement("tr");
       const selectionCell = document.createElement("td");
@@ -179,19 +173,7 @@
       const oddsCell = document.createElement("td");
       const startsWagerGroup = index === 0 || rows[index - 1].wagerType !== item.wagerType;
       row.dataset.wagerGroup = item.wagerType.toLowerCase();
-      if (startsWagerGroup) {
-        row.dataset.wagerGroupStart = "true";
-        const wagerCell = document.createElement("td");
-        const wagerLabel = document.createElement("span");
-        wagerCell.className = "wager-label-cell";
-        wagerCell.rowSpan = wagerCounts[item.wagerType];
-        wagerCell.setAttribute("aria-label", `券種 ${WAGER_LABELS[item.wagerType]}`);
-        wagerLabel.className = "wager-label-text";
-        wagerLabel.setAttribute("aria-hidden", "true");
-        wagerLabel.textContent = WAGER_LABELS[item.wagerType];
-        wagerCell.append(wagerLabel);
-        row.append(wagerCell);
-      }
+      if (startsWagerGroup) row.dataset.wagerGroupStart = "true";
       selectionCell.className = "selection-cell";
       oddsCell.className = "odds-cell";
       probabilityCell.className = "probability-cell";

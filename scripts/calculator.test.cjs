@@ -373,7 +373,7 @@ function pressedValue(node) {
   return node.children.find((button) => button.attrs["aria-pressed"] === "true")?.dataset.value ?? null;
 }
 
-test("table keeps aligned data columns and labels each wager group vertically", () => {
+test("table keeps aligned data columns and separates wager groups", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   assert.doesNotMatch(html, /Tickets/);
   assert.doesNotMatch(html, /result-note|同条件の馬をまとめた表記/);
@@ -383,6 +383,7 @@ test("table keeps aligned data columns and labels each wager group vertically", 
   assert.equal(nodes["#show-probability"].checked, true);
   assert.equal(nodes["#odds-table"].dataset.showProbability, "true");
   nodes["#result-body"].children.forEach((row, index) => {
+    assert.equal(row.children.length, 3);
     const selection = row.children.find((cell) => cell.className === "selection-cell");
     const odds = row.children.find((cell) => cell.className === "odds-cell");
     const probability = row.children.find((cell) => cell.className === "probability-cell");
@@ -395,14 +396,10 @@ test("table keeps aligned data columns and labels each wager group vertically", 
     assert.equal(probability.hidden, false);
   });
   const groupRows = nodes["#result-body"].children.filter((row) => row.dataset.wagerGroupStart === "true");
-  assert.deepEqual(groupRows.map((row) => textOf(row.children[0])), ["TRIFECTA", "EXACTA", "WIN"]);
-  assert.deepEqual(groupRows.map((row) => row.children[0].rowSpan), [6, 4, 2]);
+  assert.deepEqual(groupRows.map((row) => row.dataset.wagerGroup), ["trifecta", "exacta", "win"]);
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
-  assert.match(css, /\.wager-label-cell\s*\{[^}]*position:\s*relative[^}]*width:\s*40px[^}]*min-width:\s*40px[^}]*max-width:\s*40px[^}]*background:\s*transparent/);
-  assert.doesNotMatch(css, /\.wager-label-cell\s*\{[^}]*border-right/);
-  assert.match(css, /\.wager-label-text\s*\{[^}]*position:\s*absolute[^}]*color:\s*rgb\(31 106 74 \/ 25%\)[^}]*font-size:\s*1\.725rem[^}]*transform:\s*translate\(-50%, -50%\) rotate\(-90deg\)/);
+  assert.doesNotMatch(css, /\.wager-label-(?:cell|text)/);
   assert.match(css, /tr\[data-wager-group-start="true"\]\s*>\s*td\s*\{[^}]*border-top:\s*2px/);
-  assert.match(css, /@media \(max-width:\s*430px\)[\s\S]*?\.wager-label-cell\s*\{[^}]*width:\s*40px[^}]*min-width:\s*40px[^}]*max-width:\s*40px[\s\S]*?\.wager-label-text\s*\{[^}]*font-size:\s*1\.5rem/);
 });
 
 test("settings use hierarchical rounding controls and separate tax rates", () => {
