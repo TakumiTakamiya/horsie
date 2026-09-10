@@ -424,8 +424,14 @@ test("race controls span the calculator and settings columns", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
   const controlPanel = html.match(/<section class="control-panel"[\s\S]*?<\/section>/)?.[0] ?? "";
+  const patternControl = controlPanel.match(/<div id="y-control"[\s\S]*?<\/div>/)?.[0] ?? "";
+  const jokerControl = controlPanel.match(/<div id="z-control"[\s\S]*?<\/div>/)?.[0] ?? "";
   assert.ok(controlPanel.indexOf('id="r-control"') < controlPanel.indexOf('id="y-control"'));
   assert.ok(controlPanel.indexOf('id="y-control"') < controlPanel.indexOf('id="z-control"'));
+  assert.ok(patternControl.indexOf('data-value="DD"') < patternControl.indexOf('data-value="D2"'));
+  assert.match(patternControl, /data-value="DD"[^>]*aria-pressed="true"/);
+  assert.match(jokerControl, /data-value=""[^>]*aria-label="Jなし"[^>]*aria-pressed="true"[^>]*>\s*<span aria-hidden="true">—<\/span>/);
+  assert.doesNotMatch(jokerControl, /<s\b/);
   assert.match(css, /grid-template-columns:\s*minmax\(0, 3fr\) minmax\(0, 4fr\) minmax\(260px, 2fr\)/);
   assert.match(css, /grid-template-areas:\s*"result controls controls"\s*"result calculator settings"/);
   assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator" "settings"/);
