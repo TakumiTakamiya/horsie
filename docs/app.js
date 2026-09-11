@@ -284,7 +284,9 @@
     results.forEach(({ type, multiplier, result }) => {
       const id = type.toLowerCase();
       document.querySelector(`#${id}-multiplier`).textContent = multiplier === null ? "—" : `${multiplier}倍`;
-      document.querySelector(`#${id}-result`).textContent = result ?? "—";
+      document.querySelector(`#${id}-result`).textContent = result === null
+        ? "—"
+        : roundingMode.endsWith("-integer") ? result.replace(/\.0$/, "") : result;
     });
   }
 

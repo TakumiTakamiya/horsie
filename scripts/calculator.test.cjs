@@ -272,7 +272,10 @@ test("UI retains amount across R, starts new outcomes blank, and applies Pattern
   ];
   for (const [name, value, mode] of modes) {
     changeRounding(name, value);
-    assert.equal(nodes["#win-multiplier"].textContent, `${formatOdds(winOdds, 20, mode)}倍`);
+    const displayedOdds = formatOdds(winOdds, 20, mode);
+    const preciseResult = calculator.multiplyToTenths("25", displayedOdds);
+    assert.equal(nodes["#win-multiplier"].textContent, `${displayedOdds}倍`);
+    assert.equal(nodes["#win-result"].textContent, mode.endsWith("-integer") ? preciseResult.replace(/\.0$/, "") : preciseResult);
   }
   changeRounding("rounding-kind", "raw");
   assert.equal(nodes["#rounding-details"].hidden, true);
