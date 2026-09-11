@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=39d64b21b5b4" />
+    <link rel="stylesheet" href="style.css?v=04476ef07917" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
     <script src="calculator.js?v=e79c3cfbc3e8" defer></script>
-    <script src="app.js?v=781b93339c03" defer></script>
+    <script src="app.js?v=276e6afd3efa" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -209,7 +209,7 @@
         </div>
         <span class="payout-dialog__operator" aria-hidden="true">×</span>
         <div class="payout-dialog__term">
-          <span class="payout-dialog__label">倍率</span>
+          <span id="payout-multiplier-label" class="payout-dialog__label">倍率</span>
           <output id="payout-multiplier" class="payout-dialog__value payout-dialog__value--term"></output>
         </div>
         <span class="payout-dialog__operator" aria-hidden="true">=</span>

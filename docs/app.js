@@ -27,6 +27,7 @@
   const WAGER_TYPES = Object.freeze(["Win", "Exacta", "Trifecta"]);
   const TAX_INPUT_IDS = Object.freeze({ Win: "win", Exacta: "exacta", Trifecta: "trifecta" });
   const WAGER_LABELS = Object.freeze({ Win: "単勝", Exacta: "2連単", Trifecta: "三連単" });
+  const MULTIPLIER_LABELS = Object.freeze({ Win: "単勝倍率", Exacta: "二連単倍率", Trifecta: "三連単倍率" });
   const mobileMedia = typeof window.matchMedia === "function"
     ? window.matchMedia("(max-width: 600px)")
     : { matches: false, addEventListener() {} };
@@ -172,6 +173,7 @@
     const integerDisplay = source.dataset.displayResult !== source.dataset.rawResult;
     document.querySelector("#payout-dialog-title").textContent = `${WAGER_LABELS[source.dataset.wager]}の払戻結果`;
     document.querySelector("#payout-stake").textContent = parsedAmount.value.toString();
+    document.querySelector("#payout-multiplier-label").textContent = MULTIPLIER_LABELS[source.dataset.wager];
     document.querySelector("#payout-multiplier").textContent = source.dataset.multiplier;
     total.textContent = source.dataset.displayResult;
     const profitOutput = document.querySelector("#payout-profit");

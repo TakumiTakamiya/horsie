@@ -485,6 +485,7 @@ test("mobile results present the payout, rotate for the dealer, then close", () 
   assert.equal(dialog.dataset.wager, "exacta");
   assert.equal(content.dataset.orientation, "player");
   assert.equal(nodes["#payout-stake"].textContent, "25");
+  assert.equal(nodes["#payout-multiplier-label"].textContent, "二連単倍率");
   assert.equal(nodes["#payout-multiplier"].textContent, result.dataset.multiplier);
   assert.equal(nodes["#payout-total"].textContent, result.textContent);
   assert.equal(nodes["#payout-profit"].textContent, `(+${calculator.subtractStakeFromResult("25", result.dataset.rawResult)})`);
@@ -521,6 +522,10 @@ test("payout presentation is mobile-only, closes at desktop width, hides nonposi
   assert.match(css, /\.payout-dialog\[data-wager="win"\]\s*\{[^}]*background:\s*#2f6f9f/);
   assert.match(css, /\.payout-dialog\[data-wager="exacta"\]\s*\{[^}]*background:\s*#e4bf4f/);
   assert.match(css, /\.payout-dialog\[data-wager="trifecta"\]\s*\{[^}]*background:\s*#b84c43/);
+  assert.match(css, /\.payout-dialog__label\s*\{[^}]*font-size:\s*clamp\(0\.95rem, 4\.2vw, 1\.2rem\)/);
+  assert.match(css, /\.payout-dialog__value--term\s*\{[^}]*font-size:\s*clamp\(2\.8rem, 16vw, 6\.25rem\)/);
+  const app = fs.readFileSync(path.join(docs, "app.js"), "utf8");
+  for (const label of ["単勝倍率", "二連単倍率", "三連単倍率"]) assert.match(app, new RegExp(label));
 });
 
 function textOf(node) {
