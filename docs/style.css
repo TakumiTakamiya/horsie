@@ -178,6 +178,21 @@ tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 1
 #amount-error:empty { display: none; }
 .tax-field .field-error:empty { display: none; }
 
+.payout-dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; color: white; }
+.payout-dialog::backdrop { background: transparent; }
+.payout-dialog[data-wager="win"] { background: #2f6f9f; }
+.payout-dialog[data-wager="exacta"] { background: #e4bf4f; color: #2f2918; }
+.payout-dialog[data-wager="trifecta"] { background: #b84c43; }
+.payout-dialog__content { display: flex; width: 100%; height: 100%; padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); align-items: center; justify-content: center; flex-direction: column; gap: clamp(6px, 1.5dvh, 14px); text-align: center; transform: rotate(0deg); transform-origin: center; }
+.payout-dialog__content[data-orientation="dealer"] { transform: rotate(180deg); }
+.payout-dialog__term { display: grid; justify-items: center; gap: 2px; }
+.payout-dialog__label { font-size: clamp(0.78rem, 3.5vw, 1rem); font-weight: 700; letter-spacing: 0.08em; opacity: 0.82; }
+.payout-dialog__value { display: block; max-width: 100%; font-variant-numeric: tabular-nums; font-weight: 900; line-height: 1; white-space: nowrap; }
+.payout-dialog__value--term { font-size: clamp(2.4rem, 14vw, 5.5rem); }
+.payout-dialog__value--total { font-size: clamp(4rem, 22vw, 9rem); }
+.payout-dialog__value--profit { margin-top: clamp(4px, 1dvh, 10px); font-size: clamp(2.8rem, 16vw, 6.5rem); }
+.payout-dialog__operator { font-size: clamp(1.7rem, 7vw, 3rem); font-weight: 700; line-height: 1; opacity: 0.82; }
+
 @media (max-width: 900px) {
   .app-shell { width: calc(100% - 24px); padding: 12px 0 32px; }
   .workspace-grid {
@@ -227,6 +242,8 @@ tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 1
   .calculation-rate output::before { content: "× "; color: var(--muted); }
   .calculation-equals { grid-column: 3; }
   .calculation-result { grid-column: 4; font-size: 1.5rem; }
+  .calculation-result[role="button"] { border-radius: 6px; cursor: pointer; touch-action: manipulation; }
+  .calculation-result[role="button"]:active { background: var(--accent-soft); }
   .chip-buttons { grid-column: 1; grid-row: 2 / span 2; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
   .chip-buttons button { min-height: 54px; padding: 3px 2px; flex-direction: column; gap: 1px; font-size: 0.72rem; }
   .chip-buttons img { width: 30px; height: 30px; }

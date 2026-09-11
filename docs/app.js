@@ -26,11 +26,15 @@
   const JOKERS = Object.freeze(["", "J", "JJ"]);
   const WAGER_TYPES = Object.freeze(["Win", "Exacta", "Trifecta"]);
   const TAX_INPUT_IDS = Object.freeze({ Win: "win", Exacta: "exacta", Trifecta: "trifecta" });
+  const WAGER_LABELS = Object.freeze({ Win: "単勝", Exacta: "2連単", Trifecta: "三連単" });
   const mobileMedia = typeof window.matchMedia === "function"
     ? window.matchMedia("(max-width: 600px)")
     : { matches: false, addEventListener() {} };
 
   const oddsFormatters = new Map();
+  let payoutSource = null;
+  let payoutPhase = "closed";
+  let payoutAnimating = false;
 
   function normalizeNumber(value) {
     if (Object.is(value, -0)) return "0";
@@ -123,6 +127,144 @@
     input.setAttribute("tabindex", "-1");
     input.removeAttribute("inputmode");
     if (document.activeElement === input) input.blur();
+  }
+
+  function prefersReducedMotion() {
+    return typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function fitPayoutValue(element, minimumSize) {
+    if (typeof window.getComputedStyle !== "function" || !element.scrollWidth || !element.parentElement?.clientWidth) return;
+    element.style.removeProperty("font-size");
+    const currentSize = Number.parseFloat(window.getComputedStyle(element).fontSize);
+    const availableWidth = element.parentElement.clientWidth - 24;
+    if (element.scrollWidth > availableWidth) {
+      element.style.fontSize = `${Math.max(minimumSize, currentSize * availableWidth / element.scrollWidth)}px`;
+    }
+  }
+
+  function fitPayoutValues() {
+    fitPayoutValue(document.querySelector("#payout-stake"), 28);
+    fitPayoutValue(document.querySelector("#payout-multiplier"), 28);
+    fitPayoutValue(document.querySelector("#payout-total"), 40);
+    fitPayoutValue(document.querySelector("#payout-profit"), 32);
+  }
+
+  function waitForAnimations(animations, onFinish) {
+    if (animations.length === 0) {
+      onFinish();
+      return;
+    }
+    Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).then(onFinish);
+  }
+
+  function openPayoutDialog(source) {
+    if (!isMobileLayout() || source.getAttribute("role") !== "button" || payoutPhase !== "closed") return;
+    const calculator = window.HorsieCalculator;
+    const dialog = document.querySelector("#payout-dialog");
+    const content = document.querySelector("#payout-dialog-content");
+    const total = document.querySelector("#payout-total");
+    const rawAmount = source.dataset.amount;
+    const parsedAmount = calculator.parseAmount(rawAmount);
+    if (parsedAmount.status !== "valid") return;
+
+    const profit = calculator.subtractStakeFromResult(rawAmount, source.dataset.rawResult);
+    const integerDisplay = source.dataset.displayResult !== source.dataset.rawResult;
+    document.querySelector("#payout-dialog-title").textContent = `${WAGER_LABELS[source.dataset.wager]}の払戻結果`;
+    document.querySelector("#payout-stake").textContent = parsedAmount.value.toString();
+    document.querySelector("#payout-multiplier").textContent = source.dataset.multiplier;
+    total.textContent = source.dataset.displayResult;
+    const profitOutput = document.querySelector("#payout-profit");
+    const showProfit = profit !== null && !profit.startsWith("-") && profit !== "0.0";
+    profitOutput.hidden = !showProfit;
+    profitOutput.textContent = showProfit
+      ? `(+${integerDisplay ? profit.replace(/\.0$/, "") : profit})`
+      : "";
+
+    dialog.dataset.wager = source.dataset.wager.toLowerCase();
+    content.dataset.orientation = "player";
+    payoutSource = source;
+    payoutPhase = "player";
+    payoutAnimating = true;
+    const sourceRect = source.getBoundingClientRect();
+    dialog.showModal();
+    dialog.focus();
+    fitPayoutValues();
+
+    if (prefersReducedMotion() || typeof total.animate !== "function") {
+      payoutAnimating = false;
+      return;
+    }
+    const destinationRect = total.getBoundingClientRect();
+    const sourceCenterX = sourceRect.left + sourceRect.width / 2;
+    const sourceCenterY = sourceRect.top + sourceRect.height / 2;
+    const destinationCenterX = destinationRect.left + destinationRect.width / 2;
+    const destinationCenterY = destinationRect.top + destinationRect.height / 2;
+    const scale = Math.max(0.12, Math.min(1, sourceRect.height / destinationRect.height));
+    const timing = { duration: 500, easing: "cubic-bezier(.2,.8,.2,1)" };
+    const animations = [
+      total.animate([
+        { transform: `translate(${sourceCenterX - destinationCenterX}px, ${sourceCenterY - destinationCenterY}px) scale(${scale})` },
+        { transform: "translate(0, 0) scale(1)" },
+      ], timing),
+      content.animate([{ opacity: 0.25 }, { opacity: 1 }], timing),
+    ];
+    waitForAnimations(animations, () => { payoutAnimating = false; });
+  }
+
+  function rotatePayoutDialog() {
+    if (payoutAnimating || payoutPhase !== "player") return;
+    const content = document.querySelector("#payout-dialog-content");
+    content.dataset.orientation = "dealer";
+    payoutPhase = "dealer";
+    if (prefersReducedMotion() || typeof content.animate !== "function") return;
+    payoutAnimating = true;
+    const animation = content.animate(
+      [{ transform: "rotate(0deg)" }, { transform: "rotate(180deg)" }],
+      { duration: 600, easing: "cubic-bezier(.4,0,.2,1)" },
+    );
+    waitForAnimations([animation], () => { payoutAnimating = false; });
+  }
+
+  function finishClosingPayoutDialog() {
+    const dialog = document.querySelector("#payout-dialog");
+    if (dialog.open) dialog.close();
+    payoutPhase = "closed";
+    payoutAnimating = false;
+    const source = payoutSource;
+    payoutSource = null;
+    if (source?.isConnected && isMobileLayout()) source.focus();
+  }
+
+  function closePayoutDialog() {
+    if (payoutAnimating || payoutPhase !== "dealer") return;
+    const dialog = document.querySelector("#payout-dialog");
+    if (prefersReducedMotion() || typeof dialog.animate !== "function") {
+      finishClosingPayoutDialog();
+      return;
+    }
+    payoutAnimating = true;
+    const animation = dialog.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: "ease-out" });
+    waitForAnimations([animation], finishClosingPayoutDialog);
+  }
+
+  function updateResultInteraction(output, details) {
+    const enabled = isMobileLayout() && details.result !== null && details.multiplier !== null;
+    if (!enabled) {
+      output.removeAttribute("role");
+      output.removeAttribute("tabindex");
+      output.setAttribute("aria-label", `${WAGER_LABELS[details.type]}の計算結果`);
+      for (const key of ["amount", "multiplier", "rawResult", "displayResult", "wager"]) delete output.dataset[key];
+      return;
+    }
+    output.setAttribute("role", "button");
+    output.setAttribute("tabindex", "0");
+    output.setAttribute("aria-label", `${WAGER_LABELS[details.type]}の計算結果 ${details.displayResult}。払戻結果を全画面表示`);
+    output.dataset.amount = state.amount;
+    output.dataset.multiplier = details.multiplier;
+    output.dataset.rawResult = details.result;
+    output.dataset.displayResult = details.displayResult;
+    output.dataset.wager = details.type;
   }
 
   function formatTableTitle(key) {
@@ -284,9 +426,12 @@
     results.forEach(({ type, multiplier, result }) => {
       const id = type.toLowerCase();
       document.querySelector(`#${id}-multiplier`).textContent = multiplier === null ? "—" : `${multiplier}倍`;
-      document.querySelector(`#${id}-result`).textContent = result === null
+      const resultOutput = document.querySelector(`#${id}-result`);
+      const displayResult = result === null
         ? "—"
         : roundingMode.endsWith("-integer") ? result.replace(/\.0$/, "") : result;
+      resultOutput.textContent = displayResult;
+      updateResultInteraction(resultOutput, { type, multiplier, result, displayResult });
     });
   }
 
@@ -405,6 +550,27 @@
       clearAmount();
     });
 
+    WAGER_TYPES.forEach((type) => {
+      const result = document.querySelector(`#${type.toLowerCase()}-result`);
+      result.addEventListener("click", () => openPayoutDialog(result));
+      result.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.code !== "Space") return;
+        event.preventDefault();
+        openPayoutDialog(result);
+      });
+    });
+
+    document.querySelector("#payout-dialog").addEventListener("click", () => {
+      if (payoutPhase === "player") rotatePayoutDialog();
+      else if (payoutPhase === "dealer") closePayoutDialog();
+    });
+    document.querySelector("#payout-dialog").addEventListener("cancel", (event) => {
+      event.preventDefault();
+      payoutAnimating = false;
+      payoutPhase = "dealer";
+      closePayoutDialog();
+    });
+
     window.addEventListener("keydown", (event) => {
       if (isMobileLayout()) return;
       if (event.code === "Space" && !event.altKey && !event.metaKey) {
@@ -435,7 +601,13 @@
       render();
     });
 
-    mobileMedia.addEventListener("change", render);
+    mobileMedia.addEventListener("change", () => {
+      if (!isMobileLayout() && payoutPhase !== "closed") {
+        payoutAnimating = false;
+        finishClosingPayoutDialog();
+      }
+      render();
+    });
 
     render();
   }

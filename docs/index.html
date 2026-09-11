@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="レース条件から馬券の確率とフェアオッズを確認するツール" />
     <title>Horsie Odds</title>
-    <link rel="stylesheet" href="style.css?v=1b10bf371c42" />
+    <link rel="stylesheet" href="style.css?v=39d64b21b5b4" />
     <script src="data.js?v=75e499226db3" defer></script>
     <script src="odds-data.js?v=2aa7a87fa0c5" defer></script>
-    <script src="calculator.js?v=4ee369167b14" defer></script>
-    <script src="app.js?v=f687953d934d" defer></script>
+    <script src="calculator.js?v=e79c3cfbc3e8" defer></script>
+    <script src="app.js?v=781b93339c03" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -200,5 +200,22 @@
       </aside>
       </div>
     </main>
+    <dialog id="payout-dialog" class="payout-dialog" tabindex="-1" aria-labelledby="payout-dialog-title">
+      <div id="payout-dialog-content" class="payout-dialog__content" data-orientation="player">
+        <h2 id="payout-dialog-title" class="visually-hidden">払戻結果</h2>
+        <div class="payout-dialog__term">
+          <span class="payout-dialog__label">賭け額</span>
+          <output id="payout-stake" class="payout-dialog__value payout-dialog__value--term"></output>
+        </div>
+        <span class="payout-dialog__operator" aria-hidden="true">×</span>
+        <div class="payout-dialog__term">
+          <span class="payout-dialog__label">倍率</span>
+          <output id="payout-multiplier" class="payout-dialog__value payout-dialog__value--term"></output>
+        </div>
+        <span class="payout-dialog__operator" aria-hidden="true">=</span>
+        <output id="payout-total" class="payout-dialog__value payout-dialog__value--total"></output>
+        <output id="payout-profit" class="payout-dialog__value payout-dialog__value--profit" hidden></output>
+      </div>
+    </dialog>
   </body>
 </html>

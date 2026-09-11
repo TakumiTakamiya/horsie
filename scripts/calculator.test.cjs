@@ -54,6 +54,14 @@ test("rounds exact products half-up to one decimal, including very large amounts
   for (const odds of [null, "NaN", "1.234", "-1.00", ".5", "1."]) assert.equal(calculator.multiplyToTenths("25", odds), null);
 });
 
+test("subtracts the stake from a calculated payout without losing decimal precision", () => {
+  assert.equal(calculator.subtractStakeFromResult("25", "1013.5"), "988.5");
+  assert.equal(calculator.subtractStakeFromResult("25", "25.0"), "0.0");
+  assert.equal(calculator.subtractStakeFromResult("25", "20.0"), "-5.0");
+  assert.equal(calculator.subtractStakeFromResult("", "20.0"), null);
+  assert.equal(calculator.subtractStakeFromResult("25", "invalid"), null);
+});
+
 test("supports 0.1, 0.5, and integer rounding with matching display precision", () => {
   const cases = [
     ["raw", 3.58, "3.58", 2],
@@ -116,9 +124,10 @@ test("retains only valid outcomes and leaves missing multipliers blank", () => {
 // Test event wiring without a browser dependency; real visual QA is separate.
 function createApp({ mobile = false } = {}) {
   class Element {
-    constructor(dataset = {}) { this.dataset = dataset; this.children = []; this.events = {}; this.attrs = {}; this.value = ""; }
+    constructor(dataset = {}) { this.dataset = dataset; this.children = []; this.events = {}; this.attrs = {}; this.value = ""; this.isConnected = true; }
     addEventListener(name, callback) { this.events[name] = callback; }
     setAttribute(name, value) { this.attrs[name] = value; }
+    getAttribute(name) { return this.attrs[name]; }
     removeAttribute(name) { delete this.attrs[name]; }
     querySelectorAll() { return this.children; }
     append(...children) { this.children.push(...children); }
@@ -128,7 +137,8 @@ function createApp({ mobile = false } = {}) {
     blur() { this.blurred = true; }
     select() { this.selected = true; }
     showModal() { this.open = true; }
-    close() { this.open = false; this.events.close(); }
+    close() { this.open = false; this.events.close?.(); }
+    getBoundingClientRect() { return { left: 0, top: 0, width: 80, height: 30 }; }
   }
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const nodes = Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map((m) => [`#${m[1]}`, new Element()]));
@@ -151,7 +161,11 @@ function createApp({ mobile = false } = {}) {
   };
   const sandbox = {
     addEventListener(name, callback) { events[name] = callback; },
-    matchMedia(query) { assert.equal(query, "(max-width: 600px)"); return mobileMedia; },
+    matchMedia(query) {
+      if (query === "(max-width: 600px)") return mobileMedia;
+      assert.equal(query, "(prefers-reduced-motion: reduce)");
+      return { matches: true };
+    },
     document: {
       querySelector(selector) {
         if (selector.startsWith("[data-r=")) return nodes["#r-control"].children.find((button) => button.dataset.r === selector.match(/"(\d+)"/)[1]);
@@ -455,6 +469,60 @@ test("calculator amount defaults to the PC read-only interaction and enables mob
   assert.match(mobileCss, /\.amount-field input\s*\{[^}]*caret-color:\s*auto[^}]*cursor:\s*text[^}]*pointer-events:\s*auto[^}]*user-select:\s*text/);
 });
 
+test("mobile results present the payout, rotate for the dealer, then close", () => {
+  const { nodes, click, input } = createApp({ mobile: true });
+  click("#outcome-control", "D@D");
+  input("#chip-amount", "25");
+  const result = nodes["#exacta-result"];
+  assert.equal(result.attrs.role, "button");
+  assert.equal(result.attrs.tabindex, "0");
+  assert.equal(result.dataset.wager, "Exacta");
+
+  result.events.click();
+  const dialog = nodes["#payout-dialog"];
+  const content = nodes["#payout-dialog-content"];
+  assert.equal(dialog.open, true);
+  assert.equal(dialog.dataset.wager, "exacta");
+  assert.equal(content.dataset.orientation, "player");
+  assert.equal(nodes["#payout-stake"].textContent, "25");
+  assert.equal(nodes["#payout-multiplier"].textContent, result.dataset.multiplier);
+  assert.equal(nodes["#payout-total"].textContent, result.textContent);
+  assert.equal(nodes["#payout-profit"].textContent, `(+${calculator.subtractStakeFromResult("25", result.dataset.rawResult)})`);
+  assert.equal(nodes["#payout-profit"].hidden, false);
+
+  dialog.events.click();
+  assert.equal(content.dataset.orientation, "dealer");
+  assert.equal(dialog.open, true);
+  dialog.events.click();
+  assert.equal(dialog.open, false);
+  assert.equal(result.focused, true);
+});
+
+test("payout presentation is mobile-only, closes at desktop width, hides nonpositive profit, and uses wager colors", () => {
+  const desktop = createApp();
+  desktop.click("#outcome-control", "D@D");
+  desktop.input("#chip-amount", "25");
+  assert.equal(desktop.nodes["#win-result"].attrs.role, undefined);
+  desktop.nodes["#win-result"].events.click();
+  assert.notEqual(desktop.nodes["#payout-dialog"].open, true);
+
+  const mobile = createApp({ mobile: true });
+  mobile.click("#outcome-control", "D@D");
+  mobile.input("#tax-rate-win", "100");
+  mobile.input("#chip-amount", "25");
+  mobile.nodes["#win-result"].events.click();
+  assert.equal(mobile.nodes["#payout-profit"].hidden, true);
+  assert.equal(mobile.nodes["#payout-profit"].textContent, "");
+  mobile.setMobile(false);
+  assert.equal(mobile.nodes["#payout-dialog"].open, false);
+  assert.equal(mobile.nodes["#win-result"].attrs.role, undefined);
+
+  const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
+  assert.match(css, /\.payout-dialog\[data-wager="win"\]\s*\{[^}]*background:\s*#2f6f9f/);
+  assert.match(css, /\.payout-dialog\[data-wager="exacta"\]\s*\{[^}]*background:\s*#e4bf4f/);
+  assert.match(css, /\.payout-dialog\[data-wager="trifecta"\]\s*\{[^}]*background:\s*#b84c43/);
+});
+
 function textOf(node) {
   return node.textContent ?? node.children.map(textOf).join("");
 }
@@ -526,7 +594,7 @@ test("race controls span the calculator and settings columns", () => {
   assert.match(css, /grid-template-areas:\s*"result controls controls"\s*"result calculator settings"/);
   assert.match(css, /grid-template-areas:\s*"controls" "result" "calculator" "settings"/);
   assert.match(css, /\.settings-panel\s*\{[^}]*grid-area:\s*settings[^}]*display:\s*flex/);
-  assert.doesNotMatch(html, /<dialog\b|id="open-settings"|id="close-settings"/);
+  assert.doesNotMatch(html, /id="open-settings"|id="close-settings"/);
   assert.match(css, /height:\s*calc\(100dvh - 32px\)/);
   assert.match(css, /\.result-panel[^}]*display:\s*flex/);
   assert.match(css, /\.table-wrap table\s*\{\s*height:\s*100%/);

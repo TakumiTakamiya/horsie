@@ -47,6 +47,16 @@
     return `${tenths / 10n}.${tenths % 10n}`;
   }
 
+  function subtractStakeFromResult(rawAmount, rawResult) {
+    const amount = parseAmount(rawAmount);
+    if (amount.status !== "valid" || typeof rawResult !== "string" || !/^\d+(?:\.\d)?$/.test(rawResult)) return null;
+    const [integer, fraction = ""] = rawResult.split(".");
+    const resultTenths = BigInt(integer) * 10n + BigInt(fraction || "0");
+    const difference = resultTenths - amount.value * 10n;
+    const absolute = difference < 0n ? -difference : difference;
+    return `${difference < 0n ? "-" : ""}${absolute / 10n}.${absolute % 10n}`;
+  }
+
   function calculateRows(rows, outcome, rawAmount, formatOdds) {
     const selected = retainOutcome(rows, outcome);
     return WAGERS.map(({ type, length }) => {
@@ -59,7 +69,7 @@
     });
   }
 
-  const api = Object.freeze({ parseAmount, addChip, getOutcomes, retainOutcome, multiplyToTenths, calculateRows });
+  const api = Object.freeze({ parseAmount, addChip, getOutcomes, retainOutcome, multiplyToTenths, subtractStakeFromResult, calculateRows });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.HorsieCalculator = api;
 })(globalThis);
