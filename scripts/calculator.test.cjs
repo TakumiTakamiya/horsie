@@ -514,6 +514,22 @@ test("stake, multiplier, and payout values animate from their calculator positio
   }
 });
 
+test("a tap during the opening movement queues one dealer rotation", async () => {
+  const { nodes, click, input } = createApp({ mobile: true, reducedMotion: false });
+  click("#outcome-control", "D@D");
+  input("#chip-amount", "25");
+  nodes["#exacta-result"].events.click();
+
+  nodes["#payout-dialog"].events.click();
+  nodes["#payout-dialog"].events.click();
+  assert.equal(nodes["#payout-dialog-content"].dataset.orientation, "player");
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(nodes["#payout-dialog-content"].dataset.orientation, "dealer");
+  assert.equal(nodes["#payout-dialog-content"].animations.length, 2);
+  assert.equal(nodes["#payout-dialog-content"].animations[1].keyframes[0].transform, "rotate(0deg)");
+  assert.equal(nodes["#payout-dialog-content"].animations[1].keyframes[1].transform, "rotate(180deg)");
+});
+
 test("payout presentation is mobile-only, closes at desktop width, hides nonpositive profit, and uses wager colors", () => {
   const desktop = createApp();
   desktop.click("#outcome-control", "D@D");

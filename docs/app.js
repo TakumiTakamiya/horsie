@@ -36,6 +36,7 @@
   let payoutSource = null;
   let payoutPhase = "closed";
   let payoutAnimating = false;
+  let payoutRotateQueued = false;
 
   function normalizeNumber(value) {
     if (Object.is(value, -0)) return "0";
@@ -203,6 +204,7 @@
     payoutSource = source;
     payoutPhase = "player";
     payoutAnimating = true;
+    payoutRotateQueued = false;
     const sourceRects = {
       stake: document.querySelector("#chip-amount").getBoundingClientRect(),
       multiplier: document.querySelector(`#${source.dataset.wager.toLowerCase()}-multiplier`).getBoundingClientRect(),
@@ -223,11 +225,21 @@
       animatePayoutValue(total, sourceRects.total, timing),
       content.animate([{ opacity: 0.25 }, { opacity: 1 }], timing),
     ];
-    waitForAnimations(animations, () => { payoutAnimating = false; });
+    waitForAnimations(animations, () => {
+      payoutAnimating = false;
+      if (payoutRotateQueued) {
+        payoutRotateQueued = false;
+        rotatePayoutDialog();
+      }
+    });
   }
 
   function rotatePayoutDialog() {
-    if (payoutAnimating || payoutPhase !== "player") return;
+    if (payoutPhase !== "player") return;
+    if (payoutAnimating) {
+      payoutRotateQueued = true;
+      return;
+    }
     const content = document.querySelector("#payout-dialog-content");
     content.dataset.orientation = "dealer";
     payoutPhase = "dealer";
@@ -245,6 +257,7 @@
     if (dialog.open) dialog.close();
     payoutPhase = "closed";
     payoutAnimating = false;
+    payoutRotateQueued = false;
     const source = payoutSource;
     payoutSource = null;
     if (source?.isConnected && isMobileLayout()) source.focus();
@@ -581,6 +594,7 @@
     document.querySelector("#payout-dialog").addEventListener("cancel", (event) => {
       event.preventDefault();
       payoutAnimating = false;
+      payoutRotateQueued = false;
       payoutPhase = "dealer";
       closePayoutDialog();
     });
