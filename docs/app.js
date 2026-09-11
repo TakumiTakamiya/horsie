@@ -110,6 +110,21 @@
     return ODDS_DATA[key] || [];
   }
 
+  function updateAmountInputMode(input) {
+    if (isMobileLayout()) {
+      input.readOnly = false;
+      input.removeAttribute("readonly");
+      input.removeAttribute("tabindex");
+      input.setAttribute("inputmode", "numeric");
+      return;
+    }
+    input.readOnly = true;
+    input.setAttribute("readonly", "");
+    input.setAttribute("tabindex", "-1");
+    input.removeAttribute("inputmode");
+    if (document.activeElement === input) input.blur();
+  }
+
   function formatTableTitle(key) {
     return `${DISTANCE_LABELS[key.charAt(0)] ?? key.charAt(0)}${key.slice(1)}`;
   }
@@ -252,6 +267,7 @@
 
     const amount = calculator.parseAmount(state.amount);
     const input = document.querySelector("#chip-amount");
+    updateAmountInputMode(input);
     if (input.value !== state.amount) input.value = state.amount;
     input.setAttribute("aria-invalid", String(amount.status === "invalid"));
     document.querySelector("#amount-error").textContent = amount.status === "invalid"
@@ -371,6 +387,9 @@
     document.querySelector("#chip-amount").addEventListener("input", (event) => {
       state.amount = event.target.value;
       renderCalculator();
+    });
+    document.querySelector("#chip-amount").addEventListener("focus", (event) => {
+      if (isMobileLayout() && event.target.value === "0") event.target.select();
     });
     document.querySelector("#chip-control").addEventListener("click", (event) => {
       const button = event.target.closest("button[data-chip]");

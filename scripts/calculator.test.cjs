@@ -119,11 +119,14 @@ function createApp({ mobile = false } = {}) {
     constructor(dataset = {}) { this.dataset = dataset; this.children = []; this.events = {}; this.attrs = {}; this.value = ""; }
     addEventListener(name, callback) { this.events[name] = callback; }
     setAttribute(name, value) { this.attrs[name] = value; }
+    removeAttribute(name) { delete this.attrs[name]; }
     querySelectorAll() { return this.children; }
     append(...children) { this.children.push(...children); }
     replaceChildren(...children) { this.children = children; }
     scrollIntoView() { this.scrolled = true; }
     focus() { this.focused = true; }
+    blur() { this.blurred = true; }
+    select() { this.selected = true; }
     showModal() { this.open = true; }
     close() { this.open = false; this.events.close(); }
   }
@@ -372,6 +375,12 @@ test("number keys type globally, Backspace deletes, C clears, and the display ne
 
 test("mobile uses direct distance and combined Pattern/Joker controls independently from desktop", () => {
   const { nodes, events, click, input, setMobile } = createApp({ mobile: true });
+  assert.equal(nodes["#chip-amount"].readOnly, false);
+  assert.equal(nodes["#chip-amount"].attrs.inputmode, "numeric");
+  assert.equal(nodes["#chip-amount"].attrs.readonly, undefined);
+  assert.equal(nodes["#chip-amount"].attrs.tabindex, undefined);
+  nodes["#chip-amount"].events.focus({ target: nodes["#chip-amount"] });
+  assert.equal(nodes["#chip-amount"].selected, true);
   assert.equal(pressedValue(nodes["#distance-control"]), "M");
   assert.equal(pressedValue(nodes["#mobile-pattern-control"]), "DD");
   assert.deepEqual(nodes["#mobile-pattern-control"].children.map((button) => button.dataset.value),
@@ -388,6 +397,10 @@ test("mobile uses direct distance and combined Pattern/Joker controls independen
   assert.equal(pressedValue(nodes["#outcome-control"]), "D@@");
 
   setMobile(false);
+  assert.equal(nodes["#chip-amount"].readOnly, true);
+  assert.equal(nodes["#chip-amount"].attrs.readonly, "");
+  assert.equal(nodes["#chip-amount"].attrs.tabindex, "-1");
+  assert.equal(nodes["#chip-amount"].attrs.inputmode, undefined);
   assert.equal(nodes["#current-title"].textContent, "中距離DD");
   assert.equal(pressedValue(nodes["#y-control"]), "DD");
   assert.equal(pressedValue(nodes["#z-control"]), "");
@@ -429,12 +442,14 @@ test("mobile markup integrates one-line selectors into the calculator at 600px o
   assert.match(mobileCss, /\.outcome-field h3\s*\{[^}]*position:\s*absolute/);
 });
 
-test("calculator amount is read-only and hides focus and caret interaction", () => {
+test("calculator amount defaults to the PC read-only interaction and enables mobile editing", () => {
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const css = fs.readFileSync(path.join(docs, "style.css"), "utf8");
   assert.match(html, /id="chip-amount"[^>]*readonly[^>]*tabindex="-1"/);
   assert.doesNotMatch(html, /id="chip-amount"[^>]*(?:inputmode|pattern)=/);
   assert.match(css, /\.amount-field input\s*\{[^}]*caret-color:\s*transparent[^}]*pointer-events:\s*none[^}]*user-select:\s*none/);
+  const mobileCss = css.match(/@media \(max-width:\s*600px\)\s*\{[\s\S]*?(?=\n@media \(max-width:\s*430px\))/)?.[0] ?? "";
+  assert.match(mobileCss, /\.amount-field input\s*\{[^}]*caret-color:\s*auto[^}]*cursor:\s*text[^}]*pointer-events:\s*auto[^}]*user-select:\s*text/);
 });
 
 function textOf(node) {
