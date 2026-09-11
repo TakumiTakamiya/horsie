@@ -122,9 +122,9 @@ test("retains only valid outcomes and leaves missing multipliers blank", () => {
 });
 
 // Test event wiring without a browser dependency; real visual QA is separate.
-function createApp({ mobile = false } = {}) {
+function createApp({ mobile = false, reducedMotion = true } = {}) {
   class Element {
-    constructor(dataset = {}) { this.dataset = dataset; this.children = []; this.events = {}; this.attrs = {}; this.value = ""; this.isConnected = true; }
+    constructor(dataset = {}) { this.dataset = dataset; this.children = []; this.events = {}; this.attrs = {}; this.value = ""; this.isConnected = true; this.animations = []; }
     addEventListener(name, callback) { this.events[name] = callback; }
     setAttribute(name, value) { this.attrs[name] = value; }
     getAttribute(name) { return this.attrs[name]; }
@@ -139,6 +139,7 @@ function createApp({ mobile = false } = {}) {
     showModal() { this.open = true; }
     close() { this.open = false; this.events.close?.(); }
     getBoundingClientRect() { return { left: 0, top: 0, width: 80, height: 30 }; }
+    animate(keyframes, timing) { this.animations.push({ keyframes, timing }); return { finished: Promise.resolve() }; }
   }
   const html = fs.readFileSync(path.join(docs, "index.html"), "utf8");
   const nodes = Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map((m) => [`#${m[1]}`, new Element()]));
@@ -164,7 +165,7 @@ function createApp({ mobile = false } = {}) {
     matchMedia(query) {
       if (query === "(max-width: 600px)") return mobileMedia;
       assert.equal(query, "(prefers-reduced-motion: reduce)");
-      return { matches: true };
+      return { matches: reducedMotion };
     },
     document: {
       querySelector(selector) {
@@ -497,6 +498,20 @@ test("mobile results present the payout, rotate for the dealer, then close", () 
   dialog.events.click();
   assert.equal(dialog.open, false);
   assert.equal(result.focused, true);
+});
+
+test("stake, multiplier, and payout values animate from their calculator positions", () => {
+  const { nodes, click, input } = createApp({ mobile: true, reducedMotion: false });
+  click("#outcome-control", "D@D");
+  input("#chip-amount", "25");
+  nodes["#exacta-result"].events.click();
+
+  for (const id of ["#payout-stake", "#payout-multiplier", "#payout-total"]) {
+    assert.equal(nodes[id].animations.length, 1, id);
+    assert.match(nodes[id].animations[0].keyframes[0].transform, /^translate\(.+\) scale\(.+\)$/);
+    assert.equal(nodes[id].animations[0].keyframes[1].transform, "translate(0, 0) scale(1)");
+    assert.equal(nodes[id].animations[0].timing.duration, 500);
+  }
 });
 
 test("payout presentation is mobile-only, closes at desktop width, hides nonpositive profit, and uses wager colors", () => {

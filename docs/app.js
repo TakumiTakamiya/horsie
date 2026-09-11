@@ -159,11 +159,26 @@
     Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).then(onFinish);
   }
 
+  function animatePayoutValue(target, sourceRect, timing) {
+    const destinationRect = target.getBoundingClientRect();
+    const sourceCenterX = sourceRect.left + sourceRect.width / 2;
+    const sourceCenterY = sourceRect.top + sourceRect.height / 2;
+    const destinationCenterX = destinationRect.left + destinationRect.width / 2;
+    const destinationCenterY = destinationRect.top + destinationRect.height / 2;
+    const scale = Math.max(0.12, Math.min(1, sourceRect.height / destinationRect.height));
+    return target.animate([
+      { transform: `translate(${sourceCenterX - destinationCenterX}px, ${sourceCenterY - destinationCenterY}px) scale(${scale})` },
+      { transform: "translate(0, 0) scale(1)" },
+    ], timing);
+  }
+
   function openPayoutDialog(source) {
     if (!isMobileLayout() || source.getAttribute("role") !== "button" || payoutPhase !== "closed") return;
     const calculator = window.HorsieCalculator;
     const dialog = document.querySelector("#payout-dialog");
     const content = document.querySelector("#payout-dialog-content");
+    const stake = document.querySelector("#payout-stake");
+    const multiplier = document.querySelector("#payout-multiplier");
     const total = document.querySelector("#payout-total");
     const rawAmount = source.dataset.amount;
     const parsedAmount = calculator.parseAmount(rawAmount);
@@ -172,9 +187,9 @@
     const profit = calculator.subtractStakeFromResult(rawAmount, source.dataset.rawResult);
     const integerDisplay = source.dataset.displayResult !== source.dataset.rawResult;
     document.querySelector("#payout-dialog-title").textContent = `${WAGER_LABELS[source.dataset.wager]}の払戻結果`;
-    document.querySelector("#payout-stake").textContent = parsedAmount.value.toString();
+    stake.textContent = parsedAmount.value.toString();
     document.querySelector("#payout-multiplier-label").textContent = MULTIPLIER_LABELS[source.dataset.wager];
-    document.querySelector("#payout-multiplier").textContent = source.dataset.multiplier;
+    multiplier.textContent = source.dataset.multiplier;
     total.textContent = source.dataset.displayResult;
     const profitOutput = document.querySelector("#payout-profit");
     const showProfit = profit !== null && !profit.startsWith("-") && profit !== "0.0";
@@ -188,7 +203,11 @@
     payoutSource = source;
     payoutPhase = "player";
     payoutAnimating = true;
-    const sourceRect = source.getBoundingClientRect();
+    const sourceRects = {
+      stake: document.querySelector("#chip-amount").getBoundingClientRect(),
+      multiplier: document.querySelector(`#${source.dataset.wager.toLowerCase()}-multiplier`).getBoundingClientRect(),
+      total: source.getBoundingClientRect(),
+    };
     dialog.showModal();
     dialog.focus();
     fitPayoutValues();
@@ -197,18 +216,11 @@
       payoutAnimating = false;
       return;
     }
-    const destinationRect = total.getBoundingClientRect();
-    const sourceCenterX = sourceRect.left + sourceRect.width / 2;
-    const sourceCenterY = sourceRect.top + sourceRect.height / 2;
-    const destinationCenterX = destinationRect.left + destinationRect.width / 2;
-    const destinationCenterY = destinationRect.top + destinationRect.height / 2;
-    const scale = Math.max(0.12, Math.min(1, sourceRect.height / destinationRect.height));
     const timing = { duration: 500, easing: "cubic-bezier(.2,.8,.2,1)" };
     const animations = [
-      total.animate([
-        { transform: `translate(${sourceCenterX - destinationCenterX}px, ${sourceCenterY - destinationCenterY}px) scale(${scale})` },
-        { transform: "translate(0, 0) scale(1)" },
-      ], timing),
+      animatePayoutValue(stake, sourceRects.stake, timing),
+      animatePayoutValue(multiplier, sourceRects.multiplier, timing),
+      animatePayoutValue(total, sourceRects.total, timing),
       content.animate([{ opacity: 0.25 }, { opacity: 1 }], timing),
     ];
     waitForAnimations(animations, () => { payoutAnimating = false; });
