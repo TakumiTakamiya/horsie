@@ -591,6 +591,9 @@
       if (payoutPhase === "player") rotatePayoutDialog();
       else if (payoutPhase === "dealer") closePayoutDialog();
     });
+    document.querySelector("#payout-dialog").addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+    });
     document.querySelector("#payout-dialog").addEventListener("cancel", (event) => {
       event.preventDefault();
       payoutAnimating = false;

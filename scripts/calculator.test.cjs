@@ -491,6 +491,9 @@ test("mobile results present the payout, rotate for the dealer, then close", () 
   assert.equal(nodes["#payout-total"].textContent, result.textContent);
   assert.equal(nodes["#payout-profit"].textContent, `(+${calculator.subtractStakeFromResult("25", result.dataset.rawResult)})`);
   assert.equal(nodes["#payout-profit"].hidden, false);
+  let contextMenuPrevented = false;
+  dialog.events.contextmenu({ preventDefault() { contextMenuPrevented = true; } });
+  assert.equal(contextMenuPrevented, true);
 
   dialog.events.click();
   assert.equal(content.dataset.orientation, "dealer");
@@ -555,6 +558,8 @@ test("payout presentation is mobile-only, closes at desktop width, hides nonposi
   assert.match(css, /\.payout-dialog\[data-wager="trifecta"\]\s*\{[^}]*background:\s*#b84c43/);
   assert.match(css, /\.payout-dialog__label\s*\{[^}]*font-size:\s*clamp\(0\.95rem, 4\.2vw, 1\.2rem\)/);
   assert.match(css, /\.payout-dialog__value--term\s*\{[^}]*font-size:\s*clamp\(2\.8rem, 16vw, 6\.25rem\)/);
+  assert.match(css, /\.payout-dialog\s*\{[^}]*-webkit-touch-callout:\s*none[^}]*-webkit-user-select:\s*none[^}]*user-select:\s*none/);
+  assert.match(css, /\.payout-dialog \*\s*\{[^}]*user-select:\s*none/);
   const app = fs.readFileSync(path.join(docs, "app.js"), "utf8");
   for (const label of ["単勝倍率", "二連単倍率", "三連単倍率"]) assert.match(app, new RegExp(label));
 });

@@ -178,7 +178,8 @@ tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 1
 #amount-error:empty { display: none; }
 .tax-field .field-error:empty { display: none; }
 
-.payout-dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; color: white; }
+.payout-dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; color: white; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.payout-dialog * { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 .payout-dialog::backdrop { background: transparent; }
 .payout-dialog[data-wager="win"] { background: #2f6f9f; }
 .payout-dialog[data-wager="exacta"] { background: #e4bf4f; color: #2f2918; }
