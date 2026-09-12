@@ -217,6 +217,7 @@ tr[data-wager-group-start="true"] > td { border-top: 2px solid rgb(31 106 74 / 1
 
 @media (max-width: 600px) {
   .control-panel, .result-panel { display: none; }
+  .probability-option { display: none; }
   .calculator-panel { padding: 16px 18px 18px; }
   .calculator-heading { margin-bottom: 10px; }
   .mobile-selection { display: grid; }

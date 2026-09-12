@@ -452,6 +452,7 @@ test("mobile markup integrates one-line selectors into the calculator at 600px o
   assert.match(css, /\.mobile-selection\s*\{\s*display:\s*none/);
   const mobileCss = css.match(/@media \(max-width:\s*600px\)\s*\{[\s\S]*?(?=\n@media \(max-width:\s*430px\))/)?.[0] ?? "";
   assert.match(mobileCss, /\.control-panel, \.result-panel\s*\{\s*display:\s*none/);
+  assert.match(mobileCss, /\.probability-option\s*\{\s*display:\s*none/);
   assert.match(mobileCss, /\.mobile-selection\s*\{\s*display:\s*grid/);
   assert.match(mobileCss, /\.mobile-selection \.control-block, \.outcome-field\s*\{[^}]*border-top:\s*1px/);
   assert.match(mobileCss, /\.mobile-option-grid--pattern\s*\{[^}]*grid-template-columns:\s*repeat\(6/);
